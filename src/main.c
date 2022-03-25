@@ -2,7 +2,8 @@
 
 int	main(int ac, char **av, char **env)
 {
-	history();
-
+	(void)ac;
+	(void)av;
+	(void)env;
 	return (0);
 }

@@ -1,13 +1,17 @@
 .DEFAULT_GOAL			:= all
 NAME					:= minishell
-FILES					:= main.c
+FILES					:=	main.c \
+							memory.c \
+							bzero.c \
+							t_alloc.c \
+							t_node.c
 
 SHELL					:= /bin/zsh
 OS						:= $(shell uname -s)
 
 STD						:= -std=c99
 #OPT					:= -O3
-#CFLAGS					:= -Wall -Wextra -Werror -Wpedantic
+CFLAGS					:= -Wall -Wextra -Werror -Wpedantic
 DFLAGS					:= -MMD -MF
 
 REMOVE					:= rm -rvf
@@ -18,8 +22,13 @@ INCDIR					:= inc
 OBJDIR					:= obj
 DEPDIR					:= dep
 
-SRC						:= $(addprefix $(SRCDIR)/, $(FILES))
-OBJ						:= $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRC))
+SDIR						:= $(shell find $(SRCDIR) -type d)
+
+vpath %.c $(foreach dir, $(SDIR), $(dir):)
+
+OBJ						:= $(addprefix $(OBJDIR)/, $(FILES:%.c=%.o))
+#SRC						:= $(addprefix $(SRCDIR)/, $(FILES))
+#OBJ						:= $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRC))
 DEP						:= $(patsubst $(OBJDIR)/%.o, $(DEPDIR)/%.d, $(OBJ))
 
 ifeq ($(OS),Darwin)
@@ -36,8 +45,9 @@ all:					$(NAME)
 $(NAME):				$(OBJ)
 						$(CC) $^ -o $@
 
+#$(OBJDIR)/%.o:			$(SRCDIR)/%.c | $(OBJDIR) $(DEPDIR)
 -include $(DEP)
-$(OBJDIR)/%.o:			$(SRCDIR)/%.c | $(OBJDIR) $(DEPDIR)
+$(OBJDIR)/%.o:			%.c | $(OBJDIR) $(DEPDIR)
 						@printf "$(P)"
 						$(CC) $(STD) $(OPT) $(CFLAGS) -I$(INCDIR) $(DFLAGS) $(DEPDIR)/$*.d -c $< -o $@
 						@printf "$(R)"
