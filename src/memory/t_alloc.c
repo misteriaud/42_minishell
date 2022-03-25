@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 11:31:02 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/25 16:44:26 by artblin          ###   ########.fr       */
+/*   Updated: 2022/03/25 17:09:35 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,38 +41,7 @@ t_alloc	*new_alloc(t_alloc **first, size_t size)
 	return (dest);
 }
 
-void	xfree(void *ptr, int group)
-{
-	t_alloc		**first;
-	t_alloc	*curr;
-	t_alloc	*to_remove;
-	first = get_first_alloc(group);
-
-	if (!first)
-		return ;
-	if (*first && (*first)->ptr == ptr && !(*first)->next)
-	{
-		xfree_group(group); return ;
-	}
-	else if (*first && (*first)->ptr == ptr)
-	{
-		to_remove = *first;
-		*first = to_remove->next;
-		free(to_remove->ptr);
-		free(to_remove);
-	}
-	curr = *first;
-	while (curr && curr->next && curr->next->ptr != ptr)
-		curr = curr->next;
-	if (!curr || !curr->next || curr->next->ptr != ptr)
-		return ;
-	to_remove = curr->next;
-	free(to_remove->ptr);
-	curr->next = to_remove->next;
-	free(to_remove);
-}
-
-void	xfree_allocs(t_alloc *first)
+void	free_allocs(t_alloc *first)
 {
 	t_alloc	*to_remove;
 

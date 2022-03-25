@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 11:07:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/25 16:14:30 by artblin          ###   ########.fr       */
+/*   Updated: 2022/03/25 17:55:13 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,32 +56,58 @@ int	xrealloc(void *ptr, size_t size, int group)
 	return (1);
 }
 
-int	xmore(void *ptr, size_t size, int group)
+void	xfree(void *ptr, int group)
 {
-	t_alloc	**first;
-	t_alloc	*curr;
-	void	*dest;
-	void	**data;
+	t_alloc		**first;
+	t_alloc		*prev;
+	t_alloc		*curr;
 
-	data = (void **)ptr;
-	if (!*data)
-		return (xmalloc(ptr, size, group));
+	prev = NULL;
 	first = get_first_alloc(group);
+	if (!first)
+		return ;
 	curr = *first;
-	while (curr && curr->ptr != *data)
+	while (curr && curr->ptr != ptr)
+	{
+		prev = curr;
 		curr = curr->next;
-	if (!curr)
-		return (xmalloc(ptr, size, group));
-	dest = malloc(curr->size + size);
-	if (!dest)
-		return (0);
-	ft_memcpy(dest, curr->ptr, curr->size);
-	ft_bzero((char *)dest + curr->size, size);
+	}
+	if (!prev && curr && !curr->next)
+		xfree_group(group);
+	if (!curr || !curr->next)
+		return ;
+	if (!prev)
+		*first = curr->next;
+	else
+		prev->next = curr->next;
 	free(curr->ptr);
-	curr->ptr = dest;
-	curr->size = curr->size + size;
-	*data = curr->ptr;
-	return (1);
+	free(curr);
+}
+
+void	xfree_group(int group)
+{
+	t_node	**first;
+	t_node	*curr;
+	t_node	*to_remove;
+
+	first = get_first_node();
+	if (*first && (*first)->group == group)
+	{
+		to_remove = *first;
+		*first = to_remove->next;
+		free_allocs(to_remove->first);
+		free(to_remove);
+		return ;
+	}
+	curr = *first;
+	while (curr && curr->next && curr->next->group != group)
+		curr = curr->next;
+	if (!curr || (curr && !curr->next))
+		return ;
+	to_remove = curr->next;
+	curr->next = to_remove->next;
+	free_allocs(to_remove->first);
+	free(to_remove);
 }
 
 void	xfree_all(void)
@@ -96,7 +122,7 @@ void	xfree_all(void)
 	{
 		to_remove = *first;
 		*first = to_remove->next;
-		xfree_allocs(to_remove->first);
+		free_allocs(to_remove->first);
 		free(to_remove);
 	}
 }
