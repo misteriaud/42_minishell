@@ -4,7 +4,8 @@ FILES					:=	main.c \
 							memory.c \
 							bzero.c \
 							t_alloc.c \
-							t_node.c
+							t_node.c \
+							env.c
 
 SHELL					:= /bin/zsh
 OS						:= $(shell uname -s)
