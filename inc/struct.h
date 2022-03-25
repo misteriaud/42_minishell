@@ -1,23 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
+/*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/25 17:57:43 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/25 20:02:17 by artblin          ###   ########.fr       */
+/*   Created: 2022/03/25 19:56:33 by artblin           #+#    #+#             */
+/*   Updated: 2022/03/25 19:56:34 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+typedef struct s_str
+{
+	char	*str;
+	int		len;
+}	t_str;
 
-# include <struct.h>
-
-# include <stdio.h>
-# include <unistd.h>
-# include <stdlib.h>
-# include <fcntl.h>
-
-#endif
+typedef struct s_ctx
+{
+	int		fd_history;
+	t_str	*head_history;
+}	t_ctx;
