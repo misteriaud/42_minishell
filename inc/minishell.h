@@ -6,12 +6,17 @@
 #include <stdlib.h>
 #include <fcntl.h>
 
-#include "lexer.h"
+typedef struct s_str
+{
+	char	*str;
+	int		len;
+}	t_str;
 
-
-
-int		history();
-
+typedef struct s_ctx
+{
+	int		fd_history;
+	t_str	*head_history;
+}	t_ctx;
 
 
 #endif
