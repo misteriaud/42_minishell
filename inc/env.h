@@ -1,14 +1,9 @@
 #ifndef ENV_H
 # define ENV_H
 
-#define ENV_GROUP	0
+# include <struct.h>
 
-typedef struct s_env
-{
-	char			*key;
-	char			*value;
-	struct s_env	*next;
-}	t_env;
+#define ENV_GROUP	0
 
 int		init_env(t_ctx *ctx, char **env);
 

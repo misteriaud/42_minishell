@@ -1,5 +1,4 @@
 #include <minishell.h>
-#include <env.h>
 
 int	get_env()
 {

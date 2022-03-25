@@ -6,14 +6,14 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 17:57:43 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/25 20:02:17 by artblin          ###   ########.fr       */
+/*   Updated: 2022/03/25 20:05:00 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <struct.h>
+# include <env.h>
 
 # include <stdio.h>
 # include <unistd.h>
