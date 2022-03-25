@@ -2,7 +2,7 @@
 
 int	main(int ac, char **av, char **env)
 {
-	//history();
+	history();
 
 	return (0);
 }
