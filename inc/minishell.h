@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <fcntl.h>
 
+#include "lexer.h"
 
 
 
