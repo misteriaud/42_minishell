@@ -6,7 +6,7 @@
 /*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 19:56:33 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/25 20:09:48 by artblin          ###   ########.fr       */
+/*   Updated: 2022/03/25 20:36:30 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,5 @@ typedef struct s_env
 typedef struct s_ctx
 {
 	int		fd_history;
-	t_str	*head_history;
+	t_env	*history;
 }	t_ctx;
