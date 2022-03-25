@@ -1,6 +1,6 @@
 .DEFAULT_GOAL			:= all
 NAME					:= minishell
-FILES					:= main.c
+FILES					:= main.c history.c
 
 SHELL					:= /bin/zsh
 OS						:= $(shell uname -s)
