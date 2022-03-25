@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <fcntl.h>
 
+#include <env.h>
+
 typedef struct s_str
 {
 	char	*str;
