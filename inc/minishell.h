@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <fcntl.h>
 
+#include <history.h>
+
 typedef struct s_str
 {
 	char	*str;
@@ -17,6 +19,5 @@ typedef struct s_ctx
 	int		fd_history;
 	t_str	*head_history;
 }	t_ctx;
-
 
 #endif
