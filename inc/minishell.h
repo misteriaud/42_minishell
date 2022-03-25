@@ -18,5 +18,4 @@ typedef struct s_ctx
 	t_str	*head_history;
 }	t_ctx;
 
-
 #endif
