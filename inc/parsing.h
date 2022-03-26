@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:04:05 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/26 21:40:06 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/27 00:27:15 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,14 +24,14 @@ enum lexer_state {
 	END = -1,
 	MAIN = 0, //				00000000
 	IN_WORD = 1, //				00000001
-	IN_SINGLE_QUOTE = 2, //		00000010
-	IN_DOUBLE_QUOTE = 4, // 	00000100
-	AFTER_PIPE = 8, //			00001000
-	AFTER_L_CHEVRON = 16,//		00010000
-	AFTER_2L_CHEVRON = 48,//	00110000
-	AFTER_R_CHEVRON = 64,//		01000000
-	AFTER_2R_CHEVRON = 192,//	11000000
-	CHEVRON_WAITING = 512, //	1000000000
+	IN_SQ = 2, //				00000010	inside ''
+	IN_DQ = 4, // 				00000100	inside ""
+	A_PIP = 8, //				00001000	after |
+	A_L_CHEV = 16,//			00010000	after <
+	A_2L_CHEV = 48,//			00110000	after <<
+	A_R_CHEV = 64,//			01000000	after >
+	A_2R_CHEV = 192,//			11000000	after >>
+	CHEV_WAIT = 512, //			1000000000	wait for next chevron
 	AFTER_TOKEN = 256, //		100000000
 	ERROR = 255 //				11111111
 };
