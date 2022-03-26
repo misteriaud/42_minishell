@@ -6,7 +6,8 @@ FILES					:=	main.c \
 							bzero.c \
 							t_alloc.c \
 							t_node.c \
-							history.c
+							history.c \
+							env.c
 
 SHELL					:= /bin/zsh
 OS						:= $(shell uname -s)
@@ -34,8 +35,10 @@ OBJ						:= $(addprefix $(OBJDIR)/, $(FILES:%.c=%.o))
 DEP						:= $(patsubst $(OBJDIR)/%.o, $(DEPDIR)/%.d, $(OBJ))
 
 ifeq ($(OS),Darwin)
+	CC = clang
 endif
 ifeq ($(OS),Linux)
+	CC = gcc
 endif
 
 G := \033[3;32m
