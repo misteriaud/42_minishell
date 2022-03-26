@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:04:05 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/26 13:21:50 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/26 14:12:47 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ enum lexer_state {
 	AFTER_L_CHEVRON = 16,//		00010000
 	AFTER_2L_CHEVRON = 32,//	00110000
 	AFTER_R_CHEVRON = 64,//		01000000
-	AFTER_2R_CHEVRON = 128,//	11000000
+	AFTER_2R_CHEVRON = 192,//	11000000
+	CHEVRON_WAITING = 512, //	1000000000
 	AFTER_TOKEN = 256, //		100000000
 	ERROR = 255 //				11111111
 };
@@ -47,11 +48,10 @@ enum token_type
 {
 	cmd,
 	path,
+	append_path,
 	arg_w_var,
 	arg_wo_var,
 	heredoc,
-	var,
-	text
 };
 
 typedef struct s_token
