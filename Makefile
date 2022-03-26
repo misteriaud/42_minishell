@@ -33,8 +33,10 @@ OBJ						:= $(addprefix $(OBJDIR)/, $(FILES:%.c=%.o))
 DEP						:= $(patsubst $(OBJDIR)/%.o, $(DEPDIR)/%.d, $(OBJ))
 
 ifeq ($(OS),Darwin)
+	CC = clang
 endif
 ifeq ($(OS),Linux)
+	CC = gcc
 endif
 
 G := \033[3;32m
