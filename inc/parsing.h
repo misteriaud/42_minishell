@@ -6,29 +6,40 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:04:05 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/25 21:04:09 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/26 11:51:01 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-enum state {
-	GENERAL,
-	IN_WORD,
-	IN_VAR,
-	IN_SINGLE_QUOTE,
-	IN_DOUBLE_QUOTE,
-	AFTER_PIPE,
-	AFTER_L_CHEVRON,
-	AFTER_2L_CHEVRON,
-	AFTER_R_CHEVRON,
-	AFTER_2R_CHEVRON,
+#ifndef PARSING_H
+# define PARSING_H
+
+# define PARSING_ALLOC 1
+
+# define ERR_ALLOC_FAILED 20
+
+enum lexer_state {
+	MAIN = 0, //				00000000
+	IN_WORD = 1, //				00000001
+	IN_SINGLE_QUOTE = 2, //		00000010
+	IN_DOUBLE_QUOTE = 4, // 	00000100
+	AFTER_PIPE = 8, //			00001000
+	AFTER_L_CHEVRON = 16,//		00010000
+	AFTER_2L_CHEVRON = 32,//	00100000
+	AFTER_R_CHEVRON = 64,//		01000000
+	AFTER_2R_CHEVRON = 128,//	10000000
+	ERROR = 255 //				11111111
 };
 
-enum character_category
+enum char_cat
 {
-    CHAR_GENERAL,
-    CHAR_WHITESPACE = ' ',
-    CHAR_AMPERSAND = '&',
-    CHAR_PIPE = '|',
+	EOF = -1,
+	WHITESPACE = 0,
+	GENERAL = 1,
+	SINGLE = 2,
+	DOUBLE = 4,
+	PIPE = 8,
+	L_CHEVRON = 16,
+	R_CHEVRON = 64,
 };
 
 enum token_type
@@ -52,3 +63,5 @@ typedef struct s_token
 }	t_token;
 
 int parse(t_token **first, char *str);
+
+#endif
