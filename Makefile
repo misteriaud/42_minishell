@@ -8,7 +8,8 @@ FILES					:=	main.c \
 							t_node.c \
 							history.c \
 							get_file.c \
-							env.c
+							env.c \
+							raw.c
 
 SHELL					:= /bin/zsh
 OS						:= $(shell uname -s)
