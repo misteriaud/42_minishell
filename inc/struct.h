@@ -1,22 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   struct.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
+/*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/25 17:57:54 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/26 18:50:52 by artblin          ###   ########.fr       */
+/*   Created: 2022/03/25 19:56:33 by artblin           #+#    #+#             */
+/*   Updated: 2022/03/25 19:56:34 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
-
-int	main(int ac, char **av, char **env)
+typedef struct s_str
 {
-	(void)ac;
-	(void)av;
-	(void)env;
+	char	*str;
+	int		len;
+}	t_str;
 
-	return (0);
-}
+typedef struct s_ctx
+{
+	int		fd_history;
+	t_str	*head_history;
+}	t_ctx;

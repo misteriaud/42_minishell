@@ -1,22 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   bzero.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/25 17:57:54 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/26 18:50:52 by artblin          ###   ########.fr       */
+/*   Created: 2021/11/24 11:54:28 by mriaud            #+#    #+#             */
+/*   Updated: 2022/03/25 15:49:31 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include <memory.h>
 
-int	main(int ac, char **av, char **env)
+void	ft_bzero(void *s, size_t n)
 {
-	(void)ac;
-	(void)av;
-	(void)env;
+	size_t	i;
 
-	return (0);
+	i = 0;
+	while (i < n)
+	{
+		((char *)s)[i] = 0;
+		i++;
+	}
+}
+
+void	ft_memcpy(void *dest, const void *src, size_t n)
+{
+	size_t	i;
+
+	i = 0;
+	while (i < n)
+	{
+		((char *)dest)[i] = ((char *)src)[i];
+		i++;
+	}
 }
