@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:06:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/26 19:56:38 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/26 23:32:08 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,10 @@ int get_cat(char c)
 
 int get_state(int state, enum char_cat cat)
 {
+	if (cat == EOF && state & 766)
+		return (ERROR);
+	if (cat == EOF)
+		return (END);
 	if (cat == WHITESPACE && state != IN_WORD)
 	{
 		if (state & CHEVRON_WAITING)
@@ -96,20 +100,23 @@ int	generate_token(t_token *curr_token, int prev_state, char *str)
 	int	cat;
 
 	cat = get_cat(*str);
-	if (cat == EOF)
-		return (0);
 	state = get_state(prev_state, cat);
 	if (state > 1 && state % 2)
 		return (1);
+	if (!*str)
+		return (0);
 	else if ((prev_state == MAIN) && state < 8) //add CMD
 	{
 		if (!curr_token->type)
 			curr_token->type = CMD;
 		if (state == IN_DOUBLE_QUOTE)
 			curr_token->type += 1;
-		if (xrealloc(&curr_token->value.str, (curr_token->value.len++) + 1, PARSING_ALLOC))
-			return (ERR_ALLOC_FAILED);
-		curr_token->value.str[curr_token->value.len - 1] = *str;
+		if (state == 1)
+		{
+			if (xrealloc(&curr_token->value.str, (curr_token->value.len++) + 1, PARSING_ALLOC))
+				return (ERR_ALLOC_FAILED);
+			curr_token->value.str[curr_token->value.len - 1] = *str;
+		}
 	}
 	else if (prev_state & (AFTER_PIPE) && state < 8)
 	{
@@ -122,9 +129,12 @@ int	generate_token(t_token *curr_token, int prev_state, char *str)
 		if (state == IN_DOUBLE_QUOTE)
 			curr_token->type += 1;
 		printf("%s->stdout (CMD)\n", curr_token->prev->value.str);
-		if (xrealloc(&curr_token->value.str, (curr_token->value.len++) + 1, PARSING_ALLOC))
-			return (ERR_ALLOC_FAILED);
-		curr_token->value.str[curr_token->value.len - 1] = *str;
+		if (state == 1)
+		{
+			if (xrealloc(&curr_token->value.str, (curr_token->value.len++) + 1, PARSING_ALLOC))
+				return (ERR_ALLOC_FAILED);
+			curr_token->value.str[curr_token->value.len - 1] = *str;
+		}
 	}
 	else if (prev_state & (AFTER_R_CHEVRON) && state < 8)
 	{
@@ -139,9 +149,12 @@ int	generate_token(t_token *curr_token, int prev_state, char *str)
 		if (state == IN_DOUBLE_QUOTE)
 			curr_token->type += 1;
 		printf("%s->stdout (PATH)\n", curr_token->prev->value.str);
-		if (xrealloc(&curr_token->value.str, (curr_token->value.len++) + 1, PARSING_ALLOC))
-			return (ERR_ALLOC_FAILED);
-		curr_token->value.str[curr_token->value.len - 1] = *str;
+		if (state == 1)
+		{
+			if (xrealloc(&curr_token->value.str, (curr_token->value.len++) + 1, PARSING_ALLOC))
+				return (ERR_ALLOC_FAILED);
+			curr_token->value.str[curr_token->value.len - 1] = *str;
+		}
 	}
 	else if (prev_state & (AFTER_L_CHEVRON) && state < 8)
 	{
@@ -156,9 +169,12 @@ int	generate_token(t_token *curr_token, int prev_state, char *str)
 		if (state == IN_DOUBLE_QUOTE)
 			curr_token->type += 1;
 		printf("%s->stdin (PATH)\n", curr_token->prev->value.str);
-		if (xrealloc(&curr_token->value.str, (curr_token->value.len++) + 1, PARSING_ALLOC))
-			return (ERR_ALLOC_FAILED);
-		curr_token->value.str[curr_token->value.len - 1] = *str;
+		if (state == 1)
+		{
+			if (xrealloc(&curr_token->value.str, (curr_token->value.len++) + 1, PARSING_ALLOC))
+				return (ERR_ALLOC_FAILED);
+			curr_token->value.str[curr_token->value.len - 1] = *str;
+		}
 	}
 	else if (prev_state & AFTER_TOKEN && state < 8)
 	{
@@ -177,9 +193,12 @@ int	generate_token(t_token *curr_token, int prev_state, char *str)
 		curr_token->type = ARG;
 		if (state == IN_DOUBLE_QUOTE)
 			curr_token->type += 1;
-		if (xrealloc(&curr_token->value.str, (curr_token->value.len++) + 1, PARSING_ALLOC))
-			return (ERR_ALLOC_FAILED);
-		curr_token->value.str[curr_token->value.len - 1] = *str;
+		if (state == 1)
+		{
+			if (xrealloc(&curr_token->value.str, (curr_token->value.len++) + 1, PARSING_ALLOC))
+				return (ERR_ALLOC_FAILED);
+			curr_token->value.str[curr_token->value.len - 1] = *str;
+		}
 	}
 	else if (prev_state & (IN_WORD | IN_SINGLE_QUOTE | IN_DOUBLE_QUOTE) && state < 8)
 	{
@@ -187,7 +206,7 @@ int	generate_token(t_token *curr_token, int prev_state, char *str)
 			return (ERR_ALLOC_FAILED);
 		curr_token->value.str[curr_token->value.len - 1] = *str;
 	}
-	printf("char %c, state: %d, cat: %d, type: %d, value: %s\n", *str, state, cat, curr_token->type, curr_token->value.str);
+	printf("char \'%c\', state: %d, cat: %d, type: %d, value: \"%s\"\n", *str, state, cat, curr_token->type, curr_token->value.str);
 	return (generate_token(curr_token, state, str + 1));
 }
 
@@ -198,7 +217,6 @@ int parse(t_token **first, char *str)
 	(void)first;
 	if (xmalloc(&dest, sizeof(*dest), PARSING_ALLOC))
 		return (ERR_ALLOC_FAILED);
-	dest->prev = dest;
 	if (generate_token(dest, MAIN, str))
 		printf("PAS BON\n");
 	return (1);
