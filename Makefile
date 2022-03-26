@@ -12,7 +12,7 @@ OS						:= $(shell uname -s)
 
 STD						:= -std=c99
 #OPT					:= -O3
-CFLAGS					:= -Wall -Wextra -Werror -Wpedantic
+CFLAGS					:= -Wall -Wextra -Werror -Wpedantic -g
 DFLAGS					:= -MMD -MF
 
 REMOVE					:= rm -rvf
@@ -41,14 +41,14 @@ G := \033[3;32m
 P := \033[3;35m
 R := \033[m
 
-all:					$(NAME)
+all:					$(NAME) Makefile
 
-$(NAME):				$(OBJ)
+$(NAME):				$(OBJ) | Makefile
 						$(CC) $^ -o $@
 
 #$(OBJDIR)/%.o:			$(SRCDIR)/%.c | $(OBJDIR) $(DEPDIR)
 -include $(DEP)
-$(OBJDIR)/%.o:			%.c | $(OBJDIR) $(DEPDIR)
+$(OBJDIR)/%.o:			%.c | $(OBJDIR) $(DEPDIR) Makefile
 						@printf "$(P)"
 						$(CC) $(STD) $(OPT) $(CFLAGS) -I$(INCDIR) $(DFLAGS) $(DEPDIR)/$*.d -c $< -o $@
 						@printf "$(R)"

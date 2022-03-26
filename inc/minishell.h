@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 17:57:43 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/25 21:03:50 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/26 12:17:35 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <struct.h>
 # include <parsing.h>
+# include <memory.h>
 
 # include <stdio.h>
 # include <unistd.h>

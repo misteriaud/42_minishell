@@ -6,13 +6,13 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:06:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/26 12:09:33 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/26 13:45:42 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-enum char_cat get_cat(char c)
+int get_cat(char c)
 {
 	if (!c)
 		return EOF;
@@ -31,54 +31,59 @@ enum char_cat get_cat(char c)
 	return GENERAL;
 }
 
-enum lexer_state get_state(enum lexer_state state, enum char_cat cat)
+int get_state(int state, enum char_cat cat)
 {
 	if (cat == WHITESPACE && state != IN_WORD)
 		return (state);
-	if (state == START && cat < 8)
+	if (state == MAIN && cat < 8)
 		return (cat);
-	if (state == MAIN)
-	{
-		if (cat != SINGLE && cat != DOUBLE) // si autre chose que quote
-			return (cat);
-	}
+	if (state == AFTER_TOKEN)
+		return (cat);
+	if (state & (AFTER_PIPE | AFTER_L_CHEVRON | AFTER_2L_CHEVRON | AFTER_R_CHEVRON | AFTER_2R_CHEVRON) && cat < 8)
+		return (cat);
 	if (state & IN_WORD)
 	{
 		if (!cat) // si whitespace
-			return (MAIN); // on retourne dans le main
+			return (AFTER_TOKEN); // on retourne dans le main
 		if (cat == GENERAL)
 			return (IN_WORD);
 	}
 	if (state & (IN_SINGLE_QUOTE | IN_DOUBLE_QUOTE)) //in quotes
 	{
 		if (cat & state) //si fermeture de quote
-			return (MAIN);
+			return (AFTER_TOKEN);
 		return (state);
 	}
-	if (cat == (PIPE | L_CHEVRON | R_CHEVRON))
-		return (state + cat);
+	if (state & (L_CHEVRON | R_CHEVRON) && !(state ^ cat))
+		return ((state << 1) + cat);
 	return (ERROR);
 }
 
-t_token	*generate_token(t_token *curr_token, enum lexer_state prev_state, char *str)
+t_token	*generate_token(t_token *curr_token, int prev_state, char *str)
 {
-	enum lexer_state	next_state;
-	enum char_cat		cat;
+	int	state;
+	int	cat;
 
 	cat = get_cat(*str);
 	if (cat == EOF)
 		return (curr_token);
-	next_state = get_state(prev_state, cat);
-
+	state = get_state(prev_state, cat);
+	if (state > 1 && state % 2)
+	{
+		printf("ERROR, char %c, state: %d\n", *str, state);
+		return (NULL);
+	}
+	printf("char %c, state: %d\n", *str, state);
+	return (generate_token(curr_token, state, str + 1));
 }
 
 int parse(t_token **first, char *str)
 {
-	enum lexer_state	state;
-	int					i;
 	t_token				*dest;
 
+	(void)first;
 	if (xmalloc(&dest, sizeof(*dest), PARSING_ALLOC))
 		return (ERR_ALLOC_FAILED);
-	dest = generate_token(dest, START, str);
+	dest = generate_token(dest, MAIN, str);
+	return (1);
 }
