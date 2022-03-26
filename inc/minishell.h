@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 17:57:43 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/26 20:09:46 by artblin          ###   ########.fr       */
+/*   Updated: 2022/03/26 20:14:40 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <struct.h>
 # include <env.h>
 # include <memory.h>
+# include <get_next_line.h>
 
 # include <stdio.h>
 # include <unistd.h>

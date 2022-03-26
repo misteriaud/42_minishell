@@ -7,7 +7,9 @@ FILES					:=	main.c \
 							t_alloc.c \
 							t_node.c \
 							history.c \
-							env.c
+							env.c \
+							get_next_line.c \
+							get_next_line_utils.c
 
 SHELL					:= /bin/zsh
 OS						:= $(shell uname -s)
