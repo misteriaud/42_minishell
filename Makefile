@@ -10,9 +10,10 @@ FILES					:=	main.c \
 							parser_utils.c \
 							history.c \
 							get_file.c \
-							env.c \
+							init_env.c get_env.c print_env.c \
 							raw.c \
-							split_arr.c \
+							split.c \
+							compare.c
 
 SHELL					:= /bin/zsh
 OS						:= $(shell uname -s)
