@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:06:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/27 12:26:12 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/27 12:43:13 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static t_token	*add_token_back(t_token *parent, t_token **first)
 }
 
 static t_err	new_branch(t_token **curr_token, int prev_state,
-	int state, enum token_type type)
+	int state, t_token_type type)
 {
 	while (prev_state && (*curr_token)->type != CMD)
 		*curr_token = (*curr_token)->prev;

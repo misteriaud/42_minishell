@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 19:56:33 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/27 12:24:08 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/27 12:43:05 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #define STRUCT_H
 
 # include <termios.h>
-# include <parsing.h>
 
 typedef enum e_err
 {
@@ -25,7 +24,7 @@ typedef enum e_err
 	OVERFLOW_ERROR = 0x40,
 	ARG_ERROR = 0x50,
 	OPTION_ERROR = 0x60,
-	LEXING_ERROR = 0x70
+	LEXING_ERROR = 0x70,
 	PARSING_ERROR = 0x71,
 }	t_err;
 
@@ -49,6 +48,35 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
+
+//PARSING STRUCT
+typedef enum e_token_type
+{
+	CMD = 2,
+	CMD_VAR = 3,
+	PATH = 4,
+	PATH_VAR = 5,
+	APPEND_PATH = 8,
+	APPEND_PATH_VAR = 9,
+	ARG = 16,
+	ARG_VAR = 17,
+	HEREDOC = 32,
+	HEREDOC_VAR = 33,
+}	t_token_type;
+
+typedef struct s_token
+{
+	t_token_type	type;
+	t_str			value;
+	struct s_token	*stdin;
+	struct s_token	*arg;
+	struct s_token	*stdout;
+	struct s_token	*next;
+	struct s_token	*prev;
+}	t_token;
+
+
+// CONTEXT STRUCT
 typedef struct s_ctx
 {
 	int				fd_history;

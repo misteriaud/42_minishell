@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 00:35:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/27 12:28:09 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/27 12:39:50 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static inline int	get_state_when_whitespace(int state)
 	return (state);
 }
 
-static inline int	get_state_in_word(enum char_cat cat)
+static inline int	get_state_in_word(t_char_cat cat)
 {
 	if (!cat)
 		return (AFTER_TOKEN);
@@ -47,14 +47,14 @@ static inline int	get_state_in_word(enum char_cat cat)
 	return (cat);
 }
 
-static inline int	get_state_after_cmd(enum char_cat cat)
+static inline int	get_state_after_cmd(t_char_cat cat)
 {
 	if (cat & (L_CHEVRON | R_CHEVRON))
 		return (cat + CHEV_WAIT);
 	return (cat);
 }
 
-int	get_state(int state, enum char_cat cat)
+int	get_state(int state, t_char_cat cat)
 {
 	if (cat == EOF && state & 766)
 		return (ERROR);
