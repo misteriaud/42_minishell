@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:06:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/27 12:43:13 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/27 13:05:26 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static t_token	*add_token_back(t_token *parent, t_token **first)
 
 	prev = NULL;
 	curr = *first;
-	if (xmalloc(&dest, sizeof(*dest), PARS_GROUP))
+	if (xmalloc(&dest, sizeof(*dest), PARS_ALLOC))
 		return (NULL);
 	dest->prev = parent;
 	while (curr && curr->next)
@@ -41,9 +41,9 @@ static t_err	new_branch(t_token **curr_token, int prev_state,
 	while (prev_state && (*curr_token)->type != CMD)
 		*curr_token = (*curr_token)->prev;
 	if (prev_state == MAIN || prev_state & (A_PIP | A_R_CHEV))
-		*curr_token = add_token_back(*curr_token, &(*curr_token)->stdout);
+		*curr_token = add_token_back(*curr_token, &(*curr_token)->out);
 	else if (prev_state & A_L_CHEV)
-		*curr_token = add_token_back(*curr_token, &(*curr_token)->stdin);
+		*curr_token = add_token_back(*curr_token, &(*curr_token)->in);
 	else if (prev_state & AFTER_TOKEN && (*curr_token)->type == ARG)
 		*curr_token = add_token_back(*curr_token, &(*curr_token)->next);
 	else
@@ -80,7 +80,7 @@ static t_err	generate_token(t_token *token, int prev_state, char *str)
 		return (MEMORY_ERROR);
 	if (state == 1 || (prev_state & (IN_WORD | IN_SQ | IN_DQ) && state < 8))
 	{
-		if (xrealloc(&token->value.str, (token->value.len++) + 1, PARS_GROUP))
+		if (xrealloc(&token->value.str, (token->value.len++) + 1, PARS_ALLOC))
 			return (MEMORY_ERROR);
 		token->value.str[token->value.len - 1] = *str;
 	}
@@ -90,7 +90,7 @@ static t_err	generate_token(t_token *token, int prev_state, char *str)
 
 t_err	parse(t_token **first, char *str)
 {
-	if (xmalloc(first, sizeof(**first), PARS_GROUP))
+	if (xmalloc(first, sizeof(**first), PARS_ALLOC))
 		return (MEMORY_ERROR);
 	return (generate_token(*first, MAIN, str));
 }

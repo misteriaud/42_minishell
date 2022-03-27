@@ -13,7 +13,7 @@ int	export_env(t_ctx *ctx, const char *str)
 	int		state;
 
 	state = 0;
-	if (xmalloc(&new, sizeof(t_env), ENV_GROUP))
+	if (xmalloc(&new, sizeof(t_env), ENV_ALLOC))
 		return (MEMORY_ERROR);
 	while (str[new->key.len])
 	{
@@ -67,11 +67,11 @@ int	print_env(t_ctx *ctx)
 
 	elm = ctx->env;
 	size = get_env_size(elm);
-	if (xmalloc(&env, size, ENV_GROUP))
+	if (xmalloc(&env, size, ENV_ALLOC))
 		return (MEMORY_ERROR);
 	copy_env(env, elm);
 	write(1, env, size);
-	xfree(env, ENV_GROUP);
+	xfree(env, ENV_ALLOC);
 	return (NO_ERROR);
 }
 
@@ -82,7 +82,7 @@ int	byte_copy(t_str *new, char **str, const char end)
 	new->len = 0;
 	while ((*str)[new->len] != end)
 		new->len++;
-	if (xmalloc(&(new->str), new->len + 1, ENV_GROUP))
+	if (xmalloc(&(new->str), new->len + 1, ENV_ALLOC))
 		return (MEMORY_ERROR);
 	(new->str)[new->len] = '\0';
 	x = 0;
@@ -101,7 +101,7 @@ int	init_env(t_ctx *ctx, char **env)
 		return (NO_ENV_ERROR);
 	while (*env)
 	{
-		if (xmalloc(elm, sizeof(t_env), ENV_GROUP)
+		if (xmalloc(elm, sizeof(t_env), ENV_ALLOC)
 			| byte_copy(&(*elm)->key, env, '=')
 			| byte_copy(&(*elm)->value, env, '\0'))
 			return (MEMORY_ERROR);

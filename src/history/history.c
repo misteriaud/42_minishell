@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   history.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/26 18:53:26 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/26 21:41:05 by artblin          ###   ########.fr       */
+/*   Updated: 2022/03/27 13:04:24 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 int	init_history(t_ctx *ctx)
 {
 	ctx->fd_history = open(".minishell_history",
-			O_RDWR | O_CREAT | O_SYMLINK, 0666);
+			O_RDWR | O_CREAT, 0666);
 	if (ctx->fd_history < 0)
 		return (OPEN_ERROR);
 
@@ -41,7 +41,7 @@ int	add_to_history(t_ctx *ctx, t_str cmd)
 	write(ctx->fd_history, cmd.str, cmd.len);
 	write(ctx->fd_history, "\n", 1);
 
-	if (xmalloc(&new, sizeof(t_hst), HISTORY_GROUP))
+	if (xmalloc(&new, sizeof(t_hst), HISTORY_ALLOC))
 		return (MEMORY_ERROR);
 	new->cmd = cmd;
 	new->next = ctx->history;

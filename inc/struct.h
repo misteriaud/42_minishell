@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 19:56:33 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/27 12:43:05 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/27 13:06:24 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,14 @@ typedef enum e_err
 	LEXING_ERROR = 0x70,
 	PARSING_ERROR = 0x71,
 }	t_err;
+
+enum e_alloc_group
+{
+	PARS_ALLOC,
+	HISTORY_ALLOC,
+	ENV_ALLOC,
+	TMP_ALLOC,
+};
 
 typedef struct s_str
 {
@@ -68,9 +76,9 @@ typedef struct s_token
 {
 	t_token_type	type;
 	t_str			value;
-	struct s_token	*stdin;
+	struct s_token	*in;
 	struct s_token	*arg;
-	struct s_token	*stdout;
+	struct s_token	*out;
 	struct s_token	*next;
 	struct s_token	*prev;
 }	t_token;
