@@ -5,7 +5,7 @@ FILES					:=	main.c \
 							bzero.c \
 							t_alloc.c \
 							t_node.c \
-							parser.c
+							parser.c parser_utils.c
 
 SHELL					:= /bin/zsh
 OS						:= $(shell uname -s)

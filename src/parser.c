@@ -6,71 +6,13 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:06:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/27 00:30:50 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/27 01:16:17 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-int	get_cat(char c)
-{
-	if (!c)
-		return (EOF);
-	if (c == ' ')
-		return (WHITESPACE);
-	if (c == '|')
-		return (PIPE);
-	if (c == '\'')
-		return (SINGLE);
-	if (c == '"')
-		return (DOUBLE);
-	if (c == '<')
-		return (L_CHEVRON);
-	if (c == '>')
-		return (R_CHEVRON);
-	return (GENERAL);
-}
-
-int	get_state(int state, enum char_cat cat)
-{
-	if (cat == EOF && state & 766)
-		return (ERROR);
-	if (cat == EOF)
-		return (END);
-	if (cat == WHITESPACE && state != IN_WORD)
-	{
-		if (state & CHEV_WAIT)
-			return (state ^ CHEV_WAIT);
-		return (state);
-	}
-	if ((state == MAIN && cat < 8) || state == AFTER_TOKEN)
-	{
-		if (cat & (L_CHEVRON | R_CHEVRON))
-			return (cat + CHEV_WAIT);
-		return (cat);
-	}
-	if (state & 248 && cat < 8)
-		return (cat);
-	if (state & IN_WORD)
-	{
-		if (!cat)
-			return (AFTER_TOKEN);
-		if (cat & (L_CHEVRON | R_CHEVRON))
-			return (cat + CHEV_WAIT);
-		return (cat);
-	}
-	if (state & (IN_SQ | IN_DQ))
-	{
-		if (cat & state)
-			return (AFTER_TOKEN);
-		return (state);
-	}
-	if (state & CHEV_WAIT && cat & (L_CHEVRON | R_CHEVRON))
-		return ((state << 1) + cat);
-	return (ERROR);
-}
-
-t_token	*add_token_back(t_token *parent, t_token **first)
+static t_token	*add_token_back(t_token *parent, t_token **first)
 {
 	t_token	*curr;
 	t_token	*prev;
@@ -78,7 +20,7 @@ t_token	*add_token_back(t_token *parent, t_token **first)
 
 	prev = NULL;
 	curr = *first;
-	if (xmalloc(&dest, sizeof(*dest), PARSING_ALLOC))
+	if (xmalloc(&dest, sizeof(*dest), PARS_GROUP))
 		return (0);
 	dest->prev = parent;
 	while (curr && curr->next)
@@ -93,7 +35,8 @@ t_token	*add_token_back(t_token *parent, t_token **first)
 	return (dest);
 }
 
-int	new_branch(t_token **curr_token, int prev_state, int state, enum token_type type, char c)
+static int	new_branch(t_token **curr_token, int prev_state,
+	int state, enum token_type type)
 {
 	while (prev_state && (*curr_token)->type != CMD)
 		*curr_token = (*curr_token)->prev;
@@ -112,17 +55,10 @@ int	new_branch(t_token **curr_token, int prev_state, int state, enum token_type 
 		(*curr_token)->type += 4 + ((prev_state & 255) == A_2L_CHEV) * 24;
 	if (state == IN_DQ)
 		(*curr_token)->type += 1;
-	if (state == 1)
-	{
-		if (xrealloc(&(*curr_token)->value.str,
-				((*curr_token)->value.len++) + 1, PARSING_ALLOC))
-			return (ERR_ALLOC_FAILED);
-		(*curr_token)->value.str[(*curr_token)->value.len - 1] = c;
-	}
 	return (0);
 }
 
-int	generate_token(t_token *curr_token, int prev_state, char *str)
+static int	generate_token(t_token *token, int prev_state, char *str)
 {
 	int	state;
 	int	cat;
@@ -134,31 +70,27 @@ int	generate_token(t_token *curr_token, int prev_state, char *str)
 	if (!*str)
 		return (0);
 	else if (((prev_state == MAIN) || prev_state & A_PIP) && state < 8
-		&& new_branch(&curr_token, prev_state, state, CMD, *str))
+		&& new_branch(&token, prev_state, state, CMD))
 		return (ERR_ADD_TOKEN);
 	else if (prev_state & (A_L_CHEV | A_R_CHEV) && state < 8
-		&& new_branch(&curr_token, prev_state, state, PATH, *str))
+		&& new_branch(&token, prev_state, state, PATH))
 		return (ERR_ADD_TOKEN);
 	else if (prev_state & AFTER_TOKEN && state < 8
-		&& new_branch(&curr_token, prev_state, state, ARG, *str))
+		&& new_branch(&token, prev_state, state, ARG))
 		return (ERR_ADD_TOKEN);
-	else if (prev_state & (IN_WORD | IN_SQ | IN_DQ) && state < 8)
+	if (state == 1 || (prev_state & (IN_WORD | IN_SQ | IN_DQ) && state < 8))
 	{
-		if (xrealloc(&curr_token->value.str, (curr_token->value.len++) + 1, PARSING_ALLOC))
+		if (xrealloc(&token->value.str, (token->value.len++) + 1, PARS_GROUP))
 			return (ERR_ALLOC_FAILED);
-		curr_token->value.str[curr_token->value.len - 1] = *str;
+		token->value.str[token->value.len - 1] = *str;
 	}
-	return (generate_token(curr_token, state, str + 1));
+	// printf("%s(type %d) from %s\n", token->value.str, token->type, token->prev->value.str);
+	return (generate_token(token, state, str + 1));
 }
 
 int	parse(t_token **first, char *str)
 {
-	t_token				*dest;
-
-	(void)first;
-	if (xmalloc(&dest, sizeof(*dest), PARSING_ALLOC))
+	if (xmalloc(first, sizeof(**first), PARS_GROUP))
 		return (ERR_ALLOC_FAILED);
-	if (generate_token(dest, MAIN, str))
-		printf("PAS BON\n");
-	return (1);
+	return (generate_token(*first, MAIN, str));
 }
