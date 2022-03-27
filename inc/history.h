@@ -6,11 +6,11 @@
 /*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/26 19:04:00 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/26 19:33:58 by artblin          ###   ########.fr       */
+/*   Updated: 2022/03/27 21:18:14 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <struct.h>
 
 int		init_history(t_ctx *ctx);
-int		add_to_history(t_ctx *ctx, t_str cmd);
+int		add_history(t_ctx *ctx, t_str cmd);
