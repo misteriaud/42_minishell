@@ -12,8 +12,7 @@ FILES					:=	main.c \
 							get_file.c \
 							init_env.c get_env.c print_env.c \
 							raw.c \
-							split.c \
-							compare.c
+							split.c compare.c merge.c
 
 SHELL					:= /bin/zsh
 OS						:= $(shell uname -s)
