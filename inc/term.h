@@ -1,29 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   term.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
+/*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/25 17:57:43 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/26 23:44:15 by artblin          ###   ########.fr       */
+/*   Created: 2022/03/26 23:40:40 by artblin           #+#    #+#             */
+/*   Updated: 2022/03/26 23:41:44 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#ifndef TERM_H
+# define TERM_H
 
-# include <history.h>
 # include <struct.h>
-# include <env.h>
-# include <memory.h>
-# include <get_file.h>
-# include <term.h>
 
-//# include <termios.h>
-# include <stdio.h>
-# include <unistd.h>
-# include <stdlib.h>
-# include <fcntl.h>
+void	init_term(t_ctx *ctx);
+void	set_raw_term(t_ctx *ctx);
+void	set_origin_term(t_ctx *ctx);
 
 #endif

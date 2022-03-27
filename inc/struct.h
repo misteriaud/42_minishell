@@ -6,12 +6,14 @@
 /*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 19:56:33 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/26 21:48:31 by artblin          ###   ########.fr       */
+/*   Updated: 2022/03/26 23:37:51 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCT_H
 #define STRUCT_H
+
+# include <termios.h>
 
 typedef enum e_err
 {
@@ -50,6 +52,10 @@ typedef struct s_ctx
 	t_hst			*history;
 	t_env			*env;
 	t_env			*var;
+
+	struct termios	raw_term;
+	struct termios	origin_term;
+
 }	t_ctx;
 
 #endif
