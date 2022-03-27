@@ -1,11 +1,17 @@
 .DEFAULT_GOAL			:= all
 NAME					:= minishell
+
 FILES					:=	main.c \
 							memory.c \
 							bzero.c \
 							t_alloc.c \
 							t_node.c \
-							parser.c parser_utils.c
+							parser.c \
+							parser_utils.c \
+							history.c \
+							get_file.c \
+							env.c \
+							raw.c
 
 SHELL					:= /bin/zsh
 OS						:= $(shell uname -s)
@@ -33,8 +39,10 @@ OBJ						:= $(addprefix $(OBJDIR)/, $(FILES:%.c=%.o))
 DEP						:= $(patsubst $(OBJDIR)/%.o, $(DEPDIR)/%.d, $(OBJ))
 
 ifeq ($(OS),Darwin)
+	CC = clang
 endif
 ifeq ($(OS),Linux)
+	CC = gcc
 endif
 
 G := \033[3;32m
