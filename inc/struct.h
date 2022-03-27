@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 19:56:33 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/27 13:06:24 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/27 16:47:23 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,10 @@ typedef enum e_err
 	OPTION_ERROR = 0x60,
 	LEXING_ERROR = 0x70,
 	PARSING_ERROR = 0x71,
+	EMPTY_STR_ERROR = 0x80,
+	NULL_PTR_ERROR = 0x81,
+	NO_TOKEN_ERROR = 0x82,
+	NO_BYTE_ERROR = 0x83
 }	t_err;
 
 enum e_alloc_group
@@ -41,6 +45,13 @@ typedef struct s_str
 	char			*str;
 	int				len;
 }	t_str;
+
+typedef struct s_lst
+{
+	t_str			data;
+	struct s_lst	*next;
+	struct s_hst	*prev;
+}	t_lst;
 
 typedef struct s_hst
 {
