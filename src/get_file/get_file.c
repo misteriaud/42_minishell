@@ -6,72 +6,74 @@
 /*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/05 04:29:57 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/26 21:45:30 by artblin          ###   ########.fr       */
+/*   Updated: 2022/03/27 19:37:21 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-/*
-static int	file_record(const int fd, t_file **lst, size_t *byte)
+#define BUFFER_SIZE		4096
+
+static int	file_record(const int fd, t_lst **lst, int *byte)
 {
-	t_file	**elm;
+	t_lst	**elm;
 	char	*buf;
 	int		err;
 
-	*byte = 0;
 	elm = lst;
-	while (LOOP)
+	while (1)
 	{
-		if (!mempush(&buf, sizeof(char), BUFFER_SIZE + 1))
+		if (xmalloc(&buf, BUFFER_SIZE + 1, TMP_ALLOC))
 			return (MEMORY_ERROR);
 		err = read(fd, buf, BUFFER_SIZE);
 		if (err < 0)
 			return (READ_ERROR);
 		else if (!err)
 			break ;
-		if (!mempush(elm, sizeof(t_file), 1))
+		if (xmalloc(elm, sizeof(t_lst), TMP_ALLOC))
 			return (MEMORY_ERROR);
-		*byte += err;
 		buf[err] = '\0';
-		(*elm)->buf = buf;
-		elm = &(*elm)->nxt;
+		*byte += err;
+		(*elm)->data.len = err;
+		(*elm)->data.str = buf;
+		elm = &(*elm)->next;
 	}
-	(*elm) = NULL;
+	if (!*lst)
+		return (EMPTY_FILE_ERROR);
 	return (NO_ERROR);
 }
 
-static int	merge_file(t_file *lst, char **rec, const size_t byte)
-{
-	char	*str;
 
-	if (!mempush(rec, sizeof(char), byte + 1))
+
+static int	merge_lst(t_lst *lst, char **str, const int byte)
+{
+	int		x;
+
+	if (xmalloc(str, byte + 1, HISTORY_ALLOC))
 		return (MEMORY_ERROR);
-	(*rec)[byte] = '\0';
-	str = *rec;
+	(*str)[byte] = '\0';
+	x = 0;
 	while (lst)
 	{
-		while (*(lst->buf))
-			*(str)++ = *(lst->buf)++;
-		lst = lst->nxt;
+		while (*(lst->data.str))
+			(*str)[x++] = *(lst->data.str)++;
+		lst = lst->next;
 	}
 	return (NO_ERROR);
-}*/
+}
 
 int	get_file(const int fd, char **str)
 {
-	(void)fd;
-	(void)str;
-	/*
-	int			err;
-	size_t		byte;
-	t_file		*lst;
+	t_lst	*lst;
+	int		err;
+	int		byte;
 
-	err = file_record(*fd, &lst, &byte);
+	lst = NULL;
+	byte = 0;
+	err = file_record(fd, &lst, &byte);
 	if (err)
 		return (err);
-	if (merge_file(lst, str, byte))
+	if (merge_lst(lst, str, byte))
 		return (MEMORY_ERROR);
-		*/
 	return (NO_ERROR);
 }
