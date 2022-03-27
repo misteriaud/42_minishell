@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 19:56:33 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/27 17:23:53 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/27 19:28:07 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,15 @@ typedef enum e_err
 	EMPTY_STR_ERROR = 0x80,
 	NULL_PTR_ERROR = 0x81,
 	NO_TOKEN_ERROR = 0x82,
-	NO_BYTE_ERROR = 0x83
+	NO_BYTE_ERROR = 0x83,
+	READLINE_ERROR = 0x90,
+	READLINE_CTRL_C = 0x93,
+	READLINE_CTRL_D = 0x94,
 }	t_err;
 
 enum e_alloc_group
 {
+	READL_ALLOC,
 	PARS_ALLOC,
 	HISTORY_ALLOC,
 	ENV_ALLOC,
@@ -50,15 +54,8 @@ typedef struct s_lst
 {
 	t_str			data;
 	struct s_lst	*next;
-	struct s_hst	*prev;
+	struct s_lst	*prev;
 }	t_lst;
-
-typedef struct s_hst
-{
-	t_str			cmd;
-	struct s_hst	*next;
-	struct s_hst	*prev;
-}	t_hst;
 
 typedef struct s_env
 {
@@ -99,7 +96,7 @@ typedef struct s_token
 typedef struct s_ctx
 {
 	int				fd_history;
-	t_hst			*history;
+	t_lst			*history;
 	t_env			*env;
 	t_env			*var;
 	struct termios	raw_term;
