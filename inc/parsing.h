@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:04:05 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/27 00:39:52 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/27 12:26:47 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,6 @@
 #include <struct.h>
 
 # define PARS_GROUP 1
-
-# define ERR_ALLOC_FAILED 20
-# define ERR_ADD_TOKEN 21
 
 enum lexer_state {
 	END = -1,
@@ -75,10 +72,10 @@ typedef struct s_token
 }	t_token;
 
 // local functions
-int	get_cat(char c);
-int	get_state(int state, enum char_cat cat);
+t_err	get_cat(char c);
+t_err	get_state(int state, enum char_cat cat);
 
 // public functions
-int parse(t_token **first, char *str);
+t_err	parse(t_token **first, char *str);
 
 #endif
