@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/26 18:53:26 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/27 13:04:24 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/27 18:38:45 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,14 @@ int	history_parsing()
 
 int	add_to_history(t_ctx *ctx, t_str cmd)
 {
-	t_hst	*new;
+	t_lst	*new;
 
 	write(ctx->fd_history, cmd.str, cmd.len);
 	write(ctx->fd_history, "\n", 1);
 
-	if (xmalloc(&new, sizeof(t_hst), HISTORY_ALLOC))
+	if (xmalloc(&new, sizeof(t_lst), HISTORY_ALLOC))
 		return (MEMORY_ERROR);
-	new->cmd = cmd;
+	new->data = cmd;
 	new->next = ctx->history;
 	ctx->history = new;
 	return (NO_ERROR);

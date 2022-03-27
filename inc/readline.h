@@ -12,11 +12,8 @@
 #include <struct.h>
 #include <term.h>
 
-typedef struct termios t_termios;
-#define CTRL_KEY(q) ((q) & 0x1f)
 #define MAIN_CTX 0
 #define LETTER_GROUP 1
-#define PARSING_GROUP 2
 #define BUFFER_SIZE 4096
 
 enum e_move {
@@ -34,6 +31,7 @@ typedef struct s_line {
 	unsigned char	c;
 	t_letter		*first;
 	char			*prefix;
+	int				cols;
 	int				pos;
 	int				offset;
 	int				len;

@@ -94,7 +94,7 @@ void print_prefix(t_line *line)
 	write(STDOUT_FILENO, " > ", 3);
 }
 
-void display_line(t_line *line)
+t_err	display_line(t_line *line)
 {
 	t_letter *curr;
 	int	 i;
@@ -102,15 +102,15 @@ void display_line(t_line *line)
 	char *str;
 
 	i = -1;
-	if (line->cursor_move)
-		return ;
+	if (line->cursor_move || !line->first)
+		return (NO_ERROR);
 	write(STDOUT_FILENO, "\x1b[s", 3);
 	write(STDOUT_FILENO, "\x1b[0K", 4); //clean until end of line
 	i = -1;
 	j = -1;
 	curr = line->first;
-	if (!curr || xmalloc(&str, line->len + 1 - line->pos, 1))
-		return ;
+	if (xmalloc(&str, line->len + 1 - line->pos, 1))
+		return (MEMORY_ERROR);
 	while (curr && ++i < line->pos)
 		curr = curr->next;
 	while (curr)
@@ -119,16 +119,17 @@ void display_line(t_line *line)
 		curr = curr->next;
 	}
 	write(STDOUT_FILENO, str, line->len + 1 - line->pos);
-	write(STDOUT_FILENO, "\x1b[ur", 3);
+	write(STDOUT_FILENO, "\x1b[u", 3);
 	if (line->letter_added)
 	{
 		move_cursor(line, 1);
 		line->letter_added = 0;
 	}
 	xfree(str, 1);
+	return (NO_ERROR);
 }
 
-t_err	get_line(t_ctx *ctx, t_line *line)
+t_err	line_to_ctx(t_ctx *ctx, t_line *line)
 {
 	t_letter *curr;
 
@@ -201,6 +202,8 @@ t_err	xreadline(t_ctx *ctx, char *prefix)
 	line.letter_added = 0;
 	line.curr_hst = NULL;
 	line.head_hst = ctx->history;
+	if (get_cols(&line.cols))
+		return (READLINE_ERROR);
 	set_raw_term(ctx);
 	print_prefix(&line);
 	while (read(STDIN_FILENO, &line.c, 1) == 1 && line.c != 13) {
@@ -211,11 +214,12 @@ t_err	xreadline(t_ctx *ctx, char *prefix)
 		if (error)
 			break ;
 		set_autocomp(&line, LAST);
-		display_line(&line);
+		if (display_line(&line))
+			return (READLINE_ERROR);
 		display_autocomp(&line);
 	}
 	if (!error)
-		error = get_line(ctx, &line);
+		error = line_to_ctx(ctx, &line);
 	set_origin_term(ctx);
 	write(STDOUT_FILENO, "\n", 1);
 	return (error);

@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 19:56:33 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/27 19:28:07 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/27 20:52:17 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef enum e_err
 	READLINE_ERROR = 0x90,
 	READLINE_CTRL_C = 0x93,
 	READLINE_CTRL_D = 0x94,
+	TERM_ERROR = 0x95,
 }	t_err;
 
 enum e_alloc_group

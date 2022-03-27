@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   raw.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/26 23:30:31 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/26 23:40:29 by artblin          ###   ########.fr       */
+/*   Updated: 2022/03/27 21:07:59 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include <term.h>
 
 void	init_term(t_ctx *ctx)
 {
@@ -34,4 +34,15 @@ void	set_raw_term(t_ctx *ctx)
 void	set_origin_term(t_ctx *ctx)
 {
 	tcsetattr(0, TCSAFLUSH, &ctx->origin_term);
+}
+
+t_err	get_cols(int *cols)
+{
+	struct winsize ws;
+
+	if (ioctl(STDOUT_FILENO, TIOCGWINSZ, &ws) == -1 || ws.ws_col == 0)
+		return (TERM_ERROR);
+	else
+		*cols = ws.ws_col;
+	return (NO_ERROR);
 }
