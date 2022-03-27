@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 17:57:43 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/27 12:06:30 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/27 15:32:18 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <get_file.h>
 # include <term.h>
 # include <parsing.h>
+# include <utils.h>
 
 //# include <termios.h>
 # include <stdio.h>
