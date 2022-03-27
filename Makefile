@@ -11,7 +11,8 @@ FILES					:=	main.c \
 							history.c \
 							get_file.c \
 							env.c \
-							raw.c
+							raw.c \
+							split_arr.c \
 
 SHELL					:= /bin/zsh
 OS						:= $(shell uname -s)
