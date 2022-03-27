@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 19:56:33 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/27 16:47:23 by artblin          ###   ########.fr       */
+/*   Updated: 2022/03/27 17:23:53 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,9 +102,9 @@ typedef struct s_ctx
 	t_hst			*history;
 	t_env			*env;
 	t_env			*var;
-
 	struct termios	raw_term;
 	struct termios	origin_term;
+	t_str			curr_cmd;
 	t_token			*parse_tree;
 
 }	t_ctx;
