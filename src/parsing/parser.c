@@ -6,24 +6,26 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:06:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/28 15:07:26 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/28 16:37:49 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-static t_token	*add_token_back(t_token *parent, t_token **first)
+static t_token	*add_token_back(t_token *parent, t_redirect target)
 {
 	t_token	*curr;
 	t_token	*prev;
 	t_token	*dest;
+	t_token	**first;
 
 	prev = NULL;
+	first = &parent->in + target;
 	curr = *first;
 	if (xmalloc(&dest, sizeof(*dest), PARS_ALLOC))
 		return (NULL);
 	dest->prev = parent;
-	while (curr && curr->next)
+	while (curr)
 	{
 		prev = curr;
 		curr = curr->next;
@@ -31,7 +33,7 @@ static t_token	*add_token_back(t_token *parent, t_token **first)
 	if (!prev)
 		*first = dest;
 	else
-		curr->next = dest;
+		prev->next = dest;
 	return (dest);
 }
 
@@ -41,13 +43,11 @@ static t_err	new_branch(t_token **curr_token, int prev_state,
 	while (prev_state && (*curr_token)->type != CMD)
 		*curr_token = (*curr_token)->prev;
 	if (prev_state == MAIN || prev_state & (A_PIP | A_R_CHEV))
-		*curr_token = add_token_back(*curr_token, &(*curr_token)->out);
+		*curr_token = add_token_back(*curr_token, TARGET_OUT);
 	else if (prev_state & A_L_CHEV)
-		*curr_token = add_token_back(*curr_token, &(*curr_token)->in);
-	else if (prev_state & AFTER_TOKEN && (*curr_token)->type == ARG)
-		*curr_token = add_token_back(*curr_token, &(*curr_token)->next);
-	else
-		*curr_token = add_token_back(*curr_token, &(*curr_token)->arg);
+		*curr_token = add_token_back(*curr_token, TARGET_IN);
+	else if (prev_state & AFTER_TOKEN)
+		*curr_token = add_token_back(*curr_token, TARGET_ARG);
 	if (!curr_token)
 		return (MEMORY_ERROR);
 	(*curr_token)->type = type;
@@ -84,7 +84,8 @@ static t_err	generate_token(t_token *token, int prev_state, char *str)
 			return (MEMORY_ERROR);
 		token->value.str[token->value.len - 1] = *str;
 	}
-	// printf("%s(type %d) from %s\n", token->value.str, token->type, token->prev->value.str);
+	// if (token->prev)
+	// 	printf("%s(type %d) from %s\n", token->value.str, token->type, token->prev->value.str);
 	return (generate_token(token, state, str + 1));
 }
 

@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:04:05 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/27 12:39:16 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/28 16:17:06 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,13 @@ typedef enum e_char_cat
 	L_CHEVRON = 16,
 	R_CHEVRON = 64,
 }	t_char_cat;
+
+typedef enum e_redirect
+{
+	TARGET_IN = 0,
+	TARGET_ARG = 1,
+	TARGET_OUT = 2
+}	t_redirect;
 
 // local functions
 t_char_cat		get_cat(char c);
