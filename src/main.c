@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 17:57:54 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/28 16:12:38 by artblin          ###   ########.fr       */
+/*   Updated: 2022/03/28 23:33:00 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 int	main(int ac, char **av, char **env)
 {
 	(void)ac;
-	(void)av;
 	(void)env;
 
 	t_ctx	ctx;
@@ -24,9 +23,11 @@ int	main(int ac, char **av, char **env)
 	init_history(&ctx);
 	refresh_paths(&ctx);
 
-	t_str	prog = {"nvim", 4};
-	get_exec_path(&ctx, &prog);
-	printf("prog -> %s\n", prog.str);
+	if(parse(&ctx.parse_tree, av[1]))
+		return (0);
+	// t_str	prog = {"nvim", 4};
+	// get_exec_path(&ctx, &prog);
+	// printf("prog -> %s\n", prog.str);
 
 	xfree_all();
 	return (0);

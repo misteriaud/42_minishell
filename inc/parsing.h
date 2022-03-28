@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:04:05 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/27 12:39:16 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/29 00:54:30 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ typedef enum e_lexer_state {
 	A_2R_CHEV = 192,//			11000000	after >>
 	CHEV_WAIT = 512, //			1000000000	wait for next chevron
 	AFTER_TOKEN = 256, //		100000000
+	VAR_CHAR = 1024, //			10000000000	begin with $
 	ERROR = 255 //				11111111
 }	t_lexer_state;
 
@@ -43,6 +44,9 @@ typedef enum e_char_cat
 	PIPE = 8,
 	L_CHEVRON = 16,
 	R_CHEVRON = 64,
+	FOLLOW = 128,
+	FOLLOW_ARG = 129,
+	DOLLAR = 1024
 }	t_char_cat;
 
 // local functions

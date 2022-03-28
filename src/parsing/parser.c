@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:06:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/28 15:07:26 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/29 00:57:33 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ static t_err	new_branch(t_token **curr_token, int prev_state,
 	(*curr_token)->type = type;
 	if ((prev_state & 255) == A_2L_CHEV || (prev_state & 255) == A_2R_CHEV)
 		(*curr_token)->type += 4 + ((prev_state & 255) == A_2L_CHEV) * 24;
-	if (state == IN_DQ)
+	if (state & (IN_DQ | DOLLAR))
 		(*curr_token)->type += 1;
 	return (NO_ERROR);
 }
@@ -69,22 +69,33 @@ static t_err	generate_token(t_token *token, int prev_state, char *str)
 		return (LEXING_ERROR);
 	if (!*str)
 		return (NO_ERROR);
-	else if ((prev_state & A_PIP) && state < 8
+	else if ((prev_state & A_PIP) && (state & 0x3FF) < 8
 		&& new_branch(&token, prev_state, state, CMD))
 		return (MEMORY_ERROR);
-	else if (prev_state & (A_L_CHEV | A_R_CHEV) && state < 8
+	else if (prev_state & (A_L_CHEV | A_R_CHEV) && (state & 0x3FF) < 8
 		&& new_branch(&token, prev_state, state, PATH))
 		return (MEMORY_ERROR);
-	else if (prev_state & AFTER_TOKEN && state < 8
+	else if (prev_state == AFTER_TOKEN && (state & 0x3FF) < 8
 		&& new_branch(&token, prev_state, state, ARG))
 		return (MEMORY_ERROR);
-	if (state == 1 || (prev_state & (IN_WORD | IN_SQ | IN_DQ) && state < 8))
+	else if ((prev_state == IN_WORD && state & (IN_SQ | IN_DQ))
+			|| ((prev_state & 0x3FF) > AFTER_TOKEN && state < 8 && state != prev_state)
+			|| ((prev_state + state) == (IN_DQ & IN_SQ)))
+	{
+		token = add_token_back(token, &token->next);
+		if (!token)
+			return (MEMORY_ERROR);
+		token->type = FOLLOW;
+		if (state == IN_DQ)
+			token->type += 1;
+	}
+	if (state == IN_WORD || (state == prev_state && state < 8))
 	{
 		if (xrealloc(&token->value.str, (token->value.len++) + 1, PARS_ALLOC))
 			return (MEMORY_ERROR);
 		token->value.str[token->value.len - 1] = *str;
 	}
-	// printf("%s(type %d) from %s\n", token->value.str, token->type, token->prev->value.str);
+	printf("\'%c\'(prev_state: %d, state:%d) %s(type %d)\n", *str, prev_state, state, token->value.str, token->type);
 	return (generate_token(token, state, str + 1));
 }
 
