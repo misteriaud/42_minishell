@@ -10,7 +10,7 @@ FILES					:=	main.c \
 							parser_utils.c \
 							history.c \
 							get_file.c \
-							init_env.c get_env.c print_env.c \
+							init_env.c get_env.c print_env.c paths.c\
 							raw.c \
 							split.c compare.c merge.c
 
