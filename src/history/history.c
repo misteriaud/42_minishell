@@ -6,22 +6,24 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/26 18:53:26 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/27 21:17:57 by artblin          ###   ########.fr       */
+/*   Updated: 2022/03/28 15:47:48 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-#define HISTORY_FILE_NAME	".minishell_history"
+#define HST_FILE_NAME	".minishell_history"
+#define HST_FILE_LEN	18
 
 int	init_history(t_ctx *ctx)
 {
-	char	*file;
-	char	*home;
-	t_str	history_path;
+	t_str			home;
+	const t_str		history_file = {HST_FILE_NAME, HST_FILE_LEN};
+	t_str			history_path;
+	char			*file;
 
 	get_env(ctx, "HOME", &home);
-	merge(&history_path, home, "/.minishell_history");
+	merge(&history_path, &home, (t_str *)&history_file, '/');
 	ctx->fd_history = open(history_path.str, O_RDWR | O_CREAT, 0666);
 	if (ctx->fd_history < 0)
 		return (OPEN_ERROR);
