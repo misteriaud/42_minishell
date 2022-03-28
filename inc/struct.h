@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 19:56:33 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/28 15:42:37 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/28 18:19:25 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ typedef enum e_err
 	NO_VAR_ERROR = 0x84,
 	NOT_EQUAL_ERROR = 0x85,
 	EMPTY_FILE_ERROR = 0x86,
+	UNKNOWN_EXEC_ERROR = 0x87,
 	TERM_ERROR = 0x90,
 	PROCESS_ERROR = 0xA0,
 	FORK_ERROR = 0xA1,
@@ -41,9 +42,11 @@ typedef enum e_err
 
 enum e_alloc_group
 {
-	PARS_ALLOC,
+	PARS_ALLOC = 1,
 	HISTORY_ALLOC,
+	PATHS_ALLOC,
 	ENV_ALLOC,
+	EXEC_ALLOC,
 	TMP_ALLOC,
 };
 
@@ -100,6 +103,7 @@ typedef struct s_ctx
 {
 	int				fd_history;
 	t_lst			*history;
+	t_lst			*paths;
 	t_env			*env;
 
 	struct termios	raw_term;

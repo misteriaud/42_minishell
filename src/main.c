@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 17:57:54 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/28 16:30:24 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/28 18:19:20 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	main(int ac, char **av, char **env)
 	init_term(&ctx);
 	init_env(&ctx, env);
 	init_history(&ctx);
+	refresh_paths(&ctx);
 	err = parse(&ctx.parse_tree, av[1]);
 	if (!err)
 		err = run_process(&ctx);

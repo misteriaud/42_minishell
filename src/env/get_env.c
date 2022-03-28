@@ -6,13 +6,13 @@
 /*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 18:14:33 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/27 18:15:58 by artblin          ###   ########.fr       */
+/*   Updated: 2022/03/28 15:21:59 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-t_err	get_env(t_ctx *ctx, const char *key, char **value)
+t_err	get_env(t_ctx *ctx, const char *key, t_str *value)
 {
 	t_env	*elm;
 
@@ -21,7 +21,8 @@ t_err	get_env(t_ctx *ctx, const char *key, char **value)
 	{
 		if (!compare(key, elm->key.str))
 		{
-			*value = elm->value.str;
+			value->str = elm->value.str;
+			value->len = elm->value.len;
 			return (NO_ERROR);
 		}
 		elm = elm->next;
