@@ -6,7 +6,7 @@
 /*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 20:41:30 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/27 20:52:07 by artblin          ###   ########.fr       */
+/*   Updated: 2022/03/28 15:56:25 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,22 +22,26 @@ int	len(const char *str)
 	return (len);
 }
 
-t_err	merge(t_str *dest, char *str1, const char *str2)
+t_err	merge(t_str *merged, t_str *left, t_str *right, const char sep)
 {
-	int		byte;
-	int		x;
+	int	const	len = left->len + right->len + !!(sep);
+	int			x;
+	int			z;
 
 	x = 0;
-	if (!str1 | !str2)
+	if (!left->str | !right->str)
 		return (NULL_PTR_ERROR);
-	byte = len(str1) + len(str2);
-	if (!byte)
-		return (NO_BYTE_ERROR);
-	if (xmalloc(&(dest->str), byte + 1, TMP_ALLOC))
+	if (xmalloc(&(merged->str), len + 1, TMP_ALLOC))
 		return (MEMORY_ERROR);
-	while (*str1)
-		dest->str[x++] = *(str1)++;
-	while (*str2)
-		dest->str[x++] = *(str2)++;
+	merged->str[len] = '\0';
+	z = 0;
+	while (z < left->len)
+		merged->str[x++] = left->str[z++];
+	if (sep)
+		merged->str[x++] = sep;
+	z = 0;
+	while (z < right->len)
+		merged->str[x++] = right->str[z++];
+	merged->len = len;
 	return (NO_ERROR);
 }
