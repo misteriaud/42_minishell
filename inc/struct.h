@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 19:56:33 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/27 21:23:44 by artblin          ###   ########.fr       */
+/*   Updated: 2022/03/28 13:43:20 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ typedef enum e_err
 	NO_BYTE_ERROR = 0x83,
 	NO_VAR_ERROR = 0x84,
 	NOT_EQUAL_ERROR = 0x85,
-	EMPTY_FILE_ERROR = 0x86
-
+	EMPTY_FILE_ERROR = 0x86,
+	TERM_ERROR = 0x90,
 }	t_err;
 
 enum e_alloc_group
