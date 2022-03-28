@@ -6,11 +6,18 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 11:07:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/25 20:38:54 by artblin          ###   ########.fr       */
+/*   Updated: 2022/03/28 17:44:48 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <memory.h>
+
+int	*curr_group(void)
+{
+	static int	group = 0;
+	return (&group);
+}
+
 
 int	xmalloc(void *ptr, size_t size, int group)
 {
@@ -19,7 +26,7 @@ int	xmalloc(void *ptr, size_t size, int group)
 	void	**data;
 
 	data = (void **)ptr;
-	first = get_first_alloc(group);
+	first = get_first_alloc((group * !!group) + (*(curr_group()) * !group));
 	dest = new_alloc(first, size);
 	if (!dest)
 		return (1);
@@ -91,7 +98,7 @@ void	xfree_group(int group)
 	t_node	*to_remove;
 
 	first = get_first_node();
-	if (*first && (*first)->group == group)
+	if (*first && (*first)->group == (group * !!group) + (*(curr_group()) * !group))
 	{
 		to_remove = *first;
 		*first = to_remove->next;
@@ -100,7 +107,7 @@ void	xfree_group(int group)
 		return ;
 	}
 	curr = *first;
-	while (curr && curr->next && curr->next->group != group)
+	while (curr && curr->next && curr->next->group != (group * !!group) + (*(curr_group()) * !group))
 		curr = curr->next;
 	if (!curr || (curr && !curr->next))
 		return ;

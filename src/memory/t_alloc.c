@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 11:31:02 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/25 17:09:35 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/28 17:45:00 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_alloc	**get_first_alloc(int group)
 {
 	t_node	*node;
 
-	node = get_node(group);
+	node = get_node((group * !!group) + (*(curr_group()) * !group));
 	if (!node)
 		return (NULL);
 	return (&node->first);
