@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 19:56:33 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/28 16:01:08 by artblin          ###   ########.fr       */
+/*   Updated: 2022/03/28 18:03:34 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ typedef enum e_err
 
 enum e_alloc_group
 {
-	PARS_ALLOC,
+	PARS_ALLOC = 1,
 	HISTORY_ALLOC,
 	PATHS_ALLOC,
 	ENV_ALLOC,
