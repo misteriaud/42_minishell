@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 17:57:54 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/28 14:05:50 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/28 16:30:24 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,18 @@
 int	main(int ac, char **av, char **env)
 {
 	t_ctx	ctx;
+	t_err	err;
 
 	if (ac != 2)
 		return (1);
+	err = NO_ERROR;
 	init_term(&ctx);
 	init_env(&ctx, env);
 	init_history(&ctx);
-	if (parse(&ctx.parse_tree, av[1]))
-		return (1);
-	if (run_process(&ctx))
-		return (1);
+	err = parse(&ctx.parse_tree, av[1]);
+	if (!err)
+		err = run_process(&ctx);
 	xfree_all();
+	printf("\n end of process(%d)\n", err);
 	return (0);
 }

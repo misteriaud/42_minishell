@@ -6,37 +6,53 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:09:08 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/28 14:21:29 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/28 18:05:57 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <process.h>
 #include <stdio.h>
 
-t_err	execute_builtin(t_token *token)
+int	execute_builtin(t_token *token, t_err *err)
 {
 	(void)token;
+	(void)err;
 	return (NO_ERROR);
 }
 
-t_err	execute_bin(t_token *token)
+// return stdin
+int	execute_bin(t_token *token, t_err *err)
 {
+	pid_t	pid;
 	t_token *curr_arg;
+	// t_token *curr_in;
+	t_token	*curr_out;
 
-	if (!token)
-	{
-		printf("out\n");
-		return (NO_ERROR);
-	}
 	curr_arg = token->arg;
-	printf("%s with args [", token->value.str);
+	if (token->type == CMD)
+		printf("\n-> %s ", token->value.str);
+	if (token->type == PATH)
+		printf("\n-> save to %s", token->value.str);
+	fflush(stdout);
 	while (curr_arg)
 	{
-		printf("%s (%d), ", curr_arg->value.str, curr_arg->type);
+		printf("%s ", curr_arg->value.str);
+		fflush(stdout);
 		curr_arg = curr_arg->next;
 	}
-	printf("] -> ");
-	return (execute_bin(token->out));
+	curr_out = token->out;
+	while (curr_out)
+	{
+		if (curr_out->next)
+			pid = fork();
+		if (pid < 0)
+			*err = FORK_ERROR;
+		if (pid) //child
+			return (execute_bin(curr_out, err));
+		// printf("\nparent process : ");
+		curr_out = curr_out->next;
+	}
+	return (0);
 }
 
 t_err	run_process(t_ctx *ctx)
@@ -47,7 +63,7 @@ t_err	run_process(t_ctx *ctx)
 	err = NO_ERROR;
 	curr = ctx->parse_tree;
 	if (!curr)
-		return (err);
-	err = execute_bin(curr);
+		return (PARSING_ERROR);
+	execute_bin(curr, &err);
 	return (err);
 }
