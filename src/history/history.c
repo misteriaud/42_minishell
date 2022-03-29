@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/26 18:53:26 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/28 15:47:48 by artblin          ###   ########.fr       */
+/*   Updated: 2022/03/29 15:41:21 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ int	init_history(t_ctx *ctx)
 	char			*file;
 
 	get_env(ctx, "HOME", &home);
+	new_str(&history_path, home.len + history_file.len, TMP_ALLOC);
 	merge(&history_path, &home, (t_str *)&history_file, '/');
 	ctx->fd_history = open(history_path.str, O_RDWR | O_CREAT, 0666);
 	if (ctx->fd_history < 0)

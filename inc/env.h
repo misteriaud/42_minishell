@@ -11,4 +11,6 @@ t_err	get_env(t_ctx *ctx, const char *key, t_str *value);
 t_err	refresh_paths(t_ctx *ctx);
 t_err	get_exec_path(t_ctx *ctx, t_str *exec);
 
+t_err	replace_var(t_ctx *ctx, t_str *parse);
+
 #endif

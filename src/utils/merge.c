@@ -6,7 +6,7 @@
 /*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 20:41:30 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/28 15:56:25 by artblin          ###   ########.fr       */
+/*   Updated: 2022/03/29 15:32:39 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,13 @@ int	len(const char *str)
 	return (len);
 }
 
+t_err	new_str(t_str *data, const int len, const int alloc_group)
+{
+	if (xmalloc(&(data->str), len + 1, alloc_group))
+		return (MEMORY_ERROR);
+	return (NO_ERROR);
+}
+
 t_err	merge(t_str *merged, t_str *left, t_str *right, const char sep)
 {
 	int	const	len = left->len + right->len + !!(sep);
@@ -29,11 +36,8 @@ t_err	merge(t_str *merged, t_str *left, t_str *right, const char sep)
 	int			z;
 
 	x = 0;
-	if (!left->str | !right->str)
+	if (!merged->str | !left->str | !right->str)
 		return (NULL_PTR_ERROR);
-	if (xmalloc(&(merged->str), len + 1, TMP_ALLOC))
-		return (MEMORY_ERROR);
-	merged->str[len] = '\0';
 	z = 0;
 	while (z < left->len)
 		merged->str[x++] = left->str[z++];
