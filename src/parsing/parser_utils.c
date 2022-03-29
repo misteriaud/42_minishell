@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 00:35:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/29 00:52:41 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/29 01:30:29 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,9 @@ static inline int	get_state_in_word(t_char_cat cat)
 		return (AFTER_TOKEN);
 	if (cat & (L_CHEVRON | R_CHEVRON))
 		return (cat + CHEV_WAIT);
-	return (IN_WORD);
+	if (cat & DOLLAR)
+		return (VAR_CHAR);
+	return (cat);
 }
 
 static inline int	get_state_after_cmd(t_char_cat cat)

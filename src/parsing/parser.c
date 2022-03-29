@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:06:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/29 00:57:33 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/29 10:29:15 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ static t_err	generate_token(t_token *token, int prev_state, char *str)
 
 	cat = get_cat(*str);
 	state = get_state(prev_state, cat);
+	// if (!prev_state && state & (DOLLAR | IN_DQ))
+	// 	token->type = 3;
 	if (state > 1 && state % 2)
 		return (LEXING_ERROR);
 	if (!*str)
@@ -78,9 +80,9 @@ static t_err	generate_token(t_token *token, int prev_state, char *str)
 	else if (prev_state == AFTER_TOKEN && (state & 0x3FF) < 8
 		&& new_branch(&token, prev_state, state, ARG))
 		return (MEMORY_ERROR);
-	else if ((prev_state == IN_WORD && state & (IN_SQ | IN_DQ))
+	else if (state && prev_state && ((prev_state == IN_WORD && state & (IN_SQ | IN_DQ))
 			|| ((prev_state & 0x3FF) > AFTER_TOKEN && state < 8 && state != prev_state)
-			|| ((prev_state + state) == (IN_DQ & IN_SQ)))
+			|| ((prev_state + state) == (IN_DQ & IN_SQ))))
 	{
 		token = add_token_back(token, &token->next);
 		if (!token)
@@ -89,7 +91,7 @@ static t_err	generate_token(t_token *token, int prev_state, char *str)
 		if (state == IN_DQ)
 			token->type += 1;
 	}
-	if (state == IN_WORD || (state == prev_state && state < 8))
+	if (state & (IN_WORD | VAR_CHAR) || (state == prev_state && state < 8 && state))
 	{
 		if (xrealloc(&token->value.str, (token->value.len++) + 1, PARS_ALLOC))
 			return (MEMORY_ERROR);
