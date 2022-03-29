@@ -6,7 +6,7 @@
 /*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 20:41:30 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/29 15:32:39 by artblin          ###   ########.fr       */
+/*   Updated: 2022/03/29 16:50:17 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,22 @@ t_err	new_str(t_str *data, const int len, const int alloc_group)
 {
 	if (xmalloc(&(data->str), len + 1, alloc_group))
 		return (MEMORY_ERROR);
+	data->len = len;
+	return (NO_ERROR);
+}
+
+t_err	str_fill(t_str *dst, const char *str)
+{
+	int		x;
+
+	x = 0;
+	if (!dst->len)
+		return (NO_BYTE_ERROR);
+	while (x < dst->len)
+	{
+		dst->str[x] = str[x];
+		x++;
+	}
 	return (NO_ERROR);
 }
 
