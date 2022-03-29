@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 00:35:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/29 01:30:29 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/29 11:39:52 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,14 +62,13 @@ static inline int	get_state_after_cmd(t_char_cat cat)
 
 int	get_state(int state, t_char_cat cat)
 {
-	if (cat == EOF && state & 766)
+	if (cat == EOF && !(state & AFTER_TOKEN) && state & 766)
 		return (ERROR);
 	if (cat == EOF)
 		return (END);
 	if (cat & DOLLAR && (state > 4 || !state))
 		return (VAR_CHAR);
 	if (cat == WHITESPACE && state != IN_WORD)
-	// if (cat == WHITESPACE && state != IN_WORD && (state & (IN_SQ | IN_DQ)) == 0)
 		return (get_state_when_whitespace(state));
 	if ((state == MAIN && cat < 8) || state & AFTER_TOKEN)
 		return (get_state_after_cmd(cat));

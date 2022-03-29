@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:06:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/29 10:29:15 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/29 11:44:53 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,15 +58,40 @@ static t_err	new_branch(t_token **curr_token, int prev_state,
 	return (NO_ERROR);
 }
 
-static t_err	generate_token(t_token *token, int prev_state, char *str)
+static inline void	move_forward(int *prev_state, int *state, char **str)
 {
-	int	state;
-	int	cat;
+		*str = *str + 1;
+		*prev_state = *state;
+		*state = get_state(*prev_state, get_cat(**str));
+}
 
-	cat = get_cat(*str);
-	state = get_state(prev_state, cat);
-	// if (!prev_state && state & (DOLLAR | IN_DQ))
-	// 	token->type = 3;
+static t_err	feed_token(t_token *token, int *prev_state, int *state, char **str)
+{
+	t_str tmp;
+
+	tmp.len = 0;
+	tmp.str = NULL;
+	while ((*state > 0 && *state & (IN_WORD | VAR_CHAR)) || (*state == *prev_state && *state < 8 && *state))
+	{
+		if (xrealloc(&tmp.str, (tmp.len++) + 1, PARS_ALLOC))
+			return (MEMORY_ERROR);
+		tmp.str[tmp.len - 1] = **str;
+		move_forward(prev_state, state, str);
+	}
+	if (tmp.len)
+	{
+		if (!token->value.str)
+			token->value = tmp;
+		else if (merge(&token->value, &token->value, &tmp, 0))
+			return (MEMORY_ERROR);
+	}
+	else
+		move_forward(prev_state, state, str);
+	return (NO_ERROR);
+}
+
+static t_err	generate_token(t_token *token, int prev_state, int state, char *str)
+{
 	if (state > 1 && state % 2)
 		return (LEXING_ERROR);
 	if (!*str)
@@ -80,31 +105,19 @@ static t_err	generate_token(t_token *token, int prev_state, char *str)
 	else if (prev_state == AFTER_TOKEN && (state & 0x3FF) < 8
 		&& new_branch(&token, prev_state, state, ARG))
 		return (MEMORY_ERROR);
-	else if (state && prev_state && ((prev_state == IN_WORD && state & (IN_SQ | IN_DQ))
-			|| ((prev_state & 0x3FF) > AFTER_TOKEN && state < 8 && state != prev_state)
-			|| ((prev_state + state) == (IN_DQ & IN_SQ))))
-	{
-		token = add_token_back(token, &token->next);
-		if (!token)
-			return (MEMORY_ERROR);
-		token->type = FOLLOW;
-		if (state == IN_DQ)
-			token->type += 1;
-	}
-	if (state & (IN_WORD | VAR_CHAR) || (state == prev_state && state < 8 && state))
-	{
-		if (xrealloc(&token->value.str, (token->value.len++) + 1, PARS_ALLOC))
-			return (MEMORY_ERROR);
-		token->value.str[token->value.len - 1] = *str;
-	}
+	if (feed_token(token, &prev_state, &state, &str))
+		return (MEMORY_ERROR);
 	printf("\'%c\'(prev_state: %d, state:%d) %s(type %d)\n", *str, prev_state, state, token->value.str, token->type);
-	return (generate_token(token, state, str + 1));
+	return (generate_token(token, prev_state, state, str));
 }
 
 t_err	parse(t_token **first, char *str)
 {
+	int	state;
+
 	if (xmalloc(first, sizeof(**first), PARS_ALLOC))
 		return (MEMORY_ERROR);
 	(*first)->type = CMD;
-	return (generate_token(*first, MAIN, str));
+	state = get_state(MAIN, get_cat(*str));
+	return (generate_token(*first, MAIN, state, str));
 }
