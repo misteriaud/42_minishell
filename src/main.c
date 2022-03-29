@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 17:57:54 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/29 15:39:27 by artblin          ###   ########.fr       */
+/*   Updated: 2022/03/29 15:47:42 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,9 @@ int	main(int ac, char **av, char **env)
 	init_history(&ctx);
 	refresh_paths(&ctx);
 
-	t_str	prog = {"wc", 2};
-	get_exec_path(&ctx, &prog);
-	printf("prog -> %s\n", prog.str);
+	// t_str	prog = {"wc", 2};
+	// get_exec_path(&ctx, &prog);
+	// printf("prog -> %s\n", prog.str);
 	//execve(prog.str, av, env);
 
 	/*
