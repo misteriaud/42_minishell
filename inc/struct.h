@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 19:56:33 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/29 19:18:06 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/29 22:48:58 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@ typedef enum e_err
 	TERM_ERROR = 0x90,
 	PROCESS_ERROR = 0xA0,
 	FORK_ERROR = 0xA1,
-	BIN_UNKNOWN = 0xA2
+	BIN_UNKNOWN = 0xA2,
+	PIPE_ERROR = 0xA3
 }	t_err;
 
 enum e_alloc_group
@@ -97,7 +98,6 @@ typedef struct s_token
 	struct s_token	*redir;
 	struct s_token	*next;
 	struct s_token	*prev;
-	int				fd[2];
 }	t_token;
 
 

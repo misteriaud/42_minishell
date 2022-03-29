@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 17:02:17 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/29 17:26:36 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/29 22:30:09 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,6 @@ int	main(int ac, char **av, char **env)
 	if (!err)
 		err = run_process(&ctx);
 	xfree_all();
-	printf("\n end of process(%x)\n", err);
+	// printf("\n end of process(%x)\n", err);
 	return (0);
 }

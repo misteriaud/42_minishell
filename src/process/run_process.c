@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:09:08 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/29 22:03:59 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/29 22:49:38 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,54 +24,34 @@ int	execute_builtin(t_token *token, t_err *err)
 t_err	execute_bin(t_ctx *ctx, t_token *token, t_err *err)
 {
 	pid_t	pid;
-	t_token *curr_arg;
-	// t_token *curr_in;
 	int		pfd[2];
-	char	c;
+	char	**argv;
 
-	curr_arg = token->arg;
-	if (token->type == CMD)
-	{
-		if (get_exec_path(ctx, &token->value))
-			return (BIN_UNKNOWN);
-		printf("\n-> %s \n", token->value.str);
-		if (token->out && pipe(pfd) == -1)
-		{
-			printf("pipe failed\n");
-			return 1;
-		}
-		while (token->fd[0] && read(token->fd[0], &c, 1) != 1)
-			write(1, &c, 1);
-	}
-	// if (token->type == PATH)
-	// 	printf("\n-> save to %s", token->value.str);
-	while (curr_arg)
-	{
-		printf("%s ", curr_arg->value.str);
-		fflush(stdout);
-		curr_arg = curr_arg->next;
-	}
+
+	if (get_exec_path(ctx, &token->value))
+		return (BIN_UNKNOWN);
+	if (get_exec_arg(&argv, token))
+		return (MEMORY_ERROR);
 	if (token->out)
 	{
+		if (token->out && pipe(pfd) == -1)
+			return (PIPE_ERROR);
 		pid = fork();
 		if (pid < 0)
-			*err = FORK_ERROR;
+			return (FORK_ERROR);
 		if (pid == 0)
 		{
-			token->fd[0] = pfd[0];
 			close(pfd[1]); /* close write side */
+			dup2(pfd[0], 0); // connect read side with stdin
+			close(pfd[0]); // close read side
 			return (execute_bin(ctx, token->out, err));
 		}
-		else
-		{
-			close(pfd[0]);
-			write(pfd[1], "hello", 5);
-			close(pfd[1]);
-			printf("\nparent process : ");
-
-		}
 	}
-	return (0);
+	close(pfd[0]);
+	dup2(pfd[1], 1); /* connect the write side with stdout */
+	close(pfd[1]); /* close the write side */
+	execve(token->value.str, argv, NULL);
+	return (NO_ERROR);
 }
 
 t_err	run_process(t_ctx *ctx)
