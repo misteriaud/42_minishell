@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 00:35:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/29 11:39:52 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/29 16:24:01 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	get_cat(char c)
 	return (GENERAL);
 }
 
-static inline int	get_state_when_whitespace(int state)
+static inline t_lexer_state	get_state_when_whitespace(int state)
 {
 	if (state & CHEV_WAIT)
 		return (state ^ CHEV_WAIT);
@@ -42,7 +42,7 @@ static inline int	get_state_when_whitespace(int state)
 	return (state);
 }
 
-static inline int	get_state_in_word(t_char_cat cat)
+static inline t_lexer_state	get_state_in_word(t_char_cat cat)
 {
 	if (!cat)
 		return (AFTER_TOKEN);
@@ -53,14 +53,14 @@ static inline int	get_state_in_word(t_char_cat cat)
 	return (cat);
 }
 
-static inline int	get_state_after_cmd(t_char_cat cat)
+static inline t_lexer_state	get_state_after_cmd(t_char_cat cat)
 {
 	if (cat & (L_CHEVRON | R_CHEVRON))
 		return (cat + CHEV_WAIT);
 	return (cat);
 }
 
-int	get_state(int state, t_char_cat cat)
+t_lexer_state	get_state(t_lexer_state state, t_char_cat cat)
 {
 	if (cat == EOF && !(state & AFTER_TOKEN) && state & 766)
 		return (ERROR);

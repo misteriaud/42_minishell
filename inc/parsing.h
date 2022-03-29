@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:04:05 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/29 00:54:30 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/29 16:28:37 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,17 @@ typedef enum e_char_cat
 	DOLLAR = 1024
 }	t_char_cat;
 
+typedef struct t_state
+{
+	t_lexer_state	prev;
+	t_lexer_state	curr;
+}	t_state;
+
 // local functions
 t_char_cat		get_cat(char c);
 t_lexer_state	get_state(t_lexer_state state, t_char_cat cat);
 
 // public functions
-t_err			parse(t_token **first, char *str);
+t_err			parse(t_ctx *ctx, char *str);
 
 #endif
