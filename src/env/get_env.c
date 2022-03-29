@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 18:14:33 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/29 16:54:02 by artblin          ###   ########.fr       */
+/*   Updated: 2022/03/29 16:59:43 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ t_err	replace_var(t_ctx *ctx, t_str *parse)
 	str = parse->str;
 	while (*str)
 	{
-		printf("*str->%c\n", *str);
+		//printf("*str->%c\n", *str);
 		if (*str != '$')
 		{
 			extract_text(&str, &text);
