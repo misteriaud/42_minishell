@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_env.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 18:14:33 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/28 20:56:47 by artblin          ###   ########.fr       */
+/*   Updated: 2022/03/29 15:47:28 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,7 +137,6 @@ t_err	replace_var(t_ctx *ctx, t_str *parse)
 			byte += var.len;
 		}
 	}
-	printf("byte:%d\n", byte);
 	if (xmalloc(&(parse->str), byte + 1, PARS_ALLOC))
 		return (MEMORY_ERROR);
 	while (lst)
@@ -148,6 +147,5 @@ t_err	replace_var(t_ctx *ctx, t_str *parse)
 		//write(1, "\n", 1);
 		lst = lst->next;
 	}
-	printf("--> %s\n", parse->str);
 	return (NO_ERROR);
 }
