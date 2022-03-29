@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_utils.c                                     :+:      :+:    :+:   */
+/*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 00:35:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/29 16:45:17 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/29 22:58:17 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,14 @@ static inline t_lexer_state	get_state_in_word(t_char_cat cat)
 		return (AFTER_TOKEN);
 	if (cat & (L_CHEVRON | R_CHEVRON))
 		return (cat + CHEV_WAIT);
-	return (cat);
+	return ((t_lexer_state)cat);
 }
 
 static inline t_lexer_state	get_state_after_cmd(t_char_cat cat)
 {
 	if (cat & (L_CHEVRON | R_CHEVRON))
 		return (cat + CHEV_WAIT);
-	return (cat);
+	return ((t_lexer_state)cat);
 }
 
 t_lexer_state	get_state(t_lexer_state state, t_char_cat cat)
@@ -67,7 +67,7 @@ t_lexer_state	get_state(t_lexer_state state, t_char_cat cat)
 	if ((state == MAIN && cat < 8) || state & AFTER_TOKEN)
 		return (get_state_after_cmd(cat));
 	if (state & 248 && cat < 8)
-		return (cat);
+		return ((t_lexer_state)cat);
 	if (state & IN_WORD)
 		return (get_state_in_word(cat));
 	if (state & (IN_SQ | IN_DQ))
