@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:06:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/29 16:43:29 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/29 16:46:18 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static t_err	feed_token(t_ctx *ctx, t_token *token, t_state *state, char **str)
 	to_convert = 0;
 	if (state->curr & IN_DQ || (state->curr & IN_WORD && **str == '$'))
 		to_convert = 1;
-	while ((state->curr > 0 && state->curr & (IN_WORD | VAR_CHAR)) || (state->curr == state->prev && state->curr < 8 && state->curr))
+	while ((state->curr > 0 && state->curr & IN_WORD) || (state->curr == state->prev && state->curr < 8 && state->curr))
 	{
 		if (xrealloc(&tmp.str, (tmp.len++) + 1, PARS_ALLOC))
 			return (MEMORY_ERROR);
@@ -106,13 +106,13 @@ static t_err	generate_token(t_ctx *ctx, t_token *token, t_state state, char *str
 		return (LEXING_ERROR);
 	if (!*str)
 		return (NO_ERROR);
-	else if ((state.prev & A_PIP) && (state.prev & 0x3FF) < 8
+	else if ((state.prev & A_PIP) && state.prev < 8
 		&& new_branch(&token, state, CMD))
 		return (MEMORY_ERROR);
-	else if (state.prev & (A_L_CHEV | A_R_CHEV) && (state.curr & 0x3FF) < 8
+	else if (state.prev & (A_L_CHEV | A_R_CHEV) && state.curr < 8
 		&& new_branch(&token, state, PATH))
 		return (MEMORY_ERROR);
-	else if (state.prev == AFTER_TOKEN && (state.curr & 0x3FF) < 8
+	else if (state.prev == AFTER_TOKEN && state.curr < 8
 		&& new_branch(&token, state, ARG))
 		return (MEMORY_ERROR);
 	if (feed_token(ctx, token, &state, &str))
