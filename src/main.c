@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 17:02:17 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/29 17:02:40 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/29 22:50:40 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,26 @@ int	main(int ac, char **av, char **env)
 
 	if(parse(&ctx, av[1]))
 		return (0);
+
 	xfree_all();
 	return (0);
 }
+
+// test drop_variables
+	/*t_str str;
+	str.str = "tutur.utilise.$_!";
+	printf("%s\n", str.str);
+	drop_variables(&ctx, &str);
+	printf("%s\n", str.str);
+	printf("%d\n", str.len);*/
+// test execve
+	/*t_str	prog;
+	if (ac > 1)
+		prog.str = av[1];
+	else
+		prog.str = "";
+	prog.len = get_len(prog.str);
+	if (!get_exec_path(&ctx, &prog))
+		execve(prog.str, av+1, env);
+	else
+		printf("bad exec!\n");*/
