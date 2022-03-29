@@ -5,78 +5,79 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/27 00:35:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/29 16:45:17 by mriaud           ###   ########.fr       */
+/*   Created: 2022/03/29 17:15:44 by mriaud            #+#    #+#             */
+/*   Updated: 2022/03/29 17:20:33 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include <parsing.h>
 
-int	get_cat(char c)
+static t_token	*add_token_back(t_token *parent, t_token **first)
 {
-	if (!c)
-		return (EOF);
-	if (c == ' ')
-		return (WHITESPACE);
-	if (c == '|')
-		return (PIPE);
-	if (c == '\'')
-		return (SINGLE);
-	if (c == '"')
-		return (DOUBLE);
-	if (c == '<')
-		return (L_CHEVRON);
-	if (c == '>')
-		return (R_CHEVRON);
-	return (GENERAL);
-}
+	t_token	*curr;
+	t_token	*prev;
+	t_token	*dest;
 
-static inline t_lexer_state	get_state_when_whitespace(int state)
-{
-	if (state & CHEV_WAIT)
-		return (state ^ CHEV_WAIT);
-	if (state & AFTER_TOKEN)
-		return (AFTER_TOKEN);
-	return (state);
-}
-
-static inline t_lexer_state	get_state_in_word(t_char_cat cat)
-{
-	if (!cat)
-		return (AFTER_TOKEN);
-	if (cat & (L_CHEVRON | R_CHEVRON))
-		return (cat + CHEV_WAIT);
-	return (cat);
-}
-
-static inline t_lexer_state	get_state_after_cmd(t_char_cat cat)
-{
-	if (cat & (L_CHEVRON | R_CHEVRON))
-		return (cat + CHEV_WAIT);
-	return (cat);
-}
-
-t_lexer_state	get_state(t_lexer_state state, t_char_cat cat)
-{
-	if (cat == EOF && !(state & AFTER_TOKEN) && state & 766)
-		return (ERROR);
-	if (cat == EOF)
-		return (END);
-	if (cat == WHITESPACE && state != IN_WORD)
-		return (get_state_when_whitespace(state));
-	if ((state == MAIN && cat < 8) || state & AFTER_TOKEN)
-		return (get_state_after_cmd(cat));
-	if (state & 248 && cat < 8)
-		return (cat);
-	if (state & IN_WORD)
-		return (get_state_in_word(cat));
-	if (state & (IN_SQ | IN_DQ))
+	prev = NULL;
+	curr = *first;
+	if (xmalloc(&dest, sizeof(*dest), PARS_ALLOC))
+		return (NULL);
+	dest->prev = parent;
+	while (curr && curr->next)
 	{
-		if (cat & state)
-			return (AFTER_TOKEN | cat);
-		return (state);
+		prev = curr;
+		curr = curr->next;
 	}
-	if (state & CHEV_WAIT && cat & (L_CHEVRON | R_CHEVRON))
-		return ((state << 1) + cat);
-	return (ERROR);
+	if (!prev)
+		*first = dest;
+	else
+		curr->next = dest;
+	return (dest);
+}
+
+t_err	new_branch(t_token **curr_token, t_state state, t_token_type type)
+{
+	while (state.prev && (*curr_token)->type != CMD)
+		*curr_token = (*curr_token)->prev;
+	if (state.prev == MAIN || state.prev & (A_PIP | A_R_CHEV))
+		*curr_token = add_token_back(*curr_token, &(*curr_token)->out);
+	else if (state.prev & A_L_CHEV)
+		*curr_token = add_token_back(*curr_token, &(*curr_token)->in);
+	else if (state.prev & AFTER_TOKEN && (*curr_token)->type == ARG)
+		*curr_token = add_token_back(*curr_token, &(*curr_token)->next);
+	else
+		*curr_token = add_token_back(*curr_token, &(*curr_token)->arg);
+	if (!curr_token)
+		return (MEMORY_ERROR);
+	(*curr_token)->type = type;
+	if ((state.prev & 255) == A_2L_CHEV || (state.prev & 255) == A_2R_CHEV)
+		(*curr_token)->type += 4 + ((state.prev & 255) == A_2L_CHEV) * 24;
+	return (NO_ERROR);
+}
+
+void	move_forward(t_state *state, char **str)
+{
+	*str = *str + 1;
+	state->prev = state->curr;
+	state->curr = get_state(state->prev, get_cat(**str));
+}
+
+t_err	concat_token(t_ctx *ctx, t_token *token, t_state *state, t_str tmp)
+{
+	t_str	dest;
+
+	dest = (t_str){NULL, 0};
+	if (!(state->prev & IN_SQ) && replace_var(ctx, &tmp))
+		return (MEMORY_ERROR);
+	if (!token->value.str)
+		token->value = tmp;
+	else if (new_str(&dest, tmp.len + token->value.len, PARS_ALLOC)
+		|| merge(&dest, &token->value, &tmp, 0))
+		return (MEMORY_ERROR);
+	if (dest.len)
+	{
+		xfree(token->value.str, PARS_ALLOC);
+		token->value = dest;
+	}
+	return (NO_ERROR);
 }

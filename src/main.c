@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 17:02:17 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/29 17:02:26 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/29 17:02:40 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	main(int ac, char **av, char **env)
 	init_history(&ctx);
 	refresh_paths(&ctx);
 
-	if(parse(&ctx.parse_tree, av[1]))
+	if(parse(&ctx, av[1]))
 		return (0);
 	xfree_all();
 	return (0);

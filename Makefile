@@ -2,12 +2,8 @@
 NAME					:= minishell
 
 FILES					:=	main.c \
-							memory.c \
-							bzero.c \
-							t_alloc.c \
-							t_node.c \
-							parser.c \
-							parser_utils.c \
+							memory.c bzero.c t_alloc.c t_node.c \
+							lexer.c parser.c parser_utils.c \
 							history.c \
 							get_file.c \
 							init_env.c get_env.c print_env.c paths.c\
