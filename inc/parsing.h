@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:04:05 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/28 16:17:06 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/29 17:26:03 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,9 @@
 # define PARSING_H
 
 #include <struct.h>
-
-# define PARS_GROUP 1
+#include <memory.h>
+#include <env.h>
+#include <utils.h>
 
 typedef enum e_lexer_state {
 	END = -1,
@@ -43,20 +44,24 @@ typedef enum e_char_cat
 	PIPE = 8,
 	L_CHEVRON = 16,
 	R_CHEVRON = 64,
+	FOLLOW = 128,
+	FOLLOW_ARG = 129,
 }	t_char_cat;
 
-typedef enum e_redirect
+typedef struct t_state
 {
-	TARGET_IN = 0,
-	TARGET_ARG = 1,
-	TARGET_OUT = 2
-}	t_redirect;
+	t_lexer_state	prev;
+	t_lexer_state	curr;
+}	t_state;
 
 // local functions
 t_char_cat		get_cat(char c);
 t_lexer_state	get_state(t_lexer_state state, t_char_cat cat);
+t_err			new_branch(t_token **curr_token, t_state state, t_token_type type);
+t_err			concat_token(t_ctx *ctx, t_token *token, t_state *state, t_str tmp);
+void			move_forward(t_state *state, char **str);
 
 // public functions
-t_err			parse(t_token **first, char *str);
+t_err			parse(t_ctx *ctx, char *str);
 
 #endif

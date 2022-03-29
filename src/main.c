@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/25 17:57:54 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/28 18:26:22 by mriaud           ###   ########.fr       */
+/*   Created: 2022/03/29 17:02:17 by mriaud            #+#    #+#             */
+/*   Updated: 2022/03/29 17:26:36 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	main(int ac, char **av, char **env)
 	init_env(&ctx, env);
 	init_history(&ctx);
 	refresh_paths(&ctx);
-	err = parse(&ctx.parse_tree, av[1]);
+	err = parse(&ctx, av[1]);
 	if (!err)
 		err = run_process(&ctx);
 	xfree_all();

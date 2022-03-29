@@ -6,93 +6,64 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:06:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/28 16:37:49 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/29 17:26:55 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include <parsing.h>
 
-static t_token	*add_token_back(t_token *parent, t_redirect target)
+static t_err	feed_token(t_ctx *ctx, t_token *token,
+	t_state *state, char **str)
 {
-	t_token	*curr;
-	t_token	*prev;
-	t_token	*dest;
-	t_token	**first;
+	t_str	tmp;
 
-	prev = NULL;
-	first = &parent->in + target;
-	curr = *first;
-	if (xmalloc(&dest, sizeof(*dest), PARS_ALLOC))
-		return (NULL);
-	dest->prev = parent;
-	while (curr)
+	tmp = (t_str){NULL, 0};
+	while ((state->curr > 0 && state->curr & IN_WORD)
+		|| (state->curr == state->prev && state->curr < 8 && state->curr))
 	{
-		prev = curr;
-		curr = curr->next;
+		if (xrealloc(&tmp.str, (tmp.len++) + 1, PARS_ALLOC))
+			return (MEMORY_ERROR);
+		tmp.str[tmp.len - 1] = **str;
+		move_forward(state, str);
 	}
-	if (!prev)
-		*first = dest;
+	if (tmp.len)
+		return (concat_token(ctx, token, state, tmp));
 	else
-		prev->next = dest;
-	return (dest);
-}
-
-static t_err	new_branch(t_token **curr_token, int prev_state,
-	int state, t_token_type type)
-{
-	while (prev_state && (*curr_token)->type != CMD)
-		*curr_token = (*curr_token)->prev;
-	if (prev_state == MAIN || prev_state & (A_PIP | A_R_CHEV))
-		*curr_token = add_token_back(*curr_token, TARGET_OUT);
-	else if (prev_state & A_L_CHEV)
-		*curr_token = add_token_back(*curr_token, TARGET_IN);
-	else if (prev_state & AFTER_TOKEN)
-		*curr_token = add_token_back(*curr_token, TARGET_ARG);
-	if (!curr_token)
-		return (MEMORY_ERROR);
-	(*curr_token)->type = type;
-	if ((prev_state & 255) == A_2L_CHEV || (prev_state & 255) == A_2R_CHEV)
-		(*curr_token)->type += 4 + ((prev_state & 255) == A_2L_CHEV) * 24;
-	if (state == IN_DQ)
-		(*curr_token)->type += 1;
+		move_forward(state, str);
 	return (NO_ERROR);
 }
 
-static t_err	generate_token(t_token *token, int prev_state, char *str)
+// printf("\'%c\'(prev_state: %d, state:%d) %s(type %d)\n", *str,
+	// state.prev, state.curr, token->value.str, token->type);
+static t_err	generate_token(t_ctx *ctx, t_token *token,
+	t_state state, char *str)
 {
-	int	state;
-	int	cat;
-
-	cat = get_cat(*str);
-	state = get_state(prev_state, cat);
-	if (state > 1 && state % 2)
+	if (state.curr > 1 && state.curr % 2)
 		return (LEXING_ERROR);
 	if (!*str)
 		return (NO_ERROR);
-	else if ((prev_state & A_PIP) && state < 8
-		&& new_branch(&token, prev_state, state, CMD))
+	else if ((state.prev & A_PIP) && state.prev < 8
+		&& new_branch(&token, state, CMD))
 		return (MEMORY_ERROR);
-	else if (prev_state & (A_L_CHEV | A_R_CHEV) && state < 8
-		&& new_branch(&token, prev_state, state, PATH))
+	else if (state.prev & (A_L_CHEV | A_R_CHEV) && state.curr < 8
+		&& new_branch(&token, state, PATH))
 		return (MEMORY_ERROR);
-	else if (prev_state & AFTER_TOKEN && state < 8
-		&& new_branch(&token, prev_state, state, ARG))
+	else if (state.prev == AFTER_TOKEN && state.curr < 8
+		&& new_branch(&token, state, ARG))
 		return (MEMORY_ERROR);
-	if (state == 1 || (prev_state & (IN_WORD | IN_SQ | IN_DQ) && state < 8))
-	{
-		if (xrealloc(&token->value.str, (token->value.len++) + 1, PARS_ALLOC))
-			return (MEMORY_ERROR);
-		token->value.str[token->value.len - 1] = *str;
-	}
-	// if (token->prev)
-	// 	printf("%s(type %d) from %s\n", token->value.str, token->type, token->prev->value.str);
-	return (generate_token(token, state, str + 1));
+	if (feed_token(ctx, token, &state, &str))
+		return (MEMORY_ERROR);
+	return (generate_token(ctx, token, state, str));
 }
 
-t_err	parse(t_token **first, char *str)
+t_err	parse(t_ctx *ctx, char *str)
 {
-	if (xmalloc(first, sizeof(**first), PARS_ALLOC))
+	t_state	state;
+
+	if (xmalloc(&ctx->parse_tree, sizeof(*ctx->parse_tree), PARS_ALLOC))
 		return (MEMORY_ERROR);
-	(*first)->type = CMD;
-	return (generate_token(*first, MAIN, str));
+	ctx->parse_tree->type = CMD;
+	state.prev = MAIN;
+	state.curr = get_state(MAIN, get_cat(*str));
+	return (generate_token(ctx, ctx->parse_tree, state, str));
 }
