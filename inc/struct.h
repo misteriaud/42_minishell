@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 19:56:33 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/28 18:21:11 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/29 19:18:06 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,10 @@ typedef struct s_token
 	struct s_token	*in;
 	struct s_token	*arg;
 	struct s_token	*out;
+	struct s_token	*redir;
 	struct s_token	*next;
 	struct s_token	*prev;
+	int				fd[2];
 }	t_token;
 
 
