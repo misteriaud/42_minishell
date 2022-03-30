@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 17:15:44 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/30 01:11:32 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/30 19:31:35 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,12 @@ t_err	new_branch(t_token **curr_token, t_state state, t_token_type type)
 {
 	while (state.prev && (*curr_token)->type != CMD)
 		*curr_token = (*curr_token)->prev;
-	if (state.prev == MAIN || state.prev & (A_PIP | A_R_CHEV))
+	if (state.prev == MAIN || state.prev & A_PIP)
 		*curr_token = add_token_back(*curr_token, &(*curr_token)->out);
 	else if (state.prev & A_L_CHEV)
 		*curr_token = add_token_back(*curr_token, &(*curr_token)->in);
-	else if (state.prev & AFTER_TOKEN && (*curr_token)->type == ARG)
-		*curr_token = add_token_back(*curr_token, &(*curr_token)->next);
+	else if (state.prev & A_R_CHEV)
+		*curr_token = add_token_back(*curr_token, &(*curr_token)->redir);
 	else
 		*curr_token = add_token_back(*curr_token, &(*curr_token)->arg);
 	if (!curr_token)

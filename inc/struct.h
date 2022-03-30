@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 19:56:33 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/30 16:29:42 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/30 22:23:59 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ typedef enum e_err
 	PROCESS_ERROR = 0xA0,
 	FORK_ERROR = 0xA1,
 	BIN_UNKNOWN = 0xA2,
-	PIPE_ERROR = 0xA3
+	PIPE_ERROR = 0xA3,
+	REDIRECT_ERROR = 0xA4
 }	t_err;
 
 enum e_alloc_group
@@ -108,6 +109,7 @@ struct s_token
 	t_token			*in;
 	t_token			*arg;
 	t_token			*out;
+	t_token			*redir;
 	t_token			*next;
 	t_token			*prev;
 };
