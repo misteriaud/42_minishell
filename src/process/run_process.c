@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:09:08 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/30 15:15:28 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/30 17:10:39 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,12 @@ t_err	execute(t_ctx *ctx, t_token *token, t_err *err)
 		*err = execute_next_token(ctx, token->out, pfd, err);
 	if (!*err && !built_func)
 		*err = get_exec_arg(&argv, token);
+	if (!*err)
+		*err = package_env(ctx);
 	if (!*err && built_func)
 		built_func(ctx, token->arg);
 	else if (!*err)
-		execve(token->value.str, argv, NULL);
+		execve(token->value.str, argv, ctx->exec_env);
 	return (*err);
 }
 
