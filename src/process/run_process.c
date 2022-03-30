@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:09:08 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/30 22:59:13 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/30 23:32:20 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,46 @@ static inline t_err	execute_next_token(t_ctx *ctx, t_token *next, int *pfd, t_er
 	return (*err);
 }
 
+static inline t_err	redirect_in(t_token *path, t_err *err)
+{
+	int		pfd[2];
+	int		fd;
+	int		pid;
+	char	c;
+
+	fd = 0;
+	while (!*err && path)
+	{
+		close(fd);
+		fd = open(path->value.str, O_RDONLY);
+		if (fd == -1)
+			return(REDIRECT_ERROR);
+		path = path->next;
+	}
+	if (!*err && pipe(pfd) == -1)
+		*err = PIPE_ERROR;
+	if (!*err)
+		pid = fork();
+	if (!*err && pid < 0)
+		*err = FORK_ERROR;
+	if (!*err && pid == 0)
+	{
+		close(pfd[0]);
+		while (read(fd, &c, 1))
+			write(pfd[1], &c, 1);
+		close(pfd[1]); // close write side
+		close(fd);
+		exit(NO_ERROR);
+	}
+	if (!*err)
+	{
+		close(pfd[1]); // close write side
+		dup2(pfd[0], 0); /* connect the read side with stdin */
+		close(pfd[0]); /* close the read side */
+	}
+	return (*err);
+}
+
 static inline t_err	redirect_out(t_token *path, int *pfd, t_err *err)
 {
 	int		fd;
@@ -66,8 +106,6 @@ static inline t_err	redirect_out(t_token *path, int *pfd, t_err *err)
 	if (!*err && pid == 0)
 	{
 		close(pfd[1]); /* close write side */
-		// dup2(pfd[0], 0); // connect read side with stdin
-		// close(pfd[0]); // close read side
 		while(read(pfd[0], &c, 1))
 			write(fd, &c, 1);
 		close(pfd[0]); // close read side
@@ -92,6 +130,8 @@ t_err	execute(t_ctx *ctx, t_token *token, t_err *err)
 	built_func = search_built_in(ctx, token->value.str);
 	if (!*err && !built_func)
 		*err = get_exec_path(ctx, &token->value);
+	if (!*err && token->in)
+		*err = redirect_in(token->in, err);
 	if (!*err && token->redir)
 		*err = redirect_out(token->redir, pfd, err);
 	else if (!*err && token->out)
