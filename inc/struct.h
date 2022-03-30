@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 19:56:33 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/30 22:42:00 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/30 22:59:18 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,15 +91,10 @@ typedef struct s_env
 typedef enum e_token_type
 {
 	CMD = 2,
-	CMD_VAR = 3,
 	PATH = 4,
-	PATH_VAR = 5,
 	APPEND_PATH = 8,
-	APPEND_PATH_VAR = 9,
 	ARG = 16,
-	ARG_VAR = 17,
 	HEREDOC = 32,
-	HEREDOC_VAR = 33,
 }	t_token_type;
 
 

@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:09:08 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/30 22:37:15 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/30 22:59:13 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,10 @@ static inline t_err	redirect_out(t_token *path, int *pfd, t_err *err)
 	while (!*err && path)
 	{
 		close(fd);
-		fd = open(path->value.str, O_RDWR | O_CREAT | O_APPEND * (path->type == APPEND_PATH), 0664);
+		fd = open(path->value.str, O_RDWR | O_CREAT
+			| O_TRUNC * (path->type == PATH)
+			| O_APPEND * (path->type == APPEND_PATH)
+			, 0664);
 		if (fd == -1)
 			return(REDIRECT_ERROR);
 		path = path->next;
