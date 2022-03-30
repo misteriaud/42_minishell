@@ -21,5 +21,7 @@ t_err	get_exec_path(t_ctx *ctx, t_str *exec);
 t_err	drop_variables(t_ctx *ctx, t_str *parse);
 
 t_err	get_exec_arg(char ***arg, t_token *parse);
+// duplicate variable environment list to array
+t_err	package_env(t_ctx *ctx);
 
 #endif

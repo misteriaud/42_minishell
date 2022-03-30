@@ -6,7 +6,11 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 19:56:33 by artblin           #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2022/03/30 01:35:15 by mriaud           ###   ########.fr       */
+=======
+/*   Updated: 2022/03/30 11:43:07 by artblin          ###   ########.fr       */
+>>>>>>> main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +18,11 @@
 #define STRUCT_H
 
 # include <termios.h>
+
+typedef struct s_built		t_built;
+typedef struct s_ctx		t_ctx;
+typedef struct s_token		t_token;
+typedef struct termios		t_termios;
 
 typedef enum e_bool
 {
@@ -94,31 +103,40 @@ typedef enum e_token_type
 	HEREDOC_VAR = 33,
 }	t_token_type;
 
-typedef struct s_token
+
+struct s_token
 {
 	t_token_type	type;
 	t_str			value;
-	struct s_token	*in;
-	struct s_token	*arg;
-	struct s_token	*out;
-	struct s_token	*redir;
-	struct s_token	*next;
-	struct s_token	*prev;
-}	t_token;
+	t_token			*in;
+	t_token			*arg;
+	t_token			*out;
+	t_token			*next;
+	t_token			*prev;
+};
 
+struct s_built
+{
+	t_str	cmd;
+	t_err	(*func)(t_ctx *ctx, t_token *args);
+};
 
 // CONTEXT STRUCT
-typedef struct s_ctx
+struct s_ctx
 {
 	int				fd_history;
 	t_lst			*history;
 	t_lst			*paths;
 	t_env			*env;
-
-	struct termios	raw_term;
-	struct termios	origin_term;
+	char			**exec_env;
+	t_built			built[7];
+	t_termios		raw_term;
+	t_termios		origin_term;
 	t_token			*parse_tree;
+};
 
-}	t_ctx;
+
+
+
 
 #endif

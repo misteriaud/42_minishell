@@ -6,10 +6,11 @@ FILES					:=	main.c \
 							lexer.c parser.c parser_utils.c \
 							history.c \
 							get_file.c \
-							init_env.c get_variable.c drop_variables.c print_env.c paths.c\
+							init_env.c get_variable.c drop_variables.c print_env.c paths.c package_env.c \
 							raw.c \
 							run_process.c \
-							split_array.c split_lst.c size.c compare.c merge.c is_char.c is_set.c t_str.c fill.c
+							split_array.c split_lst.c size.c compare.c merge.c is_char.c is_set.c t_str.c fill.c \
+							init_built_in.c search_built_in.c echo.c cd.c pwd.c unset.c export.c exit.c env.c
 
 SHELL					:= /bin/zsh
 OS						:= $(shell uname -s)
