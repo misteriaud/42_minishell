@@ -8,7 +8,9 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <unistd.h>
-
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <stdlib.h>
 
 t_err	run_process(t_ctx *ctx);
 t_err	execute(t_ctx *ctx, t_token *token, t_err *err);
