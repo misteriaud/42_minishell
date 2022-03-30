@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 17:15:44 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/29 22:58:53 by artblin          ###   ########.fr       */
+/*   Updated: 2022/03/30 01:11:32 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static t_token	*add_token_back(t_token *parent, t_token **first)
 	if (xmalloc(&dest, sizeof(*dest), PARS_ALLOC))
 		return (NULL);
 	dest->prev = parent;
-	while (curr && curr->next)
+	while (curr)
 	{
 		prev = curr;
 		curr = curr->next;
@@ -31,7 +31,7 @@ static t_token	*add_token_back(t_token *parent, t_token **first)
 	if (!prev)
 		*first = dest;
 	else
-		curr->next = dest;
+		prev->next = dest;
 	return (dest);
 }
 

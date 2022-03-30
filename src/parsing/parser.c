@@ -6,25 +6,45 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:06:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/29 22:17:09 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/30 00:26:33 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <parsing.h>
 
+static	t_err	ft_state_lane(t_state *state, char *str, int *i)
+{
+	while ((state->curr > 0 && state->curr & IN_WORD)
+		|| (state->curr == state->prev && state->curr < 8 && state->curr))
+	{
+		(*i)++;
+		move_forward(state, &str);
+	}
+	if (state->curr == ERROR)
+		return (LEXING_ERROR);
+	return (NO_ERROR);
+}
+
 static t_err	feed_token(t_ctx *ctx, t_token *token,
 	t_state *state, char **str)
 {
 	t_str	tmp;
+	t_state	state_at_end;
+	int		i;
 
 	tmp = (t_str){NULL, 0};
-	while ((state->curr > 0 && state->curr & IN_WORD)
+	i = 0;
+	if ((state->curr > 0 && state->curr & IN_WORD)
 		|| (state->curr == state->prev && state->curr < 8 && state->curr))
 	{
-		if (xrealloc(&tmp.str, (tmp.len++) + 1, PARS_ALLOC))
+		state_at_end = *state;
+		if (ft_state_lane(&state_at_end, *str, &tmp.len))
+			return (LEXING_ERROR);
+		if (xmalloc(&tmp.str, tmp.len + 1, PARS_ALLOC))
 			return (MEMORY_ERROR);
-		tmp.str[tmp.len - 1] = **str;
-		move_forward(state, str);
+		while (i++ < tmp.len)
+			tmp.str[i - 1] = *((*str)++);
+		*state = state_at_end;
 	}
 	if (tmp.len)
 		return (concat_token(ctx, token, state, tmp));
