@@ -6,7 +6,7 @@
 /*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 18:05:17 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/27 18:12:42 by artblin          ###   ########.fr       */
+/*   Updated: 2022/03/30 13:27:13 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ static int	get_total_env_size(t_env *elm, int *size)
 	*size = 0;
 	while (elm)
 	{
+		printf("%d %s\n", elm->key.len, elm->key.str);
+		printf("%d %s\n", elm->value.len, elm->value.str);
 		*size += (elm->key.len + elm->value.len + 2);
 		elm = elm->next;
 	}
@@ -55,7 +57,7 @@ t_err	print_env(t_ctx *ctx)
 	if (xmalloc(&env, size, ENV_ALLOC))
 		return (MEMORY_ERROR);
 	copy_env(env, elm);
-	write(1, env, size);
+	//write(1, env, size);
 	xfree(env, ENV_ALLOC);
 	return (NO_ERROR);
 }

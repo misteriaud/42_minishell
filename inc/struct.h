@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 19:56:33 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/30 12:45:10 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/30 16:29:42 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ typedef struct s_built		t_built;
 typedef struct s_ctx		t_ctx;
 typedef struct s_token		t_token;
 typedef struct termios		t_termios;
+typedef void (t_func)(t_ctx *, t_token *);
 
 typedef enum e_bool
 {
@@ -114,7 +115,7 @@ struct s_token
 struct s_built
 {
 	t_str	cmd;
-	t_err	(*func)(t_ctx *ctx, t_token *args);
+	t_func	*func;
 };
 
 // CONTEXT STRUCT

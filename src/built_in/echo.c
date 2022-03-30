@@ -6,13 +6,13 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 12:23:15 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/30 15:18:25 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/30 16:30:18 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-t_err	cmd_echo(t_ctx *ctx, t_token *args)
+void	cmd_echo(t_ctx *ctx, t_token *args)
 {
 	(void)ctx;
 

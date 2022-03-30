@@ -6,7 +6,7 @@
 /*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 02:12:00 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/30 12:32:52 by artblin          ###   ########.fr       */
+/*   Updated: 2022/03/30 15:33:25 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,23 +27,22 @@
 #define BUILT_IN_NBR	7
 #define BUILT_ALLOC		112
 
-typedef t_err (t_func)(t_ctx *, t_token *);
 
 t_err	init_built_in(t_ctx *ctx);
 
 t_func	*search_built_in(t_ctx *ctx, const char *exec);
 
-t_err	cmd_cd(t_ctx *ctx, t_token *args);
+void	cmd_cd(t_ctx *ctx, t_token *args);
 
-t_err	cmd_env(t_ctx *ctx, t_token *args);
+void	cmd_env(t_ctx *ctx, t_token *args);
 
-t_err	cmd_echo(t_ctx *ctx, t_token *args);
+void	cmd_echo(t_ctx *ctx, t_token *args);
 
-t_err	cmd_exit(t_ctx *ctx, t_token *args);
+void	cmd_exit(t_ctx *ctx, t_token *args);
 
-t_err	cmd_export(t_ctx *ctx, t_token *args);
+void	cmd_export(t_ctx *ctx, t_token *args);
 
-t_err	cmd_pwd(t_ctx *ctx, t_token *args);
+void	cmd_pwd(t_ctx *ctx, t_token *args);
 
-t_err	cmd_unset(t_ctx *ctx, t_token *args);
+void	cmd_unset(t_ctx *ctx, t_token *args);
 #endif
