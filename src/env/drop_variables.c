@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   drop_variables.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 22:25:36 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/29 22:35:53 by artblin          ###   ########.fr       */
+/*   Updated: 2022/03/30 23:11:55 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ t_err	drop_variables(t_ctx *ctx, t_str *parse)
 	char		*str;
 	t_err		err;
 
+	lst = NULL;
 	elm = &lst;
 	str = parse->str;
 	parse->len = 0;
