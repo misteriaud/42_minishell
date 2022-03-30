@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:09:08 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/29 22:49:38 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/30 01:59:59 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,11 @@ int	execute_builtin(t_token *token, t_err *err)
 	return (NO_ERROR);
 }
 
-// return stdin
 t_err	execute_bin(t_ctx *ctx, t_token *token, t_err *err)
 {
 	pid_t	pid;
 	int		pfd[2];
 	char	**argv;
-
 
 	if (get_exec_path(ctx, &token->value))
 		return (BIN_UNKNOWN);

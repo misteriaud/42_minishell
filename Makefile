@@ -8,7 +8,6 @@ FILES					:=	main.c \
 							get_file.c \
 							init_env.c get_variable.c drop_variables.c print_env.c paths.c\
 							raw.c \
-							split.c compare.c merge.c is.c \
 							run_process.c \
 							split_array.c split_lst.c size.c compare.c merge.c is_char.c is_set.c t_str.c fill.c
 
