@@ -20,4 +20,6 @@ t_err	get_exec_path(t_ctx *ctx, t_str *exec);
 // replace variable key by value in string
 t_err	drop_variables(t_ctx *ctx, t_str *parse);
 
+t_err	get_exec_arg(char ***arg, t_token *parse);
+
 #endif

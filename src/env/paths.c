@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   paths.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:13:26 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/29 22:38:36 by artblin          ###   ########.fr       */
+/*   Updated: 2022/03/29 23:13:54 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,12 @@ t_err	get_exec_arg(char ***arg, t_token *parse)
 		elm = elm->next;
 	if (xmalloc(arg, (size + 2) * sizeof(char *), TMP_ALLOC))
 		return (MEMORY_ERROR);
-	elm = parse;
+	elm = parse->arg;
 	x = 0;
 	(*arg)[x++] = parse->value.str;
 	while (elm)
 	{
-		(*arg)[x] = elm->value.str;
+		(*arg)[x++] = elm->value.str;
 		elm = elm->next;
 	}
 	return (NO_ERROR);
