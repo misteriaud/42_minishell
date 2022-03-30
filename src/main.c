@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 17:02:17 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/29 22:50:40 by artblin          ###   ########.fr       */
+/*   Updated: 2022/03/30 12:33:15 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 int	main(int ac, char **av, char **env)
 {
 	(void)ac;
+	(void)av;
 	(void)env;
 
 	t_ctx	ctx;
@@ -22,9 +23,18 @@ int	main(int ac, char **av, char **env)
 	init_env(&ctx, env);
 	init_history(&ctx);
 	refresh_paths(&ctx);
+	init_built_in(&ctx);
 
+	t_func	*f;
+
+	f = search_built_in(&ctx, "export");
+	if (f)
+		f(&ctx, NULL);
+
+	/*
 	if(parse(&ctx, av[1]))
 		return (0);
+		*/
 
 	xfree_all();
 	return (0);
