@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env.h                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/30 22:33:16 by artblin           #+#    #+#             */
+/*   Updated: 2022/03/30 22:33:17 by artblin          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef ENV_H
 # define ENV_H
 
@@ -13,6 +25,8 @@ t_err	refresh_paths(t_ctx *ctx);
 
 // get value of variable
 t_err	get_variable(t_ctx *ctx, const char *key, t_str *value);
+
+t_err	get_address_variable(t_ctx *ctx, const char *key, t_str **address_value);
 
 // test and get execution path
 t_err	get_exec_path(t_ctx *ctx, t_str *exec);

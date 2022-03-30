@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 19:56:33 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/30 22:23:59 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/30 22:42:00 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef enum e_err
 	NOT_EQUAL_ERROR = 0x85,
 	EMPTY_FILE_ERROR = 0x86,
 	UNKNOWN_EXEC_ERROR = 0x87,
+	UNKNOWN_PATH_ERROR = 0x88,
 	TERM_ERROR = 0x90,
 	PROCESS_ERROR = 0xA0,
 	FORK_ERROR = 0xA1,
