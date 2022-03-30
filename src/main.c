@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 17:02:17 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/30 12:33:15 by artblin          ###   ########.fr       */
+/*   Updated: 2022/03/30 13:42:01 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ int	main(int ac, char **av, char **env)
 	if (f)
 		f(&ctx, NULL);
 
+	//print_env(&ctx);
+	package_env(&ctx);
 	/*
 	if(parse(&ctx, av[1]))
 		return (0);

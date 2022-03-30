@@ -6,16 +6,16 @@
 /*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 12:26:10 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/30 12:26:21 by artblin          ###   ########.fr       */
+/*   Updated: 2022/03/30 15:31:16 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-t_err	cmd_pwd(t_ctx *ctx, t_token *args)
+void	cmd_pwd(t_ctx *ctx, t_token *args)
 {
 	(void)ctx;
 	(void)args;
 	printf("pwd\n");
-	return (NO_ERROR);
+	exit(NO_ERROR);
 }
