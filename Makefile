@@ -17,7 +17,7 @@ OS						:= $(shell uname -s)
 
 STD						:= -std=c99
 #OPT					:= -O3
-CFLAGS					:= -Wall -Wextra -Werror -Wpedantic -g
+CFLAGS					:= -Wall -Wextra -Werror -Wpedantic -lreadline -g
 DFLAGS					:= -MMD -MF
 
 REMOVE					:= rm -rvf
@@ -51,7 +51,7 @@ R := \033[m
 all:					$(NAME) Makefile
 
 $(NAME):				$(OBJ) | Makefile
-						$(CC) $^ -o $@
+						$(CC) $^ -lreadline -o $@
 
 #$(OBJDIR)/%.o:			$(SRCDIR)/%.c | $(OBJDIR) $(DEPDIR)
 -include $(DEP)

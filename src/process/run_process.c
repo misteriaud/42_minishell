@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:09:08 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/31 15:50:36 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/31 16:31:36 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static inline t_err	execute_next_token(t_ctx *ctx, t_token *next, t_err *err)
 		pid = fork();
 	if (!*err && pid < 0)
 		*err = FORK_ERROR;
-	if (!*err && pid == 0)
+	if (!*err && pid != 0)
 	{
 		close(pfd[1]); /* close write side */
 		dup2(pfd[0], 0); // connect read side with stdin
@@ -135,7 +135,7 @@ t_err	execute(t_ctx *ctx, t_token *token, t_err *err)
 		*err = redirect_out(token->redir, err);
 	if (!*err && token->in)
 		*err = redirect_in(token->in, err);
-	else if (!*err && token->out)
+	if (!*err && !token->redir && token->out)
 		*err = execute_next_token(ctx, token->out, err);
 	if (!*err && !built_func)
 		*err = get_exec_arg(&argv, token);
@@ -152,10 +152,16 @@ t_err	run_process(t_ctx *ctx)
 {
 	t_token *curr;
 	t_err	err;
+	int		pid, wpid;
+	int		status;
 
 	err = NO_ERROR;
 	curr = ctx->parse_tree;
 	if (!curr)
 		return (PARSING_ERROR);
-	return (execute(ctx, curr, &err));
+	pid = fork();
+	if (pid == 0)
+		execute(ctx, curr, &err);
+	while (!err && (wpid = wait(&status)) > 0);
+	return (err);
 }
