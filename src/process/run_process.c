@@ -6,15 +6,16 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:09:08 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/30 23:32:20 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/03/31 15:50:36 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <process.h>
 #include <stdio.h>
 
-static inline t_err	execute_next_token(t_ctx *ctx, t_token *next, int *pfd, t_err *err)
+static inline t_err	execute_next_token(t_ctx *ctx, t_token *next, t_err *err)
 {
+	int		pfd[2];
 	int	pid;
 
 	if (!*err && next && pipe(pfd) == -1)
@@ -79,8 +80,9 @@ static inline t_err	redirect_in(t_token *path, t_err *err)
 	return (*err);
 }
 
-static inline t_err	redirect_out(t_token *path, int *pfd, t_err *err)
+static inline t_err	redirect_out(t_token *path, t_err *err)
 {
+	int		pfd[2];
 	int		fd;
 	int		pid;
 	char	c;
@@ -123,19 +125,18 @@ static inline t_err	redirect_out(t_token *path, int *pfd, t_err *err)
 
 t_err	execute(t_ctx *ctx, t_token *token, t_err *err)
 {
-	int		pfd[2];
 	char	**argv;
 	t_func	*built_func;
 
 	built_func = search_built_in(ctx, token->value.str);
 	if (!*err && !built_func)
 		*err = get_exec_path(ctx, &token->value);
+	if (!*err && token->redir)
+		*err = redirect_out(token->redir, err);
 	if (!*err && token->in)
 		*err = redirect_in(token->in, err);
-	if (!*err && token->redir)
-		*err = redirect_out(token->redir, pfd, err);
 	else if (!*err && token->out)
-		*err = execute_next_token(ctx, token->out, pfd, err);
+		*err = execute_next_token(ctx, token->out, err);
 	if (!*err && !built_func)
 		*err = get_exec_arg(&argv, token);
 	if (!*err)
