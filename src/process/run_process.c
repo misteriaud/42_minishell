@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:09:08 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/31 16:31:36 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/04/06 20:32:31 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static inline t_err	execute_next_token(t_ctx *ctx, t_token *next, t_err *err)
 		close(pfd[1]); /* close write side */
 		dup2(pfd[0], 0); // connect read side with stdin
 		close(pfd[0]); // close read side
-		return (execute(ctx, next, err));
+		execute(ctx, next, err);
 	}
 	if (!*err)
 	{
@@ -123,10 +123,12 @@ static inline t_err	redirect_out(t_token *path, t_err *err)
 	return (*err);
 }
 
-t_err	execute(t_ctx *ctx, t_token *token, t_err *err)
+void	execute(t_ctx *ctx, t_token *token, t_err *err)
 {
 	char	**argv;
 	t_func	*built_func;
+	int		pid;
+	int		status;
 
 	built_func = search_built_in(ctx, token->value.str);
 	if (!*err && !built_func)
@@ -141,11 +143,15 @@ t_err	execute(t_ctx *ctx, t_token *token, t_err *err)
 		*err = get_exec_arg(&argv, token);
 	if (!*err)
 		*err = package_env(ctx);
-	if (!*err && built_func)
+	pid = fork();
+	if (pid == 0 && !*err && built_func)
 		built_func(ctx, token->arg);
-	else if (!*err)
+	else if (pid == 0 && !*err)
 		execve(token->value.str, argv, ctx->exec_env);
-	return (*err);
+	else if (pid && *err)
+		write(2, "error\n", 6);
+	wait(&status);
+	exit(*err);
 }
 
 t_err	run_process(t_ctx *ctx)
@@ -162,6 +168,6 @@ t_err	run_process(t_ctx *ctx)
 	pid = fork();
 	if (pid == 0)
 		execute(ctx, curr, &err);
-	while (!err && (wpid = wait(&status)) > 0);
+	while ((wpid = wait(&status)) > 0);
 	return (err);
 }

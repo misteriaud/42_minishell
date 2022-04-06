@@ -13,5 +13,5 @@
 #include <stdlib.h>
 
 t_err	run_process(t_ctx *ctx);
-t_err	execute(t_ctx *ctx, t_token *token, t_err *err);
+void	execute(t_ctx *ctx, t_token *token, t_err *err);
 #endif
