@@ -6,35 +6,33 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:09:08 by mriaud            #+#    #+#             */
-/*   Updated: 2022/04/11 13:37:40 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/04/11 19:13:24 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <process.h>
 #include <stdio.h>
 
-static inline t_err	execute_next_token(t_ctx *ctx, t_token *next)
+static inline t_err split_process(int *pid, t_token *token)
 {
 	int		pfd[2];
-	int		pid;
 	t_err	err;
 
 	err = NO_ERROR;
-	if (next && pipe(pfd) == -1)
+	if (token->out && !token->redir && pipe(pfd) == -1)
 		err = PIPE_ERROR;
 	if (err)
 		return (err);
-	pid = fork();
-	if (pid < 0)
+	*pid = fork();
+	if (*pid < 0)
 		err = FORK_ERROR;
-	if (!err && pid != 0)
+	if (!err && token->out && !token->redir && *pid)
 	{
 		close(pfd[1]); /* close write side */
 		dup2(pfd[0], 0); // connect read side with stdin
 		close(pfd[0]); // close read side
-		execute(ctx, next);
 	}
-	if (!err)
+	else if (!err && token->out && !token->redir && !*pid)
 	{
 		close(pfd[0]);
 		dup2(pfd[1], 1); /* connect the write side with stdout */
@@ -68,7 +66,7 @@ static inline t_err	redirect_in(t_token *path, t_err *err)
 	if (!*err && pid == 0)
 	{
 		close(pfd[0]);
-		while (read(fd, &c, 1))
+		while (read(fd, &c, 1) == 1)
 			write(pfd[1], &c, 1);
 		close(pfd[1]); // close write side
 		close(fd);
@@ -111,7 +109,7 @@ static inline t_err	redirect_out(t_token *path, t_err *err)
 	if (!*err && pid == 0)
 	{
 		close(pfd[1]); /* close write side */
-		while(read(pfd[0], &c, 1))
+		while (read(pfd[0], &c, 1) == 1)
 			write(fd, &c, 1);
 		close(pfd[0]); // close read side
 		close(fd);
@@ -126,16 +124,16 @@ static inline t_err	redirect_out(t_token *path, t_err *err)
 	return (*err);
 }
 
-void	execute(t_ctx *ctx, t_token *token)
+t_err	execute(t_ctx *ctx, t_token *token)
 {
 	char	**argv;
 	t_func	*built_func;
 	int		pid;
-	int		status;
-	int		wpid;
+	int		status, wpid;
 	t_err	err;
 
 	err = NO_ERROR;
+	pid = 1;
 	built_func = search_built_in(ctx, token->value.str);
 	if (!err && !built_func)
 		err = get_exec_path(ctx, &token->value);
@@ -143,35 +141,39 @@ void	execute(t_ctx *ctx, t_token *token)
 		err = redirect_out(token->redir, &err);
 	if (!err && token->in)
 		err = redirect_in(token->in, &err);
-	if (!token->redir && token->out)
-		execute_next_token(ctx, token->out);
 	if (!err && !built_func)
 		err = get_exec_arg(&argv, token);
 	if (!err)
+	{
 		err = package_env(ctx);
-	pid = fork();
+		err = split_process(&pid, token);
+	}
 	if (pid == 0 && !err && built_func)
 		built_func(ctx, token->arg);
 	else if (pid == 0 && !err)
 		execve(token->value.str, argv, ctx->exec_env);
-	while ((wpid = wait(&status)) > 0);
-	if (pid && err)
-		write(2, "error\n", 6);
-	exit(err);
+	else if (pid && token->out)
+		return (execute(ctx, token->out));
+	while ((wpid = wait(&status)) > 0)
+		write(2, "end\n", 4);
+	return(err);
 }
 
 t_err	run_process(t_ctx *ctx)
 {
 	t_token *curr;
-	int		pid, wpid;
-	int		status;
+	t_err	err;
+	int		default_inout[2];
+	default_inout[0] = dup(0);
+	default_inout[1] = dup(1);
 
 	curr = ctx->parse_tree;
 	if (!curr)
 		return (PARSING_ERROR);
-	pid = fork();
-	if (pid == 0)
-		execute(ctx, curr);
-	while ((wpid = wait(&status)) > 0);
-	return (NO_ERROR);
+	err = execute(ctx, curr);
+	dup2(default_inout[0], 0);
+	dup2(default_inout[1], 1);
+	close(default_inout[0]);
+	close(default_inout[1]);
+	return (err);
 }
