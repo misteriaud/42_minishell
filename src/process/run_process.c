@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:09:08 by mriaud            #+#    #+#             */
-/*   Updated: 2022/04/11 19:13:24 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/04/12 11:31:42 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,8 +154,11 @@ t_err	execute(t_ctx *ctx, t_token *token)
 		execve(token->value.str, argv, ctx->exec_env);
 	else if (pid && token->out)
 		return (execute(ctx, token->out));
-	while ((wpid = wait(&status)) > 0)
-		write(2, "end\n", 4);
+	waitpid(0, &status, 0);
+	close(0);
+	close(1);
+	while ((wpid = wait(&status)) > 0);
+		// write(2, "end\n", 4);
 	return(err);
 }
 
