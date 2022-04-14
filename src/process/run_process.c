@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:09:08 by mriaud            #+#    #+#             */
-/*   Updated: 2022/04/12 11:31:42 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/04/12 15:02:11 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,8 @@ static inline t_err	redirect_out(t_token *path, t_err *err)
 	{
 		close(pfd[1]); /* close write side */
 		while (read(pfd[0], &c, 1) == 1)
-			write(fd, &c, 1);
+			if (write(fd, &c, 1) == -1)
+				write(2, "write error\n", 12);
 		close(pfd[0]); // close read side
 		close(fd);
 		exit(NO_ERROR);
@@ -132,33 +133,34 @@ t_err	execute(t_ctx *ctx, t_token *token)
 	int		status, wpid;
 	t_err	err;
 
-	err = NO_ERROR;
-	pid = 1;
-	built_func = search_built_in(ctx, token->value.str);
-	if (!err && !built_func)
-		err = get_exec_path(ctx, &token->value);
-	if (!err && token->redir)
-		err = redirect_out(token->redir, &err);
-	if (!err && token->in)
-		err = redirect_in(token->in, &err);
-	if (!err && !built_func)
-		err = get_exec_arg(&argv, token);
-	if (!err)
+	err = split_process(&pid, token);
+	if (!pid)
 	{
-		err = package_env(ctx);
-		err = split_process(&pid, token);
+		built_func = search_built_in(ctx, token->value.str);
+		if (!err && !built_func)
+			err = get_exec_path(ctx, &token->value);
+		if (!err && token->redir)
+			err = redirect_out(token->redir, &err);
+		if (!err && token->in)
+			err = redirect_in(token->in, &err);
+		if (!err && !built_func)
+			err = get_exec_arg(&argv, token);
+		if (!err)
+			err = package_env(ctx);
+		if (!err && built_func)
+			built_func(ctx, token->arg);
+		else if (!err)
+			execve(token->value.str, argv, ctx->exec_env);
+		if (err)
+			write(2, "problemo :(\n", 12);
+		exit(1);
 	}
-	if (pid == 0 && !err && built_func)
-		built_func(ctx, token->arg);
-	else if (pid == 0 && !err)
-		execve(token->value.str, argv, ctx->exec_env);
-	else if (pid && token->out)
+	if (pid && token->out)
 		return (execute(ctx, token->out));
 	waitpid(0, &status, 0);
 	close(0);
 	close(1);
 	while ((wpid = wait(&status)) > 0);
-		// write(2, "end\n", 4);
 	return(err);
 }
 
