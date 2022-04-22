@@ -1,33 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   heredoc.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/25 17:57:43 by mriaud            #+#    #+#             */
-/*   Updated: 2022/04/21 18:29:01 by mriaud           ###   ########.fr       */
+/*   Created: 2022/04/21 18:25:26 by mriaud            #+#    #+#             */
+/*   Updated: 2022/04/21 20:54:21 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#ifndef HEREDOC_H
+# define HEREDOC_H
 
-# include <built_in.h>
-# include <history.h>
-# include <struct.h>
-# include <memory.h>
-# include <env.h>
-# include <get_file.h>
-# include <term.h>
-# include <parsing.h>
-# include <heredoc.h>
-# include <utils.h>
-# include <process.h>
+#include <struct.h>
+#include <memory.h>
+#include <env.h>
+#include <utils.h>
 
-# include <stdio.h>
-# include <unistd.h>
-# include <stdlib.h>
-# include <fcntl.h>
+#include <stdio.h>
+#include <readline/readline.h>
+
+t_err	prompt_heredoc(t_ctx *ctx);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 17:02:17 by mriaud            #+#    #+#             */
-/*   Updated: 2022/04/11 16:38:10 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/04/21 18:48:34 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ int	main(int ac, char **av, char **env)
 			return (0);
 		refresh_paths(&ctx);
 		err = parse(&ctx, cmd);
+		if (!err)
+			err = prompt_heredoc(&ctx);
 		if (!err)
 			err = run_process(&ctx);
 		if (err)

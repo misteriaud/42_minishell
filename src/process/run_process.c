@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:09:08 by mriaud            #+#    #+#             */
-/*   Updated: 2022/04/12 15:02:11 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/04/21 19:11:04 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static inline t_err split_process(int *pid, t_token *token)
 	return (err);
 }
 
-static inline t_err	redirect_in(t_token *path, t_err *err)
+static inline t_err	redirect_in(t_token *in, t_err *err)
 {
 	int		pfd[2];
 	int		fd;
@@ -49,13 +49,18 @@ static inline t_err	redirect_in(t_token *path, t_err *err)
 	char	c;
 
 	fd = 0;
-	while (!*err && path)
+	while (!*err && in)
 	{
-		close(fd);
-		fd = open(path->value.str, O_RDONLY);
-		if (fd == -1)
-			return(REDIRECT_ERROR);
-		path = path->next;
+		if (in->type == PATH)
+		{
+			close(fd);
+			fd = open(in->value.str, O_RDONLY);
+			if (fd == -1)
+				return(REDIRECT_ERROR);
+		}
+		if (!in->next)
+			break;
+		in = in->next;
 	}
 	if (!*err && pipe(pfd) == -1)
 		*err = PIPE_ERROR;
@@ -66,8 +71,10 @@ static inline t_err	redirect_in(t_token *path, t_err *err)
 	if (!*err && pid == 0)
 	{
 		close(pfd[0]);
-		while (read(fd, &c, 1) == 1)
+		while (in->type == PATH && read(fd, &c, 1) == 1)
 			write(pfd[1], &c, 1);
+		if (in->type == HEREDOC)
+			write(pfd[1], in->value.str, in->value.len);
 		close(pfd[1]); // close write side
 		close(fd);
 		exit(NO_ERROR);

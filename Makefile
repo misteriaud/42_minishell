@@ -4,6 +4,7 @@ NAME					:= minishell
 FILES					:=	main.c \
 							memory.c bzero.c t_alloc.c t_node.c \
 							lexer.c parser.c parser_utils.c \
+							prompt_heredoc.c \
 							history.c \
 							get_file.c \
 							init_env.c get_variable.c drop_variables.c print_env.c paths.c package_env.c \
