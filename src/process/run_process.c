@@ -6,12 +6,13 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:09:08 by mriaud            #+#    #+#             */
-/*   Updated: 2022/04/21 19:11:04 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/04/23 20:02:00 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <process.h>
 #include <stdio.h>
+#include <unistd.h>
 
 static inline t_err split_process(int *pid, t_token *token)
 {
@@ -98,7 +99,8 @@ static inline t_err	redirect_out(t_token *path, t_err *err)
 	fd = 0;
 	while (!*err && path)
 	{
-		close(fd);
+		if (fd)
+			close(fd);
 		fd = open(path->value.str, O_RDWR | O_CREAT
 			| O_TRUNC * (path->type == PATH)
 			| O_APPEND * (path->type == APPEND_PATH)
@@ -146,10 +148,10 @@ t_err	execute(t_ctx *ctx, t_token *token)
 		built_func = search_built_in(ctx, token->value.str);
 		if (!err && !built_func)
 			err = get_exec_path(ctx, &token->value);
-		if (!err && token->redir)
-			err = redirect_out(token->redir, &err);
 		if (!err && token->in)
 			err = redirect_in(token->in, &err);
+		if (!err && token->redir)
+			err = redirect_out(token->redir, &err);
 		if (!err && !built_func)
 			err = get_exec_arg(&argv, token);
 		if (!err)
