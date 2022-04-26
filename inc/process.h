@@ -11,6 +11,10 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <stdlib.h>
+#include <signal.h>
+
+t_err	redirect_in(t_token *in, t_err *err);
+t_err	redirect_out(t_token *path, t_err *err);
 
 t_err	run_process(t_ctx *ctx);
 t_err	execute(t_ctx *ctx, t_token *token);

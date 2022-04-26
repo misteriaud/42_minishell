@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 19:56:33 by artblin           #+#    #+#             */
-/*   Updated: 2022/04/12 14:26:12 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/04/26 15:38:37 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,8 @@ typedef enum e_err
 	BIN_UNKNOWN = 0xA2,
 	PIPE_ERROR = 0xA3,
 	REDIRECT_ERROR = 0xA4,
-	WRITE_ERROR = 0xA5
+	WRITE_ERROR = 0xA5,
+	SIGNAL_ERROR = 0xA6
 }	t_err;
 
 enum e_alloc_group
