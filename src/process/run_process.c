@@ -6,13 +6,12 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:09:08 by mriaud            #+#    #+#             */
-/*   Updated: 2022/04/23 20:02:00 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/04/26 15:18:28 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <process.h>
 #include <stdio.h>
-#include <unistd.h>
 
 static inline t_err split_process(int *pid, t_token *token)
 {
@@ -139,7 +138,7 @@ t_err	execute(t_ctx *ctx, t_token *token)
 	char	**argv;
 	t_func	*built_func;
 	int		pid;
-	int		status, wpid;
+	int		wpid, status;
 	t_err	err;
 
 	err = split_process(&pid, token);
@@ -166,17 +165,18 @@ t_err	execute(t_ctx *ctx, t_token *token)
 	}
 	if (pid && token->out)
 		return (execute(ctx, token->out));
-	waitpid(0, &status, 0);
 	close(0);
 	close(1);
 	while ((wpid = wait(&status)) > 0);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
 	return(err);
 }
 
 t_err	run_process(t_ctx *ctx)
 {
 	t_token *curr;
-	t_err	err;
+	t_err	exit_status;
 	int		default_inout[2];
 	default_inout[0] = dup(0);
 	default_inout[1] = dup(1);
@@ -184,10 +184,10 @@ t_err	run_process(t_ctx *ctx)
 	curr = ctx->parse_tree;
 	if (!curr)
 		return (PARSING_ERROR);
-	err = execute(ctx, curr);
+	exit_status = execute(ctx, curr);
 	dup2(default_inout[0], 0);
 	dup2(default_inout[1], 1);
 	close(default_inout[0]);
 	close(default_inout[1]);
-	return (err);
+	return (exit_status);
 }
