@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/26 18:53:26 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/29 22:35:30 by artblin          ###   ########.fr       */
+/*   Updated: 2022/04/27 14:55:46 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ int	init_history(t_ctx *ctx)
 	ctx->fd_history = open(history_path.str, O_RDWR | O_CREAT, 0666);
 	if (ctx->fd_history < 0)
 		return (OPEN_ERROR);
-	get_file(ctx->fd_history, &file);
+	if (get_file(ctx->fd_history, &file))
+		return (ERROR);
 	split_lst_inverted(&(ctx->history), file, '\n', HISTORY_ALLOC);
 	return (NO_ERROR);
 }

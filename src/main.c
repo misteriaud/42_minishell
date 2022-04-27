@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 17:02:17 by mriaud            #+#    #+#             */
-/*   Updated: 2022/04/21 18:48:34 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/04/27 14:55:57 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	main(int ac, char **av, char **env)
 	err = NO_ERROR;
 	init_term(&ctx);
 	init_env(&ctx, env);
-	init_history(&ctx);
+	// init_history(&ctx);
 	init_built_in(&ctx);
 	while (1)
 	{
