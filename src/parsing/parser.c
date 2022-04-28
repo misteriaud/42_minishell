@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:06:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/04/28 17:46:54 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/04/28 18:02:42 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,9 @@ t_err	feed_quote(t_ctx *ctx, t_token *token, char *str, int *i)
 		return (PARSING_ERROR);
 	if (quote == '\"' && drop_variables(ctx, &in_quotes))
 		return (PARSING_ERROR);
+	if (xrealloc(token->value.str, token->value.len + in_quotes.len + 1, PARS_ALLOC))
+		return (MEMORY_ERROR);
+	while (*in_quotes.str)
 
 	return (NO_ERROR);
 }
