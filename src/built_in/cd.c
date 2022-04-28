@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 12:24:56 by artblin           #+#    #+#             */
-/*   Updated: 2022/04/27 17:08:42 by artblin          ###   ########.fr       */
+/*   Updated: 2022/04/28 14:19:05 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,14 @@ t_err	cmd_cd(t_ctx *ctx, t_token *args)
 	if (!args)
 	{
 		write(1, "need path\n", 14);
-		exit(ARG_ERROR);
+		return (ARG_ERROR);
 	}
 	if (!args->value.str)
-		exit(NULL_PTR_ERROR);
-
+		return (NULL_PTR_ERROR);
 	if (chdir(args->value.str))
 	{
 		write(1, "invalide path\n", 14);
-		exit(UNKNOWN_PATH_ERROR);
+		return (UNKNOWN_PATH_ERROR);
 	}
 
 	get_address_variable(ctx, "PWD", &new_path);
@@ -43,5 +42,4 @@ t_err	cmd_cd(t_ctx *ctx, t_token *args)
 
 
 	return (NO_ERROR);
-	//exit(NO_ERROR);
 }

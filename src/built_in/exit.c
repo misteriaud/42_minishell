@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 12:27:01 by artblin           #+#    #+#             */
-/*   Updated: 2022/04/27 17:09:00 by artblin          ###   ########.fr       */
+/*   Updated: 2022/04/28 14:19:58 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,5 +18,4 @@ t_err	cmd_exit(t_ctx *ctx, t_token *args)
 	(void)args;
 	printf("exit\n");
 	return (NO_ERROR);
-	//exit(NO_ERROR);
 }
