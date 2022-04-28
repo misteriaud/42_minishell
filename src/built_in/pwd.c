@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 12:26:10 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/30 15:31:16 by artblin          ###   ########.fr       */
+/*   Updated: 2022/04/28 10:07:28 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-void	cmd_pwd(t_ctx *ctx, t_token *args)
+t_err	cmd_pwd(t_ctx *ctx, t_token *args)
 {
 	(void)ctx;
 	(void)args;
 	printf("pwd\n");
-	exit(NO_ERROR);
+	return (NO_ERROR);
 }

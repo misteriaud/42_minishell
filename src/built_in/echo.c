@@ -6,13 +6,13 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 12:23:15 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/30 16:30:18 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/04/28 10:03:12 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-void	cmd_echo(t_ctx *ctx, t_token *args)
+t_err	cmd_echo(t_ctx *ctx, t_token *args)
 {
 	(void)ctx;
 
@@ -25,5 +25,5 @@ void	cmd_echo(t_ctx *ctx, t_token *args)
 		else
 			write(1, "\n", 1);
 	}
-	exit(NO_ERROR);
+	return (NO_ERROR);
 }
