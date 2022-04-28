@@ -6,7 +6,7 @@
 /*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 13:46:16 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/29 22:23:42 by artblin          ###   ########.fr       */
+/*   Updated: 2022/04/27 19:08:07 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 # define UTILS_H
 
 # include <struct.h>
+
+char	*str_join(const char *left, const char *right);
 
 int		get_len(const char *str);
 

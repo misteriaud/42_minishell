@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 22:09:41 by artblin           #+#    #+#             */
-/*   Updated: 2022/04/21 19:21:01 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/04/27 18:26:47 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,11 @@ int	get_len(const char *str)
 	int		len;
 
 	len = 0;
-	while (str && str[len])
-		len++;
+	if (str)
+	{
+		while (str[len])
+			len++;
+	}
 	return (len);
 }
 

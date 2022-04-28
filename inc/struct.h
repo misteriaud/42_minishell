@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 19:56:33 by artblin           #+#    #+#             */
-/*   Updated: 2022/04/26 15:38:37 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/04/27 17:06:32 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ typedef struct s_built		t_built;
 typedef struct s_ctx		t_ctx;
 typedef struct s_token		t_token;
 typedef struct termios		t_termios;
-typedef void (t_func)(t_ctx *, t_token *);
 
 typedef enum e_bool
 {
@@ -57,6 +56,8 @@ typedef enum e_err
 	WRITE_ERROR = 0xA5,
 	SIGNAL_ERROR = 0xA6
 }	t_err;
+
+typedef t_err (t_func)(t_ctx *, t_token *);
 
 enum e_alloc_group
 {

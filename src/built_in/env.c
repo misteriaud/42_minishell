@@ -6,16 +6,25 @@
 /*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 12:25:25 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/30 15:30:42 by artblin          ###   ########.fr       */
+/*   Updated: 2022/04/27 17:08:51 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-void	cmd_env(t_ctx *ctx, t_token *args)
+t_err	cmd_env(t_ctx *ctx, t_token *args)
 {
-	(void)ctx;
 	(void)args;
-	printf("env\n");
-	exit(NO_ERROR);
+	const t_env		*elm = ctx->env;
+
+	while (elm)
+	{
+		write(STDOUT_FILENO, elm->key.str, elm->key.len);
+		write(STDOUT_FILENO, "=", 1);
+		write(STDOUT_FILENO, elm->value.str, elm->value.len);
+		write(STDOUT_FILENO, "\n", 1);
+		elm = elm->next;
+	}
+	return (NO_ERROR);
+	//exit(NO_ERROR);
 }
