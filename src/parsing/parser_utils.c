@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 17:15:44 by mriaud            #+#    #+#             */
-/*   Updated: 2022/04/28 14:16:03 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/04/28 14:34:37 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,24 +38,18 @@ t_err	add_token_back(t_token **parent, t_token **first)
 
 t_err	new_branch(t_token **curr_token, char type)
 {
-	t_err	err;
-
-	err = NO_ERROR;
 	while ((*curr_token)->type != CMD)
 		*curr_token = (*curr_token)->prev;
-	if (type == '|' && add_token_back(curr_token, &(*curr_token)->out))
-		err = MEMORY_ERROR;
-	else if (type == '<' && add_token_back(curr_token, &(*curr_token)->in))
-		err = MEMORY_ERROR;
-	else if (type == '>' && add_token_back(curr_token, &(*curr_token)->redir))
-		err = MEMORY_ERROR;
-	else if (add_token_back(curr_token, &(*curr_token)->arg))
-		err = MEMORY_ERROR;
-	if (!curr_token)
+	if (type == '|' && !add_token_back(curr_token, &(*curr_token)->out))
+		(*curr_token)->type = 0;
+	else if (type == '<' && !add_token_back(curr_token, &(*curr_token)->in))
+		(*curr_token)->type = type;
+	else if (type == '>' && !add_token_back(curr_token, &(*curr_token)->redir))
+		(*curr_token)->type = type;
+	else if (!add_token_back(curr_token, &(*curr_token)->arg))
+		(*curr_token)->type = 1;
+	else
 		return (MEMORY_ERROR);
-	(*curr_token)->type = 0;
-	if ((state.prev & 255) == A_2L_CHEV || (state.prev & 255) == A_2R_CHEV)
-		(*curr_token)->type += 4 + ((state.prev & 255) == A_2L_CHEV) * 24;
 	return (NO_ERROR);
 }
 
