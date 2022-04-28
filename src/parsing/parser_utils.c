@@ -6,13 +6,13 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 17:15:44 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/30 19:31:35 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/04/28 14:16:03 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <parsing.h>
 
-static t_token	*add_token_back(t_token *parent, t_token **first)
+t_err	add_token_back(t_token **parent, t_token **first)
 {
 	t_token	*curr;
 	t_token	*prev;
@@ -21,8 +21,8 @@ static t_token	*add_token_back(t_token *parent, t_token **first)
 	prev = NULL;
 	curr = *first;
 	if (xmalloc(&dest, sizeof(*dest), PARS_ALLOC))
-		return (NULL);
-	dest->prev = parent;
+		return (MEMORY_ERROR);
+	dest->prev = *parent;
 	while (curr)
 	{
 		prev = curr;
@@ -32,24 +32,28 @@ static t_token	*add_token_back(t_token *parent, t_token **first)
 		*first = dest;
 	else
 		prev->next = dest;
-	return (dest);
+	*parent = dest;
+	return (NO_ERROR);
 }
 
-t_err	new_branch(t_token **curr_token, t_state state, t_token_type type)
+t_err	new_branch(t_token **curr_token, char type)
 {
-	while (state.prev && (*curr_token)->type != CMD)
+	t_err	err;
+
+	err = NO_ERROR;
+	while ((*curr_token)->type != CMD)
 		*curr_token = (*curr_token)->prev;
-	if (state.prev == MAIN || state.prev & A_PIP)
-		*curr_token = add_token_back(*curr_token, &(*curr_token)->out);
-	else if (state.prev & A_L_CHEV)
-		*curr_token = add_token_back(*curr_token, &(*curr_token)->in);
-	else if (state.prev & A_R_CHEV)
-		*curr_token = add_token_back(*curr_token, &(*curr_token)->redir);
-	else
-		*curr_token = add_token_back(*curr_token, &(*curr_token)->arg);
+	if (type == '|' && add_token_back(curr_token, &(*curr_token)->out))
+		err = MEMORY_ERROR;
+	else if (type == '<' && add_token_back(curr_token, &(*curr_token)->in))
+		err = MEMORY_ERROR;
+	else if (type == '>' && add_token_back(curr_token, &(*curr_token)->redir))
+		err = MEMORY_ERROR;
+	else if (add_token_back(curr_token, &(*curr_token)->arg))
+		err = MEMORY_ERROR;
 	if (!curr_token)
 		return (MEMORY_ERROR);
-	(*curr_token)->type = type;
+	(*curr_token)->type = 0;
 	if ((state.prev & 255) == A_2L_CHEV || (state.prev & 255) == A_2R_CHEV)
 		(*curr_token)->type += 4 + ((state.prev & 255) == A_2L_CHEV) * 24;
 	return (NO_ERROR);
