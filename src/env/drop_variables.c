@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 22:25:36 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/30 23:11:55 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/02 16:28:36 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,5 +80,8 @@ t_err	drop_variables(t_ctx *ctx, t_str *parse)
 	new_str(parse, parse->len, PARS_ALLOC);
 	str_fill_from_lst(parse, lst);
 	xfree_group(TMP_ALLOC);
+	//printf("\n\nlen 1 :: %d\n", parse->len);
+	//printf("str 1 :: %s\n\n\n", parse->str);
+
 	return (err);
 }

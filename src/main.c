@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 17:02:17 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/02 14:56:15 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/02 16:12:37 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	main(int ac, char **av, char **env)
 	{
 		//get_prompt(&ctx, &prompt);
 		//cmd = readline(prompt);
-		cmd = readline("Jesu reviens > ");
+		cmd = readline("minishell > ");
 		if (!cmd)
 			return (0);
 		refresh_paths(&ctx);
