@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:06:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/02 15:36:39 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/02 15:55:37 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ t_err	expand_cmd(t_ctx *ctx)
 			curr = curr->out;
 			continue ;
 		}
-		drop_variables(ctx, &curr->value);
+		// drop_variables(ctx, &curr->value);
 		i = 0;
 		j = 0;
 		while (*curr->value.str && *curr->value.str == ' ')
@@ -121,7 +121,7 @@ t_err	expand_cmd(t_ctx *ctx)
 		while (curr->value.str[i + j])
 		{
 			if ((curr_arg->type == CMD || curr_arg->value.str) && curr->value.str[i])
-				curr_arg = add_token_back(curr_arg, &curr_arg->arg);
+				curr_arg = add_token_back(curr_arg, &curr->arg);
 			if (!curr_arg)
 				return (MEMORY_ERROR);
 			while (curr->value.str[i + j] && curr->value.str[i + j] != ' ')
