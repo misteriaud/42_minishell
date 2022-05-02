@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:04:05 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/02 11:22:17 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/02 14:38:45 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ t_lexer_state	get_state(t_lexer_state state, t_char_cat cat);
 t_err			new_branch(t_token **curr_token, t_state state, t_token_type type);
 t_err			concat_token(t_ctx *ctx, t_token *token, t_state *state, t_str tmp);
 void			move_forward(t_state *state, char **str);
+t_token		*add_token_back(t_token *parent, t_token **first);
 
 // public functions
 t_err			parse(t_ctx *ctx, char *str);

@@ -6,13 +6,13 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 17:15:44 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/02 09:52:21 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/02 14:38:55 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <parsing.h>
 
-static t_token	*add_token_back(t_token *parent, t_token **first)
+t_token	*add_token_back(t_token *parent, t_token **first)
 {
 	t_token	*curr;
 	t_token	*prev;

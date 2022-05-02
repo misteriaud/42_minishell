@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:06:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/02 12:16:35 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/02 14:50:58 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,19 +98,39 @@ static t_err	generate_token(t_ctx *ctx, t_token *token,
 t_err	expand_cmd(t_ctx *ctx)
 {
 	t_token *curr;
+	t_token *curr_arg;
 	int		i;
+	int		j;
 
 	curr = ctx->parse_tree;
 	while (curr)
 	{
 		drop_variables(ctx, &curr->value);
 		i = 0;
+		j = 0;
 		while (*curr->value.str == ' ')
 			curr->value.str++;
 		while (curr->value.str[i] != ' ')
 			i++;
-		if (split_arr(&curr->args, curr->value.str + i, ' ', PARS_ALLOC))
-			return (MEMORY_ERROR);
+		curr_arg = curr;
+		while (curr->value.str[i + j])
+		{
+			if ((curr_arg->type == CMD || curr_arg->value.str) && curr->value.str[i])
+				curr_arg = add_token_back(curr_arg, &curr_arg->arg);
+			if (!curr_arg)
+				return (MEMORY_ERROR);
+			while (curr->value.str[i + j] && curr->value.str[i + j] != ' ')
+			{
+				if (xrealloc(&curr_arg->value.str, curr_arg->value.len + 2, PARS_ALLOC))
+					return (MEMORY_ERROR);
+				curr_arg->value.str[curr_arg->value.len] = curr->value.str[i + j];
+				curr_arg->value.len++;
+				j++;
+			}
+			j++;
+		}
+		// if (split_arr(&curr->args, curr->value.str + i, ' ', PARS_ALLOC))
+		// 	return (MEMORY_ERROR);
 		curr->value.str[i] = 0;
 		curr = curr->out;
 	}

@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 19:56:33 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/02 11:56:02 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/02 14:27:20 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,6 @@ struct s_token
 	t_str			value;
 	t_token			*in;
 	t_token			*arg;
-	char			**args;
 	t_token			*out;
 	t_token			*redir;
 	t_token			*next;
