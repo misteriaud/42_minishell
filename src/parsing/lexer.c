@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 00:35:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/29 22:58:17 by artblin          ###   ########.fr       */
+/*   Updated: 2022/04/27 19:18:25 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,14 @@ static inline t_lexer_state	get_state_after_cmd(t_char_cat cat)
 	return ((t_lexer_state)cat);
 }
 
+static inline t_lexer_state get_state_after_chev(t_lexer_state state, t_char_cat cat)
+{
+	if (cat < 8)
+		return (cat + CHEV_WAIT);
+	if (state & (MAIN | A_PIP | AFTER_TOKEN))
+	return (state + 1);
+}
+
 t_lexer_state	get_state(t_lexer_state state, t_char_cat cat)
 {
 	if (cat == EOF && !(state & AFTER_TOKEN) && state & 766)
@@ -66,6 +74,8 @@ t_lexer_state	get_state(t_lexer_state state, t_char_cat cat)
 		return (get_state_when_whitespace(state));
 	if ((state == MAIN && cat < 8) || state & AFTER_TOKEN)
 		return (get_state_after_cmd(cat));
+	if (cat & (L_CHEVRON | R_CHEVRON))
+		return (get_state_after_chev(state, cat));
 	if (state & 248 && cat < 8)
 		return ((t_lexer_state)cat);
 	if (state & IN_WORD)

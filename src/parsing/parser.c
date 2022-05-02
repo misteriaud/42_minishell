@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:06:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/30 00:26:33 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/04/27 17:30:43 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ static t_err	generate_token(t_ctx *ctx, t_token *token,
 		return (LEXING_ERROR);
 	if (!*str)
 		return (NO_ERROR);
-	else if ((state.prev & A_PIP) && state.curr < 8
+	else if ((state.prev & A_PIP)
 		&& new_branch(&token, state, CMD))
 		return (MEMORY_ERROR);
 	else if (state.prev & (A_L_CHEV | A_R_CHEV) && state.curr < 8
