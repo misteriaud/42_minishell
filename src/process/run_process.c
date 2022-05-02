@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:09:08 by mriaud            #+#    #+#             */
-/*   Updated: 2022/04/26 23:28:25 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/04/28 12:12:51 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static inline void	run_cmd(t_err *err, t_ctx *ctx, t_token *token)
 	if (!*err)
 		*err = package_env(ctx);
 	if (!*err && built_func)
-		built_func(ctx, token->arg);
+		*err = built_func(ctx, token->arg);
 	else if (!*err)
 		execve(token->value.str, argv, ctx->exec_env);
 	if (*err)
@@ -99,15 +99,20 @@ t_err	run_process(t_ctx *ctx)
 	t_token	*curr;
 	t_err	exit_status;
 	int		default_inout[2];
+	t_func	*built_in;
 
 	default_inout[0] = dup(0);
 	default_inout[1] = dup(1);
 	curr = ctx->parse_tree;
 	if (!curr)
 		return (PARSING_ERROR);
+	built_in = search_built_in(ctx, curr->value.str);
 	if (signal(SIGINT, sigint_handler) == SIG_ERR)
 		return (SIGNAL_ERROR);
-	exit_status = execute(ctx, curr);
+	if (curr->out || !built_in)
+		exit_status = execute(ctx, curr);
+	else
+		exit_status = built_in(ctx, curr->arg);
 	dup2(default_inout[0], 0);
 	dup2(default_inout[1], 1);
 	close(default_inout[0]);

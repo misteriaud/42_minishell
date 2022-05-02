@@ -6,13 +6,15 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 17:02:17 by mriaud            #+#    #+#             */
-/*   Updated: 2022/04/27 14:55:57 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/02 14:56:15 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <stdio.h>
 #include <readline/readline.h>
+#include <prompt.h>
+
 
 int	main(int ac, char **av, char **env)
 {
@@ -25,13 +27,18 @@ int	main(int ac, char **av, char **env)
 	if (ac != 1)
 		return (1);
 	err = NO_ERROR;
-	init_term(&ctx);
+	//init_term(&ctx);
 	init_env(&ctx, env);
 	// init_history(&ctx);
 	init_built_in(&ctx);
+
+	//char *prompt;
+
 	while (1)
 	{
-		cmd = readline("minishell > ");
+		//get_prompt(&ctx, &prompt);
+		//cmd = readline(prompt);
+		cmd = readline("Jesu reviens > ");
 		if (!cmd)
 			return (0);
 		refresh_paths(&ctx);
@@ -43,8 +50,8 @@ int	main(int ac, char **av, char **env)
 		if (err)
 			printf("err : %d\n", err);
 		free(cmd);
+
 	}
 	xfree_all();
-	// printf("\n end of process(%x)\n", err);
 	return (0);
 }
