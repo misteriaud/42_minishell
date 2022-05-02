@@ -6,19 +6,19 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:06:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/04/27 17:30:43 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/02 10:58:16 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <parsing.h>
 
-static	t_err	ft_state_lane(t_state *state, char *str, int *i)
+static	t_err	ft_state_lane(t_state *state, char **str, int *i)
 {
 	while ((state->curr > 0 && state->curr & IN_WORD)
 		|| (state->curr == state->prev && state->curr < 8 && state->curr))
 	{
 		(*i)++;
-		move_forward(state, &str);
+		move_forward(state, str);
 	}
 	if (state->curr == ERROR)
 		return (LEXING_ERROR);
@@ -29,22 +29,22 @@ static t_err	feed_token(t_ctx *ctx, t_token *token,
 	t_state *state, char **str)
 {
 	t_str	tmp;
-	t_state	state_at_end;
 	int		i;
+	char	*end;
 
 	tmp = (t_str){NULL, 0};
 	i = 0;
 	if ((state->curr > 0 && state->curr & IN_WORD)
 		|| (state->curr == state->prev && state->curr < 8 && state->curr))
 	{
-		state_at_end = *state;
-		if (ft_state_lane(&state_at_end, *str, &tmp.len))
+		end = *str;
+		if (ft_state_lane(state, &end, &tmp.len))
 			return (LEXING_ERROR);
 		if (xmalloc(&tmp.str, tmp.len + 1, PARS_ALLOC))
 			return (MEMORY_ERROR);
 		while (i++ < tmp.len)
 			tmp.str[i - 1] = *((*str)++);
-		*state = state_at_end;
+		*str = end;
 	}
 	if (tmp.len)
 		return (concat_token(ctx, token, state, tmp));
@@ -65,7 +65,7 @@ static t_err	generate_token(t_ctx *ctx, t_token *token,
 	else if ((state.prev & A_PIP)
 		&& new_branch(&token, state, CMD))
 		return (MEMORY_ERROR);
-	else if (state.prev & (A_L_CHEV | A_R_CHEV) && state.curr < 8
+	else if (state.prev & (A_L_CHEV | A_R_CHEV | A_2L_CHEV | A_2R_CHEV) && state.curr < 8
 		&& new_branch(&token, state, PATH))
 		return (MEMORY_ERROR);
 	else if (state.prev == AFTER_TOKEN && state.curr < 8
@@ -84,6 +84,6 @@ t_err	parse(t_ctx *ctx, char *str)
 		return (MEMORY_ERROR);
 	ctx->parse_tree->type = CMD;
 	state.prev = MAIN;
-	state.curr = get_state(MAIN, get_cat(*str));
+	state.curr = get_state(MAIN, get_cat(&str));
 	return (generate_token(ctx, ctx->parse_tree, state, str));
 }

@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 17:15:44 by mriaud            #+#    #+#             */
-/*   Updated: 2022/04/27 18:40:02 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/02 09:52:21 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	move_forward(t_state *state, char **str)
 {
 	*str = *str + 1;
 	state->prev = state->curr;
-	state->curr = get_state(state->prev, get_cat(**str));
+	state->curr = get_state(state->prev, get_cat(str));
 }
 
 t_err	concat_token(t_ctx *ctx, t_token *token, t_state *state, t_str tmp)

@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:04:05 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/29 17:26:03 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/02 11:02:54 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ typedef enum e_lexer_state {
 	A_2L_CHEV = 48,//			00110000	after <<
 	A_R_CHEV = 64,//			01000000	after >
 	A_2R_CHEV = 192,//			11000000	after >>
-	CHEV_WAIT = 512, //			1000000000	wait for next chevron
+	// CHEV_WAIT = 512, //			1000000000	wait for next chevron
 	AFTER_TOKEN = 256, //		100000000
 	ERROR = 255 //				11111111
 }	t_lexer_state;
@@ -43,9 +43,9 @@ typedef enum e_char_cat
 	DOUBLE = 4,
 	PIPE = 8,
 	L_CHEVRON = 16,
+	DL_CHEVRON = 48,
 	R_CHEVRON = 64,
-	FOLLOW = 128,
-	FOLLOW_ARG = 129,
+	DR_CHEVRON = 192
 }	t_char_cat;
 
 typedef struct t_state
@@ -55,7 +55,7 @@ typedef struct t_state
 }	t_state;
 
 // local functions
-t_char_cat		get_cat(char c);
+t_char_cat		get_cat(char **str);
 t_lexer_state	get_state(t_lexer_state state, t_char_cat cat);
 t_err			new_branch(t_token **curr_token, t_state state, t_token_type type);
 t_err			concat_token(t_ctx *ctx, t_token *token, t_state *state, t_str tmp);
