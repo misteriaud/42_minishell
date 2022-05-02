@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:06:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/02 14:50:58 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/02 15:36:39 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,12 +105,17 @@ t_err	expand_cmd(t_ctx *ctx)
 	curr = ctx->parse_tree;
 	while (curr)
 	{
+		if (!curr->value.str)
+		{
+			curr = curr->out;
+			continue ;
+		}
 		drop_variables(ctx, &curr->value);
 		i = 0;
 		j = 0;
-		while (*curr->value.str == ' ')
+		while (*curr->value.str && *curr->value.str == ' ')
 			curr->value.str++;
-		while (curr->value.str[i] != ' ')
+		while (curr->value.str[i] && curr->value.str[i] != ' ')
 			i++;
 		curr_arg = curr;
 		while (curr->value.str[i + j])
@@ -142,6 +147,8 @@ t_err	parse(t_ctx *ctx, char *str)
 	t_state	state;
 	t_err	err;
 
+	if (!str || !*str)
+		return (EMPTY_STR_ERROR);
 	if (xmalloc(&ctx->parse_tree, sizeof(*ctx->parse_tree), PARS_ALLOC))
 		return (MEMORY_ERROR);
 	ctx->parse_tree->type = CMD;
