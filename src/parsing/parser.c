@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:06:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/02 11:25:14 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/02 12:16:35 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,22 +80,55 @@ static t_err	generate_token(t_ctx *ctx, t_token *token,
 	else if (state.prev & (A_L_CHEV | A_R_CHEV | A_2L_CHEV | A_2R_CHEV) && state.curr < 8
 		&& new_branch(&token, state, PATH))
 		return (log_error(MEMORY_ERROR, str));
-	else if (state.prev == AFTER_TOKEN && state.curr < 8
-		&& new_branch(&token, state, ARG))
-		return (log_error(MEMORY_ERROR, str));
-	if (feed_token(ctx, token, &state, &str))
+	if (state.curr == AFTER_TOKEN)
+	{
+		while (token->prev && token->type != CMD)
+			token = token->prev;
+		if (xrealloc(&(token->value.str), token->value.len + 2, PARS_ALLOC))
+			return (log_error(MEMORY_ERROR, str));
+		token->value.str[token->value.len] = *str;
+		token->value.len++;
+		move_forward(&state, &str);
+	}
+	else if (feed_token(ctx, token, &state, &str))
 		return (log_error(MEMORY_ERROR, str));
 	return (generate_token(ctx, token, state, str));
+}
+
+t_err	expand_cmd(t_ctx *ctx)
+{
+	t_token *curr;
+	int		i;
+
+	curr = ctx->parse_tree;
+	while (curr)
+	{
+		drop_variables(ctx, &curr->value);
+		i = 0;
+		while (*curr->value.str == ' ')
+			curr->value.str++;
+		while (curr->value.str[i] != ' ')
+			i++;
+		if (split_arr(&curr->args, curr->value.str + i, ' ', PARS_ALLOC))
+			return (MEMORY_ERROR);
+		curr->value.str[i] = 0;
+		curr = curr->out;
+	}
+	return (NO_ERROR);
 }
 
 t_err	parse(t_ctx *ctx, char *str)
 {
 	t_state	state;
+	t_err	err;
 
 	if (xmalloc(&ctx->parse_tree, sizeof(*ctx->parse_tree), PARS_ALLOC))
 		return (MEMORY_ERROR);
 	ctx->parse_tree->type = CMD;
 	state.prev = MAIN;
 	state.curr = get_state(MAIN, get_cat(&str));
-	return (generate_token(ctx, ctx->parse_tree, state, str));
+	err = generate_token(ctx, ctx->parse_tree, state, str);
+	if (!err)
+		err = expand_cmd(ctx);
+	return (err);
 }
