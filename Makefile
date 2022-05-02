@@ -7,6 +7,7 @@ FILES					:=	main.c \
 							prompt_heredoc.c \
 							history.c \
 							get_file.c \
+							prompt.c \
 							init_env.c get_variable.c drop_variables.c print_env.c paths.c package_env.c \
 							raw.c \
 							run_process.c redirect_in.c redirect_out.c \
