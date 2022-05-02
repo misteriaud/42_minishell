@@ -6,11 +6,23 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:06:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/02 10:58:16 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/02 11:25:14 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <parsing.h>
+#include <stdio.h>
+
+static	t_err	log_error(t_err error, char *str)
+{
+	if (!error)
+		return (error);
+	if (!*str)
+		printf("minishell: erreur lors de la lecture de la chaîne de caractères\n");
+	else
+		printf("minishell: syntax error near unexpected token ' %c '\n", *str);
+	return (error);
+}
 
 static	t_err	ft_state_lane(t_state *state, char **str, int *i)
 {
@@ -59,20 +71,20 @@ static t_err	generate_token(t_ctx *ctx, t_token *token,
 	t_state state, char *str)
 {
 	if (state.curr > 1 && state.curr % 2)
-		return (LEXING_ERROR);
+		return (log_error(LEXING_ERROR, str));
 	if (!*str)
-		return (NO_ERROR);
+		return (log_error(NO_ERROR, str));
 	else if ((state.prev & A_PIP)
 		&& new_branch(&token, state, CMD))
-		return (MEMORY_ERROR);
+		return (log_error(MEMORY_ERROR, str));
 	else if (state.prev & (A_L_CHEV | A_R_CHEV | A_2L_CHEV | A_2R_CHEV) && state.curr < 8
 		&& new_branch(&token, state, PATH))
-		return (MEMORY_ERROR);
+		return (log_error(MEMORY_ERROR, str));
 	else if (state.prev == AFTER_TOKEN && state.curr < 8
 		&& new_branch(&token, state, ARG))
-		return (MEMORY_ERROR);
+		return (log_error(MEMORY_ERROR, str));
 	if (feed_token(ctx, token, &state, &str))
-		return (MEMORY_ERROR);
+		return (log_error(MEMORY_ERROR, str));
 	return (generate_token(ctx, token, state, str));
 }
 
