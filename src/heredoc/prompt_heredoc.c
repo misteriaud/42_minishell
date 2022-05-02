@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 18:29:44 by mriaud            #+#    #+#             */
-/*   Updated: 2022/04/22 18:52:16 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/02 15:42:25 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,13 @@ t_err	doccat(t_str *doc, const t_str *line)
 	i = -1;
 	j = -1;
 	tmp = *doc;
-	if (new_str(&tmp, doc->len + line->len + !!doc->len, PARS_ALLOC))
+	if (new_str(&tmp, doc->len + line->len + 1, PARS_ALLOC))
 		return (PARSING_ERROR);
 	while (++i < doc->len)
 		tmp.str[i] = doc->str[i];
-	if (doc->len)
-		tmp.str[i] = '\n';
 	while (++j < line->len)
-		tmp.str[i + !!doc->len + j] = line->str[j];
+		tmp.str[i + j] = line->str[j];
+	tmp.str[i + j] = '\n';
 	*doc = tmp;
 	return (NO_ERROR);
 }
@@ -55,16 +54,16 @@ t_err	prompt_heredoc(t_ctx *ctx)
 				{
 					line.str = readline("> ");
 					line.len = get_len(line.str);
-					if (!compare(line.str, curr_in->value.str))
+					if (!line.str || !compare(line.str, curr_in->value.str))
 					{
-						free(line.str);
+						if (line.str)
+							free(line.str);
 						break ;
 					}
 					if (drop_variables(ctx, &line) || doccat(&doc, &line))
 						return (PARSING_ERROR);
 					free(line.str);
 				}
-				doccat(&doc, &(t_str){NULL, 0});
 				curr_in->value = doc;
 			}
 			curr_in = curr_in->next;
