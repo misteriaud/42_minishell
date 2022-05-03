@@ -12,6 +12,7 @@
 #include <fcntl.h>
 #include <stdlib.h>
 #include <signal.h>
+#include <stdio.h>
 
 t_err	redirect_in(t_token *in, t_err *err);
 t_err	redirect_out(t_token *path, t_err *err);

@@ -52,4 +52,6 @@ int		is_under(const char c);
 int		is_variable(const char c);
 int		is_var_start(const char c);
 
+void	putstr_err(const char *str);
+
 #endif

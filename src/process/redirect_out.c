@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 16:07:16 by mriaud            #+#    #+#             */
-/*   Updated: 2022/04/26 17:48:28 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/03 09:21:36 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,10 @@ static inline t_err	open_file(int *fd, t_token *path)
 				| O_APPEND * (path->type == APPEND_PATH),
 				0664);
 		if (*fd == -1)
+		{
+			perror(path->value.str);
 			return (REDIRECT_ERROR);
+		}
 		path = path->next;
 	}
 	return (NO_ERROR);
@@ -36,7 +39,11 @@ static inline void	stream_to_file(int *pfd, const int fd)
 	close(pfd[1]);
 	while (read(pfd[0], &c, 1) == 1)
 		if (write(fd, &c, 1) == -1)
-			write(2, "write error\n", 12);
+		{
+			close(pfd[0]);
+			perror("minishell : write error ");
+			exit(WRITE_ERROR);
+		}
 	close(pfd[0]);
 	close(fd);
 	exit(NO_ERROR);

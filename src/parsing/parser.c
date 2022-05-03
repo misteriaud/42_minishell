@@ -6,21 +6,24 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:06:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/02 16:34:34 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/03 09:43:59 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <parsing.h>
-#include <stdio.h>
 
 static	t_err	log_error(t_err error, char *str)
 {
 	if (!error)
 		return (error);
 	if (!*str)
-		printf("minishell: erreur lors de la lecture de la chaîne de caractères\n");
+		putstr_err("minishell: erreur lors de la lecture de la chaîne de caractères\n");
 	else
-		printf("minishell: syntax error near unexpected token ' %c '\n", *str);
+	{
+		putstr_err("minishell: syntax error near unexpected char '");
+		write(2, str, 1);
+		putstr_err("'\n");
+	}
 	return (error);
 }
 

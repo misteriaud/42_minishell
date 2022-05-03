@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 16:07:05 by mriaud            #+#    #+#             */
-/*   Updated: 2022/04/26 16:27:47 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/03 09:16:18 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,10 @@ static inline t_err	get_fd(int *fd, t_token *in)
 			close(*fd);
 			*fd = open(in->value.str, O_RDONLY);
 			if (*fd == -1)
+			{
+				perror(in->value.str);
 				return (REDIRECT_ERROR);
+			}
 		}
 		if (!in->next)
 			break ;

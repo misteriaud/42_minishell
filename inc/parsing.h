@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:04:05 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/02 14:38:45 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/03 09:44:18 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 #include <memory.h>
 #include <env.h>
 #include <utils.h>
+#include <unistd.h>
 
 typedef enum e_lexer_state {
 	END = -1,

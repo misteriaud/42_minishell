@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:09:08 by mriaud            #+#    #+#             */
-/*   Updated: 2022/04/28 12:12:51 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/03 09:12:48 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,29 +40,36 @@ static inline t_err	split_process(int *pid, t_token *token)
 	return (err);
 }
 
-static inline void	run_cmd(t_err *err, t_ctx *ctx, t_token *token)
+static inline t_err	run_cmd(t_ctx *ctx, t_token *token)
 {
 	char	**argv;
 	t_func	*built_func;
+	t_err	err;
+	int		wpid;
+	int		status;
 
+	err = NO_ERROR;
 	built_func = search_built_in(ctx, token->value.str);
-	if (!*err && !built_func)
-		*err = get_exec_path(ctx, &token->value);
-	if (!*err && token->in)
-		*err = redirect_in(token->in, err);
-	if (!*err && token->redir)
-		*err = redirect_out(token->redir, err);
-	if (!*err && !built_func)
-		*err = get_exec_arg(&argv, token);
-	if (!*err)
-		*err = package_env(ctx);
-	if (!*err && built_func)
-		*err = built_func(ctx, token->arg);
-	else if (!*err)
+	if (!err && !built_func)
+		err = get_exec_path(ctx, &token->value);
+	if (!err && token->in)
+		err = redirect_in(token->in, &err);
+	if (!err && token->redir)
+		err = redirect_out(token->redir, &err);
+	if (!err && !built_func)
+		err = get_exec_arg(&argv, token);
+	if (!err)
+		err = package_env(ctx);
+	if (!err && built_func)
+		err = built_func(ctx, token->arg);
+	else if (!err)
 		execve(token->value.str, argv, ctx->exec_env);
-	if (*err)
+	if (err)
 		write(2, "problemo :(\n", 12);
-	exit(1);
+	wpid = wait(&status);
+	while (wpid > 0)
+		wpid = wait(&status);
+	return (err);
 }
 
 t_err	execute(t_ctx *ctx, t_token *token)
@@ -74,7 +81,10 @@ t_err	execute(t_ctx *ctx, t_token *token)
 
 	err = split_process(&pid, token);
 	if (!pid)
-		run_cmd(&err, ctx, token);
+	{
+		err = run_cmd(ctx, token);
+		exit(err);
+	}
 	if (pid && token->out)
 		return (execute(ctx, token->out));
 	close(0);
@@ -112,7 +122,7 @@ t_err	run_process(t_ctx *ctx)
 	if (curr->out || !built_in)
 		exit_status = execute(ctx, curr);
 	else
-		exit_status = built_in(ctx, curr->arg);
+		exit_status = run_cmd(ctx, curr);
 	dup2(default_inout[0], 0);
 	dup2(default_inout[1], 1);
 	close(default_inout[0]);
