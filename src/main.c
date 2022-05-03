@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 17:02:17 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/02 16:12:37 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/03 14:11:47 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ int	main(int ac, char **av, char **env)
 		if (err)
 			printf("err : %d\n", err);
 		free(cmd);
-
 	}
 	xfree_all();
 	return (0);
