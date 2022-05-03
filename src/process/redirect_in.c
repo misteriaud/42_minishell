@@ -6,29 +6,29 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 16:07:05 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/03 09:16:18 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/03 10:30:08 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <process.h>
 
-static inline t_err	get_fd(int *fd, t_token *in)
+static inline t_err	get_fd(int *fd, t_token **in)
 {
-	while (in)
+	while (*in)
 	{
-		if (in->type == PATH)
+		if ((*in)->type == PATH)
 		{
 			close(*fd);
-			*fd = open(in->value.str, O_RDONLY);
+			*fd = open((*in)->value.str, O_RDONLY);
 			if (*fd == -1)
 			{
-				perror(in->value.str);
+				perror((*in)->value.str);
 				return (REDIRECT_ERROR);
 			}
 		}
-		if (!in->next)
+		if (!(*in)->next)
 			break ;
-		in = in->next;
+		*in = (*in)->next;
 	}
 	return (NO_ERROR);
 }
@@ -54,7 +54,7 @@ t_err	redirect_in(t_token *in, t_err *err)
 	int		pid;
 
 	fd = 0;
-	if (!*err && get_fd(&fd, in))
+	if (!*err && get_fd(&fd, &in))
 		*err = REDIRECT_ERROR;
 	if (!*err && pipe(pfd) == -1)
 		*err = PIPE_ERROR;
