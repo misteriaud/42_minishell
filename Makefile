@@ -19,7 +19,7 @@ OS						:= $(shell uname -s)
 
 STD						:= -std=c99
 #OPT					:= -O3
-CFLAGS					:= -Wall -Wextra -Werror -Wpedantic -lreadline -g
+CFLAGS					:= -Wall -Wextra -Werror -Wpedantic -lreadline -g -D_POSIX_C_SOURCE
 DFLAGS					:= -MMD -MF
 
 REMOVE					:= rm -rvf

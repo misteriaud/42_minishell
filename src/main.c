@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 17:02:17 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/04 18:11:56 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/05 10:29:08 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,13 @@
 #include <readline/readline.h>
 #include <prompt.h>
 
+static void	signal_handler(int signum)
+{
+	(void)signum;
+	ioctl(STDIN_FILENO, TIOCSTI, "\n");
+	rl_replace_line("", 0);
+	rl_on_new_line();
+}
 
 int	main(int ac, char **av, char **env)
 {
@@ -31,16 +38,17 @@ int	main(int ac, char **av, char **env)
 	init_env(&ctx, env);
 	// init_history(&ctx);
 	init_built_in(&ctx);
-
-	//char *prompt;
-
+	// char *prompt;
+	signal(SIGUSR1, SIG_IGN);
 	while (1)
 	{
-		//get_prompt(&ctx, &prompt);
-		//cmd = readline(prompt);
+		signal(SIGINT, signal_handler);
+		// get_prompt(&ctx, &prompt);
+		// cmd = readline(prompt);
 		cmd = readline("minishell > ");
+		signal(SIGINT, SIG_IGN);
 		if (!cmd)
-			return (0);
+			cmd_exit(NULL, NULL);
 		refresh_paths(&ctx);
 		err = parse(&ctx, cmd);
 		if (!err)

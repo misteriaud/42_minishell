@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 18:25:26 by mriaud            #+#    #+#             */
-/*   Updated: 2022/04/21 20:54:21 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/05 09:11:42 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,11 @@
 
 #include <stdio.h>
 #include <readline/readline.h>
+#include <signal.h>
+#include <sys/ioctl.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 t_err	prompt_heredoc(t_ctx *ctx);
 

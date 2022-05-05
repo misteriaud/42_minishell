@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 12:27:01 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/04 18:12:15 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/05 10:29:04 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,6 @@ t_err	cmd_exit(t_ctx *ctx, t_token *args)
 		putstr_err(": numeric argument required\n");
 	}
 	xfree_all();
-	exit(exit_status);
+	exit(exit_status % 256);
 	return (NO_ERROR);
 }

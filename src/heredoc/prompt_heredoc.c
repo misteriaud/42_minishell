@@ -6,76 +6,118 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 18:29:44 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/03 14:12:38 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/05 10:20:31 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <heredoc.h>
 
-t_err	doccat(t_str *doc, const t_str *line)
+static void	signal_handler(int signum)
 {
-	t_str	tmp;
-	int		i;
-	int		j;
+	if (signum == SIGINT)
+		write(2, "\n", 1);
+	xfree_all();
+	exit(130);
+}
 
-	i = -1;
-	j = -1;
-	tmp = *doc;
-	if (new_str(&tmp, doc->len + line->len + 1, PARS_ALLOC))
-		return (PARSING_ERROR);
-	while (++i < doc->len)
-		tmp.str[i] = doc->str[i];
-	while (++j < line->len)
-		tmp.str[i + j] = line->str[j];
-	tmp.str[i + j] = '\n';
-	*doc = tmp;
+static inline void	write_doc(char *eof)
+{
+	t_str	line;
+
+	line.str = NULL;
+	line.len = 0;
+	signal(SIGINT, signal_handler);
+	signal(SIGUSR1, signal_handler);
+	while (1)
+	{
+		line.str = readline("> ");
+		line.len = get_len(line.str);
+		if (!line.str || !compare(line.str, eof))
+		{
+			if (line.str)
+				free(line.str);
+			else
+				putstr_err("minishell: here-doc recieve EOF\n");
+			break ;
+		}
+		write(3, line.str, line.len);
+		write(3, "\n", 1);
+		free(line.str);
+	}
+	close(3);
+	exit(0);
+}
+
+static inline t_err	recieve_doc(t_ctx *ctx, int *pfd, t_str *dest)
+{
+	char	c;
+	int		status;
+
+	close(pfd[1]);
+	while (read(pfd[0], &c, 1) == 1)
+	{
+		if (xrealloc(&(dest->str), ++dest->len + 1, PARS_ALLOC))
+		{
+			kill(0, SIGUSR1);
+			return (MEMORY_ERROR);
+		}
+		dest->str[dest->len - 1] = c;
+	}
+	if (dest->str && drop_variables(ctx, dest))
+		return (MEMORY_ERROR);
+	close(pfd[0]);
+	wait(&status);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
 	return (NO_ERROR);
 }
 
 static inline t_err	get_doc(t_ctx *ctx, t_str *dest)
 {
-	t_str	line;
-	t_str	doc;
+	int		pid;
+	int		pfd[2];
+	t_err	err;
+	char	*eof;
 
-	line.str = NULL;
-	line.len = 0;
-	doc = line;
-	while (1)
+	eof = dest->str;
+	dest->len = 0;
+	dest->str = NULL;
+	err = NO_ERROR;
+	if (pipe(pfd) == -1)
+		return (PIPE_ERROR);
+	pid = fork();
+	if (pid < 0)
+		err = FORK_ERROR;
+	if (!err && pid)
+		err = recieve_doc(ctx, pfd, dest);
+	else if (!err && !pid)
 	{
-		line.str = readline("> ");
-		line.len = get_len(line.str);
-		if (!line.str || !compare(line.str, dest->str))
-		{
-			if (line.str)
-				free(line.str);
-			else
-				putstr_err("bash: here-doc recieve EOF\n");
-			break ;
-		}
-		if (drop_variables(ctx, &line) || doccat(&doc, &line))
-			return (PARSING_ERROR);
-		free(line.str);
+		close(pfd[0]);
+		dup2(pfd[1], 3);
+		close(pfd[1]);
+		write_doc(eof);
 	}
-	*dest = doc;
-	return (NO_ERROR);
+	return (err);
 }
 
 t_err	prompt_heredoc(t_ctx *ctx)
 {
 	t_token	*curr;
 	t_token	*curr_in;
+	t_err	err;
 
+	err = NO_ERROR;
 	curr = ctx->parse_tree;
-	while (curr)
+	while (!err && curr)
 	{
 		curr_in = curr->in;
-		while (curr_in)
+		while (!err && curr_in)
 		{
-			if (curr_in->type == HEREDOC && get_doc(ctx, &curr_in->value))
-				return (PARSING_ERROR);
+			if (curr_in->type == HEREDOC)
+				err = get_doc(ctx, &curr_in->value);
 			curr_in = curr_in->next;
 		}
 		curr = curr->out;
 	}
-	return (NO_ERROR);
+	return (err);
 }
