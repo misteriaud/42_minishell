@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/26 18:53:26 by artblin           #+#    #+#             */
-/*   Updated: 2022/04/27 14:55:46 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/05 17:26:00 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ int	init_history(t_ctx *ctx)
 	return (NO_ERROR);
 }
 
-int	add_history(t_ctx *ctx, const t_str cmd)
+int	addd_history(t_ctx *ctx, const t_str cmd)
 {
 	t_lst	*new;
 
