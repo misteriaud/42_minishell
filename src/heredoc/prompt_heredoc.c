@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 18:29:44 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/05 10:14:01 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/05 10:20:31 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static void	signal_handler(int signum)
 	exit(130);
 }
 
-static inline void write_doc(char *eof)
+static inline void	write_doc(char *eof)
 {
 	t_str	line;
 
@@ -48,21 +48,36 @@ static inline void write_doc(char *eof)
 	exit(0);
 }
 
-// static inline t_err recieve_doc(t_ctx *ctx, t_str *dest)
-// {
-// 	(void)ctx;
-// 	(void)dest;
-// 	return (NO_ERROR)
-// }
+static inline t_err	recieve_doc(t_ctx *ctx, int *pfd, t_str *dest)
+{
+	char	c;
+	int		status;
+
+	close(pfd[1]);
+	while (read(pfd[0], &c, 1) == 1)
+	{
+		if (xrealloc(&(dest->str), ++dest->len + 1, PARS_ALLOC))
+		{
+			kill(0, SIGUSR1);
+			return (MEMORY_ERROR);
+		}
+		dest->str[dest->len - 1] = c;
+	}
+	if (dest->str && drop_variables(ctx, dest))
+		return (MEMORY_ERROR);
+	close(pfd[0]);
+	wait(&status);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	return (NO_ERROR);
+}
 
 static inline t_err	get_doc(t_ctx *ctx, t_str *dest)
 {
 	int		pid;
 	int		pfd[2];
-	char	c;
 	t_err	err;
 	char	*eof;
-	int		status;
 
 	eof = dest->str;
 	dest->len = 0;
@@ -74,24 +89,7 @@ static inline t_err	get_doc(t_ctx *ctx, t_str *dest)
 	if (pid < 0)
 		err = FORK_ERROR;
 	if (!err && pid)
-	{
-		close(pfd[1]);
-		while (read(pfd[0], &c, 1) == 1)
-		{
-			if (xrealloc(&(dest->str), ++dest->len + 1, PARS_ALLOC))
-			{
-				kill(0, SIGUSR1);
-				return (MEMORY_ERROR);
-			}
-			dest->str[dest->len - 1] = c;
-		}
-		if (dest->str && drop_variables(ctx, dest))
-			return (MEMORY_ERROR);
-		close(pfd[0]);
-		wait(&status);
-		if (WIFEXITED(status))
-			return (WEXITSTATUS(status));
-	}
+		err = recieve_doc(ctx, pfd, dest);
 	else if (!err && !pid)
 	{
 		close(pfd[0]);
