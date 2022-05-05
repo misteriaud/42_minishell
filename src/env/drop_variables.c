@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 22:25:36 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/04 19:30:29 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/05 19:12:08 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ t_err	drop_variables(t_ctx *ctx, t_str *parse)
 			err = create_text_node(&str, &elm, &(parse->len), '$');
 		if (!err && *str == '$')
 		{
+
 			if (is_var_start(*(++str)))
 				err = create_variable_node(ctx, &str, &elm, &(parse->len));
 			else
