@@ -6,13 +6,14 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 17:02:17 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/05 14:15:33 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/05 19:09:31 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <stdio.h>
 #include <readline/readline.h>
+#include <readline/history.h>
 #include <prompt.h>
 
 static void	signal_handler(int signum)
@@ -31,26 +32,30 @@ static inline void free_cmd(char *cmd)
 	xfree_group(TMP_ALLOC);
 }
 
+void init_minishell(t_ctx *ctx, char **env)
+{
+	init_env(ctx, env);
+	init_built_in(ctx);
+	ctx->status = NO_ERROR;
+	signal(SIGUSR1, SIG_IGN);
+}
+
 int	main(int ac, char **av, char **env)
 {
+	(void)av;
 	t_ctx	ctx;
 	char	*cmd;
-
-	(void)av;
+	char	*prompt;
 
 	if (ac != 1)
 		return (1);
-	init_env(&ctx, env);
-	init_built_in(&ctx);
-	ctx.status = NO_ERROR;
-	// char *prompt;
-	signal(SIGUSR1, SIG_IGN);
+	init_minishell(&ctx, env);
 	while (1)
 	{
 		signal(SIGINT, signal_handler);
-		// get_prompt(&ctx, &prompt);
-		// cmd = readline(prompt);
-		cmd = readline("minishell > ");
+		get_prompt(&ctx, &prompt);
+		cmd = readline(prompt);
+		xfree(prompt, PROMPT_ALLOC);
 		signal(SIGINT, SIG_IGN);
 		if (!cmd)
 			cmd_exit(NULL, NULL);
@@ -61,6 +66,7 @@ int	main(int ac, char **av, char **env)
 		if (!ctx.status)
 			ctx.status = run_process(&ctx);
 		print_err(ctx.status, NULL);
+		add_history(cmd);
 		free_cmd(cmd);
 	}
 	xfree_all();
