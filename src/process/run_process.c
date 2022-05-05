@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:09:08 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/03 09:12:48 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/04 12:13:02 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,7 @@ static inline t_err	split_process(int *pid, t_token *token)
 
 	err = NO_ERROR;
 	if (token->out && !token->redir && pipe(pfd) == -1)
-		err = PIPE_ERROR;
-	if (err)
-		return (err);
+		return (PIPE_ERROR);
 	*pid = fork();
 	if (*pid < 0)
 		err = FORK_ERROR;
@@ -101,7 +99,6 @@ static void	sigint_handler(int sig)
 {
 	(void)sig;
 	write(2, "\n", 1);
-	return ;
 }
 
 t_err	run_process(t_ctx *ctx)
