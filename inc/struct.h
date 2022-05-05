@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 19:56:33 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/05 16:09:14 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/05 19:05:19 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ enum e_alloc_group
 	ENV_ALLOC,
 	EXEC_ALLOC,
 	TMP_ALLOC,
+	PROMPT_ALLOC
 };
 
 typedef struct s_str
