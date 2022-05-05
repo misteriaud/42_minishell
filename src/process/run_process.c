@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:09:08 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/04 12:13:02 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/05 14:14:41 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ static inline t_err	run_cmd(t_ctx *ctx, t_token *token)
 	char	**argv;
 	t_func	*built_func;
 	t_err	err;
-	int		wpid;
 	int		status;
 
 	err = NO_ERROR;
@@ -51,9 +50,9 @@ static inline t_err	run_cmd(t_ctx *ctx, t_token *token)
 	if (!err && !built_func)
 		err = get_exec_path(ctx, &token->value);
 	if (!err && token->in)
-		err = redirect_in(token->in, &err);
+		redirect_in(token->in, &err);
 	if (!err && token->redir)
-		err = redirect_out(token->redir, &err);
+		redirect_out(token->redir, &err);
 	if (!err && !built_func)
 		err = get_exec_arg(&argv, token);
 	if (!err)
@@ -62,18 +61,13 @@ static inline t_err	run_cmd(t_ctx *ctx, t_token *token)
 		err = built_func(ctx, token->arg);
 	else if (!err)
 		execve(token->value.str, argv, ctx->exec_env);
-	if (err)
-		write(2, "problemo :(\n", 12);
-	wpid = wait(&status);
-	while (wpid > 0)
-		wpid = wait(&status);
+	while (wait(&status) > 0);
 	return (err);
 }
 
 t_err	execute(t_ctx *ctx, t_token *token)
 {
 	int		pid;
-	int		wpid;
 	int		status;
 	t_err	err;
 
@@ -87,9 +81,7 @@ t_err	execute(t_ctx *ctx, t_token *token)
 		return (execute(ctx, token->out));
 	close(0);
 	close(1);
-	wpid = wait(&status);
-	while (wpid > 0)
-		wpid = wait(&status);
+	while (wait(&status) > 0);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	return (err);

@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 13:46:16 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/03 13:34:42 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/05 14:10:08 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,8 @@ int		is_under(const char c);
 int		is_variable(const char c);
 int		is_var_start(const char c);
 
-void	putstr_err(const char *str);
+void	print_custom_err(const char *str);
+t_err	print_err(t_err err, char *str);
 int		secure_atoi(char *str, int *result);
 
 #endif

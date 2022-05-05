@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 18:29:44 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/05 10:20:31 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/05 14:25:26 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static void	signal_handler(int signum)
 	if (signum == SIGINT)
 		write(2, "\n", 1);
 	xfree_all();
-	exit(130);
+	exit(CTRL_C_ERROR);
 }
 
 static inline void	write_doc(char *eof)
@@ -37,7 +37,7 @@ static inline void	write_doc(char *eof)
 			if (line.str)
 				free(line.str);
 			else
-				putstr_err("minishell: here-doc recieve EOF\n");
+				print_custom_err("here-doc recieve EOF\n");
 			break ;
 		}
 		write(3, line.str, line.len);

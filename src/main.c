@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 17:02:17 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/05 10:29:08 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/05 14:15:33 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,21 +23,26 @@ static void	signal_handler(int signum)
 	rl_on_new_line();
 }
 
+static inline void free_cmd(char *cmd)
+{
+	free(cmd);
+	xfree_group(PARS_ALLOC);
+	xfree_group(EXEC_ALLOC);
+	xfree_group(TMP_ALLOC);
+}
+
 int	main(int ac, char **av, char **env)
 {
 	t_ctx	ctx;
-	t_err	err;
 	char	*cmd;
 
 	(void)av;
 
 	if (ac != 1)
 		return (1);
-	err = NO_ERROR;
-	//init_term(&ctx);
 	init_env(&ctx, env);
-	// init_history(&ctx);
 	init_built_in(&ctx);
+	ctx.status = NO_ERROR;
 	// char *prompt;
 	signal(SIGUSR1, SIG_IGN);
 	while (1)
@@ -50,14 +55,13 @@ int	main(int ac, char **av, char **env)
 		if (!cmd)
 			cmd_exit(NULL, NULL);
 		refresh_paths(&ctx);
-		err = parse(&ctx, cmd);
-		if (!err)
-			err = prompt_heredoc(&ctx);
-		if (!err)
-			err = run_process(&ctx);
-		if (err)
-			printf("err : %d\n", err);
-		free(cmd);
+		ctx.status = parse(&ctx, cmd);
+		if (!ctx.status)
+			ctx.status = prompt_heredoc(&ctx);
+		if (!ctx.status)
+			ctx.status = run_process(&ctx);
+		print_err(ctx.status, NULL);
+		free_cmd(cmd);
 	}
 	xfree_all();
 	return (0);

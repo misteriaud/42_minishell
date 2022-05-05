@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:06:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/03 09:43:59 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/05 14:36:42 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,13 +16,14 @@ static	t_err	log_error(t_err error, char *str)
 {
 	if (!error)
 		return (error);
-	if (!*str)
-		putstr_err("minishell: erreur lors de la lecture de la chaîne de caractères\n");
 	else
 	{
-		putstr_err("minishell: syntax error near unexpected char '");
-		write(2, str, 1);
-		putstr_err("'\n");
+		print_custom_err("minishell: syntax error near unexpected char '");
+		if (!*str)
+			write(2, "newline", 7);
+		else
+			write(2, str, 1);
+		write(2, "'\n", 2);
 	}
 	return (error);
 }

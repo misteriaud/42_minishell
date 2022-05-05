@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 19:56:33 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/02 15:00:20 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/05 14:37:14 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ typedef enum e_err
 	READ_ERROR = 0x30,
 	OVERFLOW_ERROR = 0x40,
 	ARG_ERROR = 0x50,
-	OPTION_ERROR = 0x60,
 	LEXING_ERROR = 0x70,
 	PARSING_ERROR = 0x71,
 	EMPTY_STR_ERROR = 0x80,
@@ -45,8 +44,10 @@ typedef enum e_err
 	NO_VAR_ERROR = 0x84,
 	NOT_EQUAL_ERROR = 0x85,
 	EMPTY_FILE_ERROR = 0x86,
-	UNKNOWN_EXEC_ERROR = 0x87,
+	// UNKNOWN_EXEC_ERROR = 0x87,
+	UNKNOWN_EXEC_ERROR = 127,
 	UNKNOWN_PATH_ERROR = 0x88,
+	CTRL_C_ERROR = 130,
 	TERM_ERROR = 0x90,
 	PROCESS_ERROR = 0xA0,
 	FORK_ERROR = 0xA1,
@@ -54,7 +55,8 @@ typedef enum e_err
 	PIPE_ERROR = 0xA3,
 	REDIRECT_ERROR = 0xA4,
 	WRITE_ERROR = 0xA5,
-	SIGNAL_ERROR = 0xA6
+	SIGNAL_ERROR = 0xA6,
+	EXIT_ERROR = 0xB0
 }	t_err;
 
 typedef t_err (t_func)(t_ctx *, t_token *);
@@ -131,6 +133,7 @@ struct s_ctx
 	t_termios		raw_term;
 	t_termios		origin_term;
 	t_token			*parse_tree;
+	t_err			status;
 };
 
 
