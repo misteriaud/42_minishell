@@ -6,7 +6,7 @@
 /*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 22:33:16 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/30 22:33:17 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/05 18:10:15 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@
 # include <struct.h>
 
 #define ENV_GROUP	0
+
+t_err	add_to_env(t_ctx *ctx, char *key, int assign, char *value);
 
 t_err	init_env(t_ctx *ctx, char **env);
 
