@@ -6,11 +6,13 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 11:07:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/03/28 17:44:48 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/05 17:39:33 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <memory.h>
+#include <readline/history.h>
+#include <readline/readline.h>
 
 int	*curr_group(void)
 {
@@ -132,4 +134,5 @@ void	xfree_all(void)
 		free_allocs(to_remove->first);
 		free(to_remove);
 	}
+	rl_clear_history();
 }
