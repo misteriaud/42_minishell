@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 13:46:16 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/05 14:10:08 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/05 16:57:02 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include <struct.h>
 
-char	*str_join(const char *left, const char *right);
+char	*str_join(const char *left, const char *right, const int alloc);
 
 int		get_len(const char *str);
 

@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 19:56:33 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/05 14:37:14 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/05 16:09:14 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,10 @@ typedef enum e_err
 	REDIRECT_ERROR = 0xA4,
 	WRITE_ERROR = 0xA5,
 	SIGNAL_ERROR = 0xA6,
-	EXIT_ERROR = 0xB0
+	EXIT_ERROR = 0xB0,
+	VAR_ERROR = 0xC0,
+	ASSIGN_ERROR = 0xC1
+
 }	t_err;
 
 typedef t_err (t_func)(t_ctx *, t_token *);

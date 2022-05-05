@@ -6,7 +6,7 @@
 /*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 20:41:30 by artblin           #+#    #+#             */
-/*   Updated: 2022/04/27 19:07:46 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/05 17:10:28 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,23 +33,27 @@ t_err	merge(t_str *merged, t_str *left, t_str *right, const char sep)
 	return (NO_ERROR);
 }
 
-char	*str_join(const char *left, const char *right)
+char	*str_join(const char *left, const char *right, const int alloc)
 {
 	char	*o;
 	char	*merge;
 
-	if (left && right)
+	if (!left && !right)
+		return (NULL);
+	const int len = get_len(left) + get_len(right);
+	if (xmalloc(&merge, len + 1, alloc))
+		return (NULL);
+	o = merge;
+	if (left)
 	{
-		const int len = get_len(left) + get_len(right);
-		if (xmalloc(&merge, len + 1, TMP_ALLOC))
-			return (NULL);
-		o = merge;
 		while (*left)
 			*(merge)++ = *(left)++;
+	}
+	if (right)
+	{
 		while (*right)
 			*(merge)++ = *(right)++;
-		*merge = '\0';
-		return (o);
 	}
-	return (NULL);
+	*merge = '\0';
+	return (o);
 }
