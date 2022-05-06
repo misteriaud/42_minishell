@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:13:26 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/05 13:42:53 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/06 09:36:08 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_err	get_exec_path(t_ctx *ctx, t_str *exec)
 	elm = ctx->paths;
 	while (elm)
 	{
-		if (new_str(&exec_path, elm->data.len + exec->len, PARS_ALLOC))
+		if (new_str(&exec_path, elm->data.len + exec->len + 1, PARS_ALLOC))
 			return (MEMORY_ERROR);
 		merge(&exec_path, &elm->data, exec, '/');
 		if (!access(exec_path.str, X_OK))
