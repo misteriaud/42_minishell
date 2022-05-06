@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include <minishell.h>
+#include <status.h>
 
 static t_err	create_variable_node(t_ctx *ctx, char **str, t_lst ***elm, int *global_len)
 {
