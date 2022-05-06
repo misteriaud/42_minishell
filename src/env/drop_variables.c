@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 22:25:36 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/05 19:12:08 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/06 17:44:36 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,15 @@
 static t_err	create_variable_node(t_ctx *ctx, char **str, t_lst ***elm, int *global_len)
 {
 	t_str	tmp;
+	char	*num;
 
 	tmp.len = 0;
+	if (**str == '?')
+	{
+		num = ft_itoa(get_status());
+		printf("%s\n", num);
+	}
+
 	while (is_variable((*str)[tmp.len]))
 		tmp.len++;
 	if (new_str(&tmp, tmp.len, TMP_ALLOC))
@@ -52,6 +59,7 @@ static t_err	create_text_node(char **str, t_lst ***elm, int *global_len, const c
 	return (NO_ERROR);
 }
 
+
 t_err	drop_variables(t_ctx *ctx, t_str *parse)
 {
 	t_lst		**elm;
@@ -70,8 +78,7 @@ t_err	drop_variables(t_ctx *ctx, t_str *parse)
 			err = create_text_node(&str, &elm, &(parse->len), '$');
 		if (!err && *str == '$')
 		{
-
-			if (is_var_start(*(++str)))
+			if (is_var_start(*++(str)) || *str == '?')
 				err = create_variable_node(ctx, &str, &elm, &(parse->len));
 			else
 				err = create_text_node(&str, &elm, &(parse->len), '\0');

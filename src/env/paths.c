@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:13:26 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/05 13:42:53 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/06 12:13:53 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ t_err	get_exec_path(t_ctx *ctx, t_str *exec)
 
 	if (is_containing_set(exec->str, "/"))
 	{
+		expand_path(ctx, exec);
 		if (!access(exec->str, X_OK))
 			return (NO_ERROR);
 		return (UNKNOWN_EXEC_ERROR);
@@ -53,7 +54,6 @@ t_err	refresh_paths(t_ctx *ctx)
 	return (NO_ERROR);
 }
 
-
 t_err	get_exec_arg(char ***arg, t_token *parse)
 {
 	// premier arg du main
@@ -74,6 +74,30 @@ t_err	get_exec_arg(char ***arg, t_token *parse)
 	{
 		(*arg)[x++] = elm->value.str;
 		elm = elm->next;
+	}
+	return (NO_ERROR);
+}
+
+t_err	expand_path(t_ctx *ctx, t_str *path)
+{
+	t_str	new;
+	t_str	home;
+	t_str	cut;
+
+	if (!path || !path->str)
+		return (NULL_PTR_ERROR);
+	if (*(path->str) == '~')
+	{
+		cut.len = path->len - 1;
+		cut.str = path->str + 1;
+		if (!get_variable(ctx, "HOME", &home))
+		{
+			new_str(&new, home.len + cut.len, PARS_ALLOC);
+			merge(&new, &home, &cut, 0);
+			xfree(path->str, PARS_ALLOC);
+			path->str = new.str;
+			path->len = new.len;
+		}
 	}
 	return (NO_ERROR);
 }

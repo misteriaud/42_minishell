@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 12:24:56 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/05 18:48:40 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/06 12:06:40 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ t_err	cmd_cd(t_ctx *ctx, t_token *args)
 	}
 	else
 	{
+		expand_path(ctx, &args->value);
 		err = check_and_change_path(&args->value);
 		if (err)
 			return (err);

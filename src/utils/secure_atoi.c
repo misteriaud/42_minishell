@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 16:58:27 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/03 13:42:03 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/06 15:08:20 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,44 @@ int	secure_atoi(char *str, int *result)
 	if (((*result >> 31) & 1) != (sign == 1))
 		return (1);
 	return (0);
+}
+#include <stddef.h>
+#include <stdlib.h>
+
+size_t	ft_digitnbr(long n)
+{
+	size_t		d;
+
+	d = (!n);
+	while (n && ++d)
+		n /= 10;
+	return (d);
+}
+
+char	*ft_itoa(int i)
+{
+	char	*a;
+	long	n;
+	long	x;
+	char	m;
+
+	n = (long)i;
+	m = 0;
+	x = ft_digitnbr(n);
+	if (n < 0 && ++x && ++m)
+		n = -(n);
+	a = malloc((x + 1) * sizeof(char));
+	if (a)
+	{
+		a[x] = '\0';
+		while (--x >= 0)
+		{
+			a[x] = (n % 10) + '0';
+			n /= 10;
+			if (!x && m)
+				a[x] = '-';
+		}
+		return (a);
+	}
+	return (NULL);
 }

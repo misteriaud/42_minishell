@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 13:46:16 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/05 16:57:02 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/06 15:04:08 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,10 @@
 # define UTILS_H
 
 # include <struct.h>
+
+char	*ft_itoa(int i);
+
+t_err	str_dup(char **new, const char *str, int alloc);
 
 char	*str_join(const char *left, const char *right, const int alloc);
 

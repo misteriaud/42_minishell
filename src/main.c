@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 17:02:17 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/05 19:09:31 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/06 16:01:04 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <prompt.h>
+
+#define RUNNING 1
 
 static void	signal_handler(int signum)
 {
@@ -38,6 +40,7 @@ void init_minishell(t_ctx *ctx, char **env)
 	init_built_in(ctx);
 	ctx->status = NO_ERROR;
 	signal(SIGUSR1, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 }
 
 int	main(int ac, char **av, char **env)
@@ -50,7 +53,7 @@ int	main(int ac, char **av, char **env)
 	if (ac != 1)
 		return (1);
 	init_minishell(&ctx, env);
-	while (1)
+	while (RUNNING)
 	{
 		signal(SIGINT, signal_handler);
 		get_prompt(&ctx, &prompt);
