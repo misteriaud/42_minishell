@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:09:08 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/05 14:14:41 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/06 07:37:26 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,9 +81,11 @@ t_err	execute(t_ctx *ctx, t_token *token)
 		return (execute(ctx, token->out));
 	close(0);
 	close(1);
-	while (wait(&status) > 0);
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
+	while (wait(&status) > 0)
+	{
+		if (WIFEXITED(status) && WEXITSTATUS(status))
+			err = WEXITSTATUS(status);
+	}
 	return (err);
 }
 
