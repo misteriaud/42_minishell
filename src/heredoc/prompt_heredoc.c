@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 18:29:44 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/05 14:25:26 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/06 19:56:03 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ static inline void	write_doc(char *eof)
 		free(line.str);
 	}
 	close(3);
-	exit(0);
+	xfree_all();
+	exit(NO_ERROR);
 }
 
 static inline t_err	recieve_doc(t_ctx *ctx, int *pfd, t_str *dest)

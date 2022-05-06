@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 16:07:05 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/05 14:16:46 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/06 19:22:40 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ static inline void	stream_from_file(int *pfd, t_token *in, const int fd)
 		write(pfd[1], in->value.str, in->value.len);
 	close(pfd[1]);
 	close(fd);
+	xfree_all();
 	exit(NO_ERROR);
 }
 

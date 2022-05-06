@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 16:07:16 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/05 14:17:29 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/06 19:23:25 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,12 @@ static inline void	stream_to_file(int *pfd, const int fd)
 		{
 			close(pfd[0]);
 			print_err(UNKNOWN_PATH_ERROR, NULL);
+			xfree_all();
 			exit(UNKNOWN_PATH_ERROR);
 		}
 	close(pfd[0]);
 	close(fd);
+	xfree_all();
 	exit(NO_ERROR);
 }
 

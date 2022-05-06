@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:09:08 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/06 18:06:17 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/06 19:18:18 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ t_err	execute(t_ctx *ctx, t_token *token)
 	if (!pid)
 	{
 		err = run_cmd(ctx, token);
+		xfree_all();
 		exit(err);
 	}
 	if (pid && token->out)
