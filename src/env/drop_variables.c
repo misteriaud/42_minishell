@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 22:25:36 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/06 18:47:38 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/06 19:06:35 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ static t_err	create_variable_node(t_ctx *ctx, char **str, t_lst ***elm, int *glo
 			return (MEMORY_ERROR);
 		str_fill(&tmp, num);
 		(*str)++;
-		free(num);
+		xfree(num, ENV_ALLOC);
 	}
 	else
 	{
