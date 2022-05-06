@@ -52,7 +52,9 @@ P := \033[3;35m
 R := \033[m
 
 all:
-						@$(MAKE) --no-print-directory $(NAME) | ./lolcat -v 1 -h 0
+						@$(MAKE) --no-print-directory $(NAME)
+
+#| ./lolcat -v 1 -h 0
 
 
 $(NAME):				$(OBJ) | Makefile
