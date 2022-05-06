@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 22:25:36 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/06 17:44:36 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/06 18:26:55 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,24 @@ static t_err	create_variable_node(t_ctx *ctx, char **str, t_lst ***elm, int *glo
 	if (**str == '?')
 	{
 		num = ft_itoa(get_status());
-		printf("%s\n", num);
+		tmp.len = get_len(num);
+		if (new_str(&tmp, tmp.len, TMP_ALLOC))
+			return (MEMORY_ERROR);
+		str_fill(&tmp, num);
+		(*str) += tmp.len;
+		free(num);
 	}
-
-	while (is_variable((*str)[tmp.len]))
-		tmp.len++;
-	if (new_str(&tmp, tmp.len, TMP_ALLOC))
-		return (MEMORY_ERROR);
-	str_fill(&tmp, *str);
-	(*str) += tmp.len;
-	if (get_variable(ctx, tmp.str, &tmp))
-		return (NO_ERROR);
+	else
+	{
+		while (is_variable((*str)[tmp.len]))
+			tmp.len++;
+		if (new_str(&tmp, tmp.len, TMP_ALLOC))
+			return (MEMORY_ERROR);
+		str_fill(&tmp, *str);
+		(*str) += tmp.len;
+		if (get_variable(ctx, tmp.str, &tmp))
+			return (NO_ERROR);
+	}
 	if (xmalloc(*elm, sizeof(t_lst), TMP_ALLOC))
 		return (MEMORY_ERROR);
 	(**elm)->data = tmp;

@@ -51,7 +51,9 @@ G := \033[3;32m
 P := \033[3;35m
 R := \033[m
 
-all:					$(NAME) Makefile
+all:
+						@$(MAKE) --no-print-directory $(NAME) | ./lolcat -v 1 -h 0
+
 
 $(NAME):				$(OBJ) | Makefile
 						$(CC) $^ -lreadline -o $@
