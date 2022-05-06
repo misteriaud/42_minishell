@@ -6,23 +6,22 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/02 14:33:18 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/06 17:17:43 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/06 18:30:38 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <prompt.h>
 #include <memory.h>
-#include <status.h>
 
 #define RED_COLOR		"\x1b[3;1;31m"
 #define GREEN_COLOR		"\x1b[3;1;32m"
 #define PURPLE_COLOR	"\x1b[3;1;33m"
 #define YELLOW_COLOR	"\x1b[3;1;35m"
 
-t_err get_prompt(char **prompt)
+t_err get_prompt(char **prompt, const unsigned int old_status)
 {
 	static char		*color[4] = {GREEN_COLOR, RED_COLOR, PURPLE_COLOR, YELLOW_COLOR};
-	const int		c = !!(get_status());
+	const int		c = !!(old_status);
 	char	*pwd;
 	char	*join_1;
 	char	*join_2;

@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 17:02:17 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/06 17:43:10 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/06 18:32:54 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ void init_minishell(t_ctx *ctx, char **env)
 	set_status(NO_ERROR);
 	signal(SIGUSR1, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
+	ctx->old_status = NO_ERROR;
 }
 
 int	main(int ac, char **av, char **env)
@@ -58,8 +59,7 @@ int	main(int ac, char **av, char **env)
 	while (RUNNING)
 	{
 		signal(SIGINT, signal_handler);
-		get_prompt(&prompt);
-		set_status(NO_ERROR);
+		get_prompt(&prompt, ctx.old_status);
 		cmd = readline(prompt);
 		xfree(prompt, PROMPT_ALLOC);
 		signal(SIGINT, SIG_IGN);
@@ -70,6 +70,7 @@ int	main(int ac, char **av, char **env)
 			set_status(parse(&ctx, cmd));
 		if (get_status() == EMPTY_STR_ERROR)
 		{
+			ctx.old_status = NO_ERROR;
 			set_status(0);
 			free_cmd(cmd);
 			continue;
@@ -78,6 +79,8 @@ int	main(int ac, char **av, char **env)
 			set_status(prompt_heredoc(&ctx));
 		if (!get_status())
 			set_status(run_process(&ctx));
+		ctx.old_status = get_status();
+		set_status(NO_ERROR);
 		add_history(cmd);
 		free_cmd(cmd);
 	}

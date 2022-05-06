@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:09:08 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/06 17:42:37 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/06 18:06:17 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static inline t_err	run_cmd(t_ctx *ctx, t_token *token)
 	err = NO_ERROR;
 	built_func = search_built_in(ctx, token->value.str);
 	if (!err && !built_func)
-		err = get_exec_path(ctx, &token->value);
+		err = print_err(get_exec_path(ctx, &token->value), token->value.str);
 	if (!err && token->in)
 		redirect_in(token->in, &err);
 	if (!err && token->redir)
@@ -106,7 +106,6 @@ t_err	execute(t_ctx *ctx, t_token *token)
 	if (!pid)
 	{
 		err = run_cmd(ctx, token);
-		print_err(err, token->value.str);
 		exit(err);
 	}
 	if (pid && token->out)

@@ -6,6 +6,6 @@
 #include <unistd.h>
 #include <utils.h>
 
-t_err get_prompt(char **data);
+t_err get_prompt(char **data, const unsigned int old_status);
 
 #endif
