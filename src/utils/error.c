@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 09:30:27 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/05 14:36:09 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/06 17:44:41 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,10 @@ t_err print_err(t_err err, char *str)
 		return (err);
 	write(2, "minishell: ", 11);
 	if (err == UNKNOWN_EXEC_ERROR)
-		print_custom_err("command not found\n");
+	{
+		print_custom_err(str);
+		print_custom_err(": command not found\n");
+	}
 	else if (err == UNKNOWN_PATH_ERROR)
 		perror(str);
 	else if (err == EXIT_ERROR)

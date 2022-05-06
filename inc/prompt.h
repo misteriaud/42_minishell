@@ -6,6 +6,6 @@
 #include <unistd.h>
 #include <utils.h>
 
-t_err get_prompt(t_ctx *ctx, char **data);
+t_err get_prompt(char **data);
 
 #endif

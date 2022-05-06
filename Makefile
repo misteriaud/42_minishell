@@ -12,14 +12,15 @@ FILES					:=	main.c \
 							raw.c \
 							run_process.c redirect_in.c redirect_out.c \
 							split_array.c split_lst.c size.c compare.c merge.c error.c secure_atoi.c is_char.c is_set.c t_str.c fill.c \
-							init_built_in.c search_built_in.c echo.c cd.c pwd.c unset.c export.c exit.c env.c
+							init_built_in.c search_built_in.c echo.c cd.c pwd.c unset.c export.c exit.c env.c \
+							status.c
 
 SHELL					:= /bin/zsh
 OS						:= $(shell uname -s)
 
 STD						:= -std=c99
 #OPT					:= -O3
-CFLAGS					:= -Wall -Wextra -Werror -Wpedantic -lreadline -g -D_POSIX_C_SOURCE
+CFLAGS					:= -Wall -Wextra -Werror -Wpedantic -g -D_POSIX_C_SOURCE
 DFLAGS					:= -MMD -MF
 
 REMOVE					:= rm -rvf
