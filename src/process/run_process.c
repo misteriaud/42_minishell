@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:09:08 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/06 07:37:26 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/06 17:42:37 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,27 +65,56 @@ static inline t_err	run_cmd(t_ctx *ctx, t_token *token)
 	return (err);
 }
 
+t_err	get_exit_status(void)
+{
+	t_wstatus	*wstatus;
+	int			i;
+	int			highest;
+	t_err		err;
+
+	i = 0;
+	wstatus = NULL;
+	err = NO_ERROR;
+	if (xrealloc(&wstatus, sizeof(*wstatus) * ++i, EXEC_ALLOC))
+		return (MEMORY_ERROR);
+	wstatus[i - 1].pid = wait(&wstatus[i - 1].status);
+	while (wstatus[i - 1].pid > 0)
+	{
+		if (xrealloc(&wstatus, sizeof(*wstatus) * ++i, EXEC_ALLOC))
+			return (MEMORY_ERROR);
+		wstatus[i - 1].pid = wait(&wstatus[i - 1].status);
+	}
+	i = 1;
+	highest = 0;
+	while (wstatus[i].pid != -1)
+	{
+		if (wstatus[i].pid > wstatus[highest].pid)
+			highest = i;
+		i++;
+	}
+	if (WIFEXITED(wstatus[highest].status))
+		err = WEXITSTATUS(wstatus[highest].status);
+	return (err);
+}
+
 t_err	execute(t_ctx *ctx, t_token *token)
 {
-	int		pid;
-	int		status;
-	t_err	err;
+	int			pid;
+	t_err		err;
 
 	err = split_process(&pid, token);
 	if (!pid)
 	{
 		err = run_cmd(ctx, token);
+		print_err(err, token->value.str);
 		exit(err);
 	}
 	if (pid && token->out)
 		return (execute(ctx, token->out));
 	close(0);
 	close(1);
-	while (wait(&status) > 0)
-	{
-		if (WIFEXITED(status) && WEXITSTATUS(status))
-			err = WEXITSTATUS(status);
-	}
+	if (!err)
+		err = get_exit_status();
 	return (err);
 }
 
