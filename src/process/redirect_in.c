@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 16:07:05 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/06 19:22:40 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/09 11:12:29 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,12 @@
 
 static inline t_err	get_fd(int *fd, t_token **in)
 {
-	struct stat stats;
-
 	while (*in)
 	{
 		if ((*in)->type == PATH)
 		{
 			if (*fd > 2)
 				close(*fd);
-			if (!stat((*in)->value.str, &stats))
-				return (print_err(UNKNOWN_PATH_ERROR, (*in)->value.str));
 			*fd = open((*in)->value.str, O_RDONLY);
 			if (*fd == -1)
 				return (print_err(UNKNOWN_PATH_ERROR, (*in)->value.str));

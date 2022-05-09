@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 17:02:17 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/06 18:32:54 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/09 17:48:36 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static void	signal_handler(int signum)
 	rl_on_new_line();
 }
 
-static inline void free_cmd(char *cmd)
+static inline void	free_cmd(char *cmd)
 {
 	free(cmd);
 	xfree_group(PARS_ALLOC);
@@ -36,7 +36,7 @@ static inline void free_cmd(char *cmd)
 	xfree_group(TMP_ALLOC);
 }
 
-void init_minishell(t_ctx *ctx, char **env)
+void	init_minishell(t_ctx *ctx, char **env)
 {
 	init_env(ctx, env);
 	init_built_in(ctx);
@@ -48,11 +48,11 @@ void init_minishell(t_ctx *ctx, char **env)
 
 int	main(int ac, char **av, char **env)
 {
-	(void)av;
 	t_ctx	ctx;
 	char	*cmd;
 	char	*prompt;
 
+	(void)av;
 	if (ac != 1)
 		return (1);
 	init_minishell(&ctx, env);
@@ -73,7 +73,7 @@ int	main(int ac, char **av, char **env)
 			ctx.old_status = NO_ERROR;
 			set_status(0);
 			free_cmd(cmd);
-			continue;
+			continue ;
 		}
 		if (!get_status())
 			set_status(prompt_heredoc(&ctx));

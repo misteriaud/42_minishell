@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:09:08 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/06 19:18:18 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/09 12:11:12 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,39 +61,8 @@ static inline t_err	run_cmd(t_ctx *ctx, t_token *token)
 		err = built_func(ctx, token->arg);
 	else if (!err)
 		execve(token->value.str, argv, ctx->exec_env);
-	while (wait(&status) > 0);
-	return (err);
-}
-
-t_err	get_exit_status(void)
-{
-	t_wstatus	*wstatus;
-	int			i;
-	int			highest;
-	t_err		err;
-
-	i = 0;
-	wstatus = NULL;
-	err = NO_ERROR;
-	if (xrealloc(&wstatus, sizeof(*wstatus) * ++i, EXEC_ALLOC))
-		return (MEMORY_ERROR);
-	wstatus[i - 1].pid = wait(&wstatus[i - 1].status);
-	while (wstatus[i - 1].pid > 0)
-	{
-		if (xrealloc(&wstatus, sizeof(*wstatus) * ++i, EXEC_ALLOC))
-			return (MEMORY_ERROR);
-		wstatus[i - 1].pid = wait(&wstatus[i - 1].status);
-	}
-	i = 1;
-	highest = 0;
-	while (wstatus[i].pid != -1)
-	{
-		if (wstatus[i].pid > wstatus[highest].pid)
-			highest = i;
-		i++;
-	}
-	if (WIFEXITED(wstatus[highest].status))
-		err = WEXITSTATUS(wstatus[highest].status);
+	while (wait(&status) > 0)
+		;
 	return (err);
 }
 

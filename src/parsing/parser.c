@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:06:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/06 13:14:01 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/09 17:45:54 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,73 +81,15 @@ static t_err	generate_token(t_ctx *ctx, t_token *token,
 	else if ((state.prev & A_PIP)
 		&& new_branch(&token, state, CMD))
 		return (log_error(MEMORY_ERROR, str));
-	else if (state.prev & (A_L_CHEV | A_R_CHEV | A_2L_CHEV | A_2R_CHEV) && state.curr < 8
-		&& new_branch(&token, state, PATH))
+	else if (state.prev & (A_L_CHEV | A_R_CHEV | A_2L_CHEV | A_2R_CHEV)
+		&& state.curr < 8 && new_branch(&token, state, PATH))
 		return (log_error(MEMORY_ERROR, str));
-	if (state.curr == AFTER_TOKEN)
-	{
-		while (token->prev && token->type != CMD)
-			token = token->prev;
-		if (xrealloc(&(token->value.str), token->value.len + 2, PARS_ALLOC))
-			return (log_error(MEMORY_ERROR, str));
-		token->value.str[token->value.len] = *str;
-		token->value.len++;
-		move_forward(&state, &str);
-	}
-	else if (feed_token(ctx, token, &state, &str))
+	else if (state.prev == AFTER_TOKEN && state.curr < 8
+		&& new_branch(&token, state, ARG))
+		return (log_error(MEMORY_ERROR, str));
+	if (feed_token(ctx, token, &state, &str))
 		return (log_error(MEMORY_ERROR, str));
 	return (generate_token(ctx, token, state, str));
-}
-
-t_err	expand_cmd(t_ctx *ctx)
-{
-	t_token *curr;
-	t_token *curr_arg;
-	int		i;
-	int		j;
-
-	curr = ctx->parse_tree;
-	while (curr)
-	{
-		if (!curr->value.str)
-		{
-			curr = curr->out;
-			continue ;
-		}
-		// drop_variables(ctx, &curr->value);
-		i = 0;
-		j = 0;
-		while (*curr->value.str && *curr->value.str == ' ')
-			curr->value.str++;
-		while (curr->value.str[i] && curr->value.str[i] != ' ')
-			i++;
-		curr_arg = curr;
-		while (curr->value.str[i + j])
-		{
-			if (curr->value.str[i + j] == ' ')
-			{
-				j++;
-				continue ;
-			}
-			if ((curr_arg->type == CMD || curr_arg->value.str) && curr->value.str[i + j])
-				curr_arg = add_token_back(curr_arg, &curr->arg);
-			if (!curr_arg)
-				return (MEMORY_ERROR);
-			while (curr->value.str[i + j] && curr->value.str[i + j] != ' ')
-			{
-				if (xrealloc(&curr_arg->value.str, curr_arg->value.len + 2, PARS_ALLOC))
-					return (MEMORY_ERROR);
-				curr_arg->value.str[curr_arg->value.len] = curr->value.str[i + j];
-				curr_arg->value.len++;
-				j++;
-			}
-		}
-		// if (split_arr(&curr->args, curr->value.str + i, ' ', PARS_ALLOC))
-		// 	return (MEMORY_ERROR);
-		curr->value.str[i] = 0;
-		curr = curr->out;
-	}
-	return (NO_ERROR);
 }
 
 t_err	parse(t_ctx *ctx, char *str)
@@ -163,7 +105,5 @@ t_err	parse(t_ctx *ctx, char *str)
 	state.prev = MAIN;
 	state.curr = get_state(MAIN, get_cat(&str));
 	err = generate_token(ctx, ctx->parse_tree, state, str);
-	if (!err)
-		err = expand_cmd(ctx);
 	return (err);
 }

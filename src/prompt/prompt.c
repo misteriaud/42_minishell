@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/02 14:33:18 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/06 18:30:38 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/09 17:47:45 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,13 @@
 #define PURPLE_COLOR	"\x1b[3;1;33m"
 #define YELLOW_COLOR	"\x1b[3;1;35m"
 
-t_err get_prompt(char **prompt, const unsigned int old_status)
+t_err	get_prompt(char **prompt, const unsigned int old_status)
 {
 	static char		*color[4] = {GREEN_COLOR, RED_COLOR, PURPLE_COLOR, YELLOW_COLOR};
 	const int		c = !!(old_status);
-	char	*pwd;
-	char	*join_1;
-	char	*join_2;
+	char			*pwd;
+	char			*join_1;
+	char			*join_2;
 
 	pwd = getcwd(NULL, 0);
 	join_1 = str_join(color[c], "minishell\x1b[0m ", PROMPT_ALLOC);
@@ -38,19 +38,3 @@ t_err get_prompt(char **prompt, const unsigned int old_status)
 	free(pwd);
 	return (NO_ERROR);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

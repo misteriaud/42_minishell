@@ -5,12 +5,11 @@ FILES					:=	main.c \
 							memory.c bzero.c t_alloc.c t_node.c \
 							lexer.c parser.c parser_utils.c \
 							prompt_heredoc.c \
-							history.c \
 							get_file.c \
 							prompt.c \
 							init_env.c get_variable.c drop_variables.c print_env.c paths.c package_env.c \
 							raw.c \
-							run_process.c redirect_in.c redirect_out.c \
+							run_process.c redirect_in.c redirect_out.c exit_status.c \
 							split_array.c split_lst.c size.c compare.c merge.c error.c secure_atoi.c is_char.c is_set.c t_str.c fill.c \
 							init_built_in.c search_built_in.c echo.c cd.c pwd.c unset.c export.c exit.c env.c \
 							status.c

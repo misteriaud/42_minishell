@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   is.c                                               :+:      :+:    :+:   */
+/*   is_char.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 16:07:38 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/29 21:54:16 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/09 17:50:50 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,17 +17,17 @@ int	is_num(const char c)
 	return ((c >= '0') & (c <= '9'));
 }
 
-int is_lower(const char c)
+int	is_lower(const char c)
 {
 	return ((c >= 'a') & (c <= 'z'));
 }
 
-int is_upper(const char c)
+int	is_upper(const char c)
 {
 	return ((c >= 'A') & (c <= 'Z'));
 }
 
-int is_under(const char c)
+int	is_under(const char c)
 {
 	return (c == '_');
 }

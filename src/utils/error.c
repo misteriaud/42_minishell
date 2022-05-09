@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 09:30:27 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/06 17:44:41 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/09 12:31:47 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,23 +17,25 @@ static void	ft_putchar(char c)
 	write(2, &c, 1);
 }
 
-void print_nbr_err(const t_err err)
+void	print_nbr_err(const t_err err)
 {
 	if (err > 9)
 		print_nbr_err(err / 10);
 	ft_putchar(err % 10 + '0');
 }
 
-void print_custom_err(const char *str)
+void	print_custom_err(const char *str)
 {
 	if (str && *str)
 		write(2, str, get_len(str));
 }
 
-t_err print_err(t_err err, char *str)
+t_err	print_err(t_err err, char *str)
 {
-	if (!err || err == 1 || err == CTRL_C_ERROR || err == PARSING_ERROR || err == LEXING_ERROR)
+	if (!err)
 		return (err);
+	// if (!err || err == 1 || err == CTRL_C_ERROR || err == PARSING_ERROR || err == LEXING_ERROR)
+	// 	return (err);
 	write(2, "minishell: ", 11);
 	if (err == UNKNOWN_EXEC_ERROR)
 	{

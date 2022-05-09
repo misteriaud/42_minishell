@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 17:57:43 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/06 17:13:21 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/09 17:51:54 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define MINISHELL_H
 
 # include <built_in.h>
-# include <history.h>
 # include <struct.h>
 # include <memory.h>
 # include <env.h>

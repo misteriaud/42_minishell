@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 16:07:16 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/06 19:23:25 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/09 12:27:00 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ static inline void	stream_to_file(int *pfd, const int fd)
 
 	close(pfd[1]);
 	while (read(pfd[0], &c, 1) == 1)
+	{
 		if (write(fd, &c, 1) == -1)
 		{
 			close(pfd[0]);
@@ -42,6 +43,7 @@ static inline void	stream_to_file(int *pfd, const int fd)
 			xfree_all();
 			exit(UNKNOWN_PATH_ERROR);
 		}
+	}
 	close(pfd[0]);
 	close(fd);
 	xfree_all();
