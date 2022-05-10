@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:04:05 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/10 11:10:52 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/10 17:02:50 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,5 +78,6 @@ t_token			*add_token_back(t_token *parent, t_token **first);
 
 // public functions
 t_err			parse(t_ctx *ctx, char *str);
+t_err			split_cmd(t_token *curr);
 
 #endif

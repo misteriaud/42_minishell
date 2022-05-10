@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:06:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/10 11:08:05 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/10 16:58:36 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,5 +107,7 @@ t_err	parse(t_ctx *ctx, char *str)
 	state.prev = MAIN;
 	state.curr = get_state(MAIN, get_cat(&str));
 	err = generate_token(ctx, ctx->parse_tree, state, str);
+	if (!err)
+		err = split_cmd(ctx->parse_tree);
 	return (err);
 }
