@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 12:25:25 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/10 16:38:37 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/10 18:15:12 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,5 +25,6 @@ t_err	cmd_env(t_ctx *ctx, t_token *args)
 		write(STDOUT_FILENO, "\n", 1);
 		elm = elm->next;
 	}
+	close(1);
 	return (NO_ERROR);
 }

@@ -1,38 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   echo.c                                             :+:      :+:    :+:   */
+/*   is_dir.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/30 12:23:15 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/10 18:15:01 by mriaud           ###   ########.fr       */
+/*   Created: 2022/05/10 17:24:08 by mriaud            #+#    #+#             */
+/*   Updated: 2022/05/10 17:51:58 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include <utils.h>
 
-t_err	cmd_echo(t_ctx *ctx, t_token *args)
+t_err	is_dir(const char *path)
 {
-	int		state;
+    struct stat	path_stat;
 
-	(void)ctx;
-	state = 1;
-	if (args && args->value.str[0] == '-'
-		&& args->value.str[1] == 'n')
-	{
-		state = 0;
-		args = args->next;
-	}
-	while (args)
-	{
-		write(1, args->value.str, args->value.len);
-		args = args->next;
-		if (args)
-			write(STDOUT_FILENO, " ", 1);
-	}
-	if (state)
-		write(STDOUT_FILENO, "\n", 1);
-	close(1);
+    stat(path, &path_stat);
+    if (S_ISDIR(path_stat.st_mode))
+		return (DIR_ERROR);
 	return (NO_ERROR);
 }

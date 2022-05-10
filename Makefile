@@ -8,7 +8,7 @@ FILES					:=	main.c \
 							prompt.c \
 							init_env.c get_variable.c drop_variables.c print_env.c paths.c package_env.c \
 							run_process.c redirect_in.c redirect_out.c exit_status.c \
-							split_array.c split_lst.c size.c compare.c merge.c error.c secure_atoi.c is_char.c is_char_2.c is_set.c t_str.c fill.c \
+							split_array.c split_lst.c size.c compare.c merge.c error.c secure_atoi.c is_char.c is_char_2.c is_set.c t_str.c fill.c is_dir.c \
 							init_built_in.c search_built_in.c echo.c cd.c pwd.c unset.c export.c exit.c env.c \
 							status.c
 

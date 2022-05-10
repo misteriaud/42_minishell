@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 13:46:16 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/06 15:04:08 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/10 17:50:35 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 # define UTILS_H
 
 # include <struct.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <unistd.h>
 
 char	*ft_itoa(int i);
 
@@ -59,5 +62,7 @@ int		is_var_start(const char c);
 void	print_custom_err(const char *str);
 t_err	print_err(t_err err, char *str);
 int		secure_atoi(char *str, int *result);
+t_err	is_dir(const char *path);
+
 
 #endif

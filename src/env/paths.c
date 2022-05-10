@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:13:26 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/10 16:40:58 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/10 17:54:25 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ t_err	get_exec_path(t_ctx *ctx, t_str *exec)
 	if (is_containing_set(exec->str, "/"))
 	{
 		expand_path(ctx, exec);
+		if (is_dir(exec->str))
+			return (DIR_ERROR);
 		if (!access(exec->str, X_OK))
 			return (NO_ERROR);
 		return (UNKNOWN_EXEC_ERROR);

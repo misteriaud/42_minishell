@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 09:30:27 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/10 15:22:21 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/10 17:51:00 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,11 @@ void	print_err_2(t_err err, char *str)
 		print_custom_err("unset: ");
 		print_custom_err(str);
 		print_custom_err(": not a valid identifier\n");
+	}
+	else if (err == DIR_ERROR)
+	{
+		print_custom_err(str);
+		print_custom_err(": Is a directory\n");
 	}
 }
 	/*
