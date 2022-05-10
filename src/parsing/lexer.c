@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 00:35:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/09 12:28:52 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/10 11:04:13 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static inline t_lexer_state	get_state_when_whitespace(int state)
 
 static inline t_lexer_state	get_state_in_word(t_char_cat cat)
 {
-	if (!cat)
+	if (cat == WHITESPACE)
 		return (AFTER_TOKEN);
 	return ((t_lexer_state)cat);
 }
@@ -73,17 +73,17 @@ t_lexer_state	get_state(t_lexer_state state, t_char_cat cat)
 		return (get_state_when_whitespace(state));
 	if ((state == MAIN && cat < 8) || state & AFTER_TOKEN)
 		return ((t_lexer_state)cat);
-	if (cat & (L_CHEVRON | R_CHEVRON | DL_CHEVRON | DR_CHEVRON))
-		return (get_state_after_chev(state, cat));
-	if (state & 248 && cat < 8)
-		return ((t_lexer_state)cat);
-	if (state & IN_WORD)
-		return (get_state_in_word(cat));
 	if (state & (IN_SQ | IN_DQ))
 	{
 		if (cat & state)
 			return (AFTER_TOKEN | cat);
 		return (state);
 	}
+	if (cat & (L_CHEVRON | R_CHEVRON | DL_CHEVRON | DR_CHEVRON))
+		return (get_state_after_chev(state, cat));
+	if (state & 248 && cat < 8)
+		return ((t_lexer_state)cat);
+	if (state & IN_WORD)
+		return (get_state_in_word(cat));
 	return (ERROR);
 }

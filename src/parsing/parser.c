@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:06:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/09 17:45:54 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/10 11:08:05 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static	t_err	log_error(t_err error, char *str)
 
 static	t_err	ft_state_lane(t_state *state, char **str, int *i)
 {
-	while ((state->curr > 0 && state->curr & IN_WORD)
+	while ((state->curr > 0 && state->curr == IN_WORD)
 		|| (state->curr == state->prev && state->curr < 8 && state->curr))
 	{
 		(*i)++;
@@ -55,7 +55,10 @@ static t_err	feed_token(t_ctx *ctx, t_token *token,
 	{
 		end = *str;
 		if (ft_state_lane(state, &end, &tmp.len))
+		{
+			*str = end;
 			return (LEXING_ERROR);
+		}
 		if (xmalloc(&tmp.str, tmp.len + 1, PARS_ALLOC))
 			return (MEMORY_ERROR);
 		while (i++ < tmp.len)
@@ -64,8 +67,7 @@ static t_err	feed_token(t_ctx *ctx, t_token *token,
 	}
 	if (tmp.len)
 		return (concat_token(ctx, token, state, tmp));
-	else
-		move_forward(state, str);
+	move_forward(state, str);
 	return (NO_ERROR);
 }
 
