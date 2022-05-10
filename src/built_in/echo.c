@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 12:23:15 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/02 16:33:44 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/10 16:39:00 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 t_err	cmd_echo(t_ctx *ctx, t_token *args)
 {
-	(void)ctx;
-	int state;
+	int		state;
 
+	(void)ctx;
 	state = 1;
 	if (args && args->value.str[0] == '-'
 		&& args->value.str[1] == 'n')

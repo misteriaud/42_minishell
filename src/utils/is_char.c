@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 16:07:38 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/09 17:50:50 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/10 15:18:16 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,4 @@ int	is_under(const char c)
 int	is_variable(const char c)
 {
 	return (is_var_start(c) | is_num(c));
-}
-
-int	is_var_start(const char c)
-{
-	return (is_lower(c) | is_upper(c) | is_under(c));
 }

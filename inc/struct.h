@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 19:56:33 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/10 14:17:48 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/10 15:07:49 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,8 @@ typedef enum e_err
 	SIGNAL_ERROR = 0xA6,
 	EXIT_ERROR = 0xB0,
 	VAR_ERROR = 0xC0,
-	VAR_IDENTIFIER_ERROR = 0xC2
+	EXPORT_ERROR = 0xC2,
+	UNSET_ERROR = 0xC3
 
 }	t_err;
 

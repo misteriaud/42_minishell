@@ -5,12 +5,10 @@ FILES					:=	main.c \
 							memory.c bzero.c t_alloc.c t_node.c \
 							lexer.c parser.c parser_utils.c \
 							prompt_heredoc.c \
-							get_file.c \
 							prompt.c \
 							init_env.c get_variable.c drop_variables.c print_env.c paths.c package_env.c \
-							raw.c \
 							run_process.c redirect_in.c redirect_out.c exit_status.c \
-							split_array.c split_lst.c size.c compare.c merge.c error.c secure_atoi.c is_char.c is_set.c t_str.c fill.c \
+							split_array.c split_lst.c size.c compare.c merge.c error.c secure_atoi.c is_char.c is_char_2.c is_set.c t_str.c fill.c \
 							init_built_in.c search_built_in.c echo.c cd.c pwd.c unset.c export.c exit.c env.c \
 							status.c
 
@@ -35,8 +33,6 @@ SDIR						:= $(shell find $(SRCDIR) -type d)
 vpath %.c $(foreach dir, $(SDIR), $(dir):)
 
 OBJ						:= $(addprefix $(OBJDIR)/, $(FILES:%.c=%.o))
-#SRC						:= $(addprefix $(SRCDIR)/, $(FILES))
-#OBJ						:= $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRC))
 DEP						:= $(patsubst $(OBJDIR)/%.o, $(DEPDIR)/%.d, $(OBJ))
 
 ifeq ($(OS),Darwin)
@@ -51,9 +47,12 @@ P := \033[3;35m
 R := \033[m
 
 all:
-						@$(MAKE) --no-print-directory $(NAME)
+						@if ! command -v lolcat &> /dev/null; then \
+							$(MAKE) --no-print-directory $(NAME); \
+						else \
+							$(MAKE) --no-print-directory $(NAME) | ./lolcat -v 1 -h 0; \
+						fi
 
-#| ./lolcat -v 1 -h 0
 
 
 $(NAME):				$(OBJ) | Makefile

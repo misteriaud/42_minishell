@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 12:25:25 by artblin           #+#    #+#             */
-/*   Updated: 2022/04/28 14:19:58 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/10 16:38:37 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 t_err	cmd_env(t_ctx *ctx, t_token *args)
 {
-	(void)args;
 	const t_env		*elm = ctx->env;
 
+	(void)args;
 	while (elm)
 	{
 		write(STDOUT_FILENO, elm->key.str, elm->key.len);

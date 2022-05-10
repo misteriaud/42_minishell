@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/02 14:33:18 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/09 17:47:45 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/10 16:37:38 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 
 t_err	get_prompt(char **prompt, const unsigned int old_status)
 {
-	static char		*color[4] = {GREEN_COLOR, RED_COLOR, PURPLE_COLOR, YELLOW_COLOR};
+	static char		*color[2] = {GREEN_COLOR, RED_COLOR};
 	const int		c = !!(old_status);
 	char			*pwd;
 	char			*join_1;

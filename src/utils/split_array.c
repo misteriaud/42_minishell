@@ -6,13 +6,14 @@
 /*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 22:13:11 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/29 22:17:36 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/10 15:17:17 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-static t_err	fill_double_array(char **tab, const char *str, const char sep, const int alloc_group)
+static t_err	fill_double_array(char **tab, const char *str,
+		const char sep, const int alloc_group)
 {
 	int		byte;
 	int		w;
@@ -36,7 +37,8 @@ static t_err	fill_double_array(char **tab, const char *str, const char sep, cons
 	return (NO_ERROR);
 }
 
-t_err	split_arr(char ***array, const char *str, const char sep, const int alloc_group)
+t_err	split_arr(char ***array, const char *str,
+		const char sep, const int alloc_group)
 {
 	char	**tab;
 	int		word;

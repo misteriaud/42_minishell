@@ -6,9 +6,14 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/07 16:58:27 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/09 17:53:28 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/10 15:23:32 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include <stddef.h>
+#include <stdlib.h>
+#include <memory.h>
+#include <struct.h>
 
 static char	*ft_strchr(const char *s, int c)
 {
@@ -68,10 +73,6 @@ int	secure_atoi(char *str, int *result)
 		return (1);
 	return (0);
 }
-#include <stddef.h>
-#include <stdlib.h>
-#include <memory.h>
-#include <struct.h>
 
 size_t	ft_digitnbr(long n)
 {
@@ -95,8 +96,8 @@ char	*ft_itoa(int i)
 	x = ft_digitnbr(n);
 	if (n < 0 && ++x && ++m)
 		n = -(n);
-	xmalloc(&a, (x + 1) * sizeof(char), ENV_ALLOC);
-	//a = malloc((x + 1) * sizeof(char));
+	if (xmalloc(&a, (x + 1) * sizeof(char), ENV_ALLOC))
+		return (NULL);
 	if (a)
 	{
 		a[x] = '\0';
