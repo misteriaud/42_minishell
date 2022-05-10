@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 09:30:27 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/09 12:31:47 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/10 15:22:21 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,35 @@ void	print_custom_err(const char *str)
 		write(2, str, get_len(str));
 }
 
+void	print_err_2(t_err err, char *str)
+{
+	if (err == EXPORT_ERROR)
+	{
+		print_custom_err("export: ");
+		print_custom_err(str);
+		print_custom_err(": not a valid identifier\n");
+	}
+	else if (err == UNSET_ERROR)
+	{
+		print_custom_err("unset: ");
+		print_custom_err(str);
+		print_custom_err(": not a valid identifier\n");
+	}
+}
+	/*
+	else
+	{
+		print_custom_err("unexpected error occurred (");
+		print_nbr_err(err);
+		write(2, ")\n", 2);
+	}*/
+
 t_err	print_err(t_err err, char *str)
 {
 	if (!err)
 		return (err);
-	// if (!err || err == 1 || err == CTRL_C_ERROR || err == PARSING_ERROR || err == LEXING_ERROR)
-	// 	return (err);
 	write(2, "minishell: ", 11);
+	print_err_2(err, str);
 	if (err == UNKNOWN_EXEC_ERROR)
 	{
 		print_custom_err(str);
@@ -49,12 +71,6 @@ t_err	print_err(t_err err, char *str)
 		print_custom_err("exit: ");
 		print_custom_err(str);
 		print_custom_err(": numeric argument required\n");
-	}
-	else
-	{
-		print_custom_err("unexpected error occurred (");
-		print_nbr_err(err);
-		write(2, ")\n", 2);
 	}
 	return (err);
 }

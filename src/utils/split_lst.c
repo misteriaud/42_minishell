@@ -6,13 +6,14 @@
 /*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 13:43:33 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/29 22:15:38 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/10 15:26:27 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-t_err	split_lst_normal(t_lst **head, const char *str,  const char sep, const int alloc_group)
+t_err	split_lst_normal(t_lst **head, const char *str,
+		const char sep, const int alloc_group)
 {
 	t_lst	**elm;
 	int		byte;
@@ -37,7 +38,8 @@ t_err	split_lst_normal(t_lst **head, const char *str,  const char sep, const int
 	return (NO_ERROR);
 }
 
-t_err	split_lst_inverted(t_lst **head, const char *str,  const char sep, const int alloc_group)
+t_err	split_lst_inverted(t_lst **head, const char *str,
+		const char sep, const int alloc_group)
 {
 	t_lst	*elm;
 	int		byte;

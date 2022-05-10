@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/14 11:07:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/05 17:39:33 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/10 15:42:28 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 #include <readline/history.h>
 #include <readline/readline.h>
 
-int	*curr_group(void)
-{
-	static int	group = 0;
-	return (&group);
-}
-
+// int	*curr_group(void)
+// {
+// 	static int	group = 0;
+// 
+// 	return (&group);
+// }
 
 int	xmalloc(void *ptr, size_t size, int group)
 {
@@ -28,7 +28,7 @@ int	xmalloc(void *ptr, size_t size, int group)
 	void	**data;
 
 	data = (void **)ptr;
-	first = get_first_alloc((group * !!group) + (*(curr_group()) * !group));
+	first = get_first_alloc(group);
 	dest = new_alloc(first, size);
 	if (!dest)
 		return (1);
@@ -100,7 +100,7 @@ void	xfree_group(int group)
 	t_node	*to_remove;
 
 	first = get_first_node();
-	if (*first && (*first)->group == (group * !!group) + (*(curr_group()) * !group))
+	if (*first && (*first)->group == group)
 	{
 		to_remove = *first;
 		*first = to_remove->next;
@@ -109,7 +109,7 @@ void	xfree_group(int group)
 		return ;
 	}
 	curr = *first;
-	while (curr && curr->next && curr->next->group != (group * !!group) + (*(curr_group()) * !group))
+	while (curr && curr->next && curr->next->group != group)
 		curr = curr->next;
 	if (!curr || (curr && !curr->next))
 		return ;

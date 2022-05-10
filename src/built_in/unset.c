@@ -6,19 +6,19 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 12:26:34 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/05 17:55:39 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/10 16:34:58 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include <built_in.h>
 
-t_err	cmd_unset(t_ctx *ctx, t_token *args)
+static void	delete(t_ctx *ctx, t_token *args)
 {
 	t_env	*elm;
 	t_env	*prv;
 
-	elm = ctx->env;
 	prv = NULL;
+	elm = ctx->env;
 	while (elm)
 	{
 		if (!compare(args->value.str, elm->key.str))
@@ -30,10 +30,25 @@ t_err	cmd_unset(t_ctx *ctx, t_token *args)
 			else
 				prv->next = elm->next;
 			xfree(elm, ENV_ALLOC);
-			return (NO_ERROR);
+			return ;
 		}
 		prv = elm;
 		elm = elm->next;
 	}
-	return (NO_ERROR);
+}
+
+t_err	cmd_unset(t_ctx *ctx, t_token *args)
+{
+	t_err	err;
+
+	err = NO_ERROR;
+	while (args)
+	{
+		if (!is_var_start(*args->value.str))
+			err = print_err(UNSET_ERROR, args->value.str);
+		else
+			delete(ctx, args);
+		args = args->next;
+	}
+	return (err);
 }

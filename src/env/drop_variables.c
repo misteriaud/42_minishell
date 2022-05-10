@@ -6,30 +6,38 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 22:25:36 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/06 19:06:35 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/10 17:00:46 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 #include <status.h>
 
-static t_err	create_variable_node(t_ctx *ctx, char **str, t_lst ***elm, int *global_len)
+int	check_interrogation(t_ctx *ctx, char **str, t_str *tmp)
 {
-	t_str	tmp;
 	char	*num;
 
-	tmp.len = 0;
 	if (**str == '?')
 	{
 		num = ft_itoa(ctx->old_status);
-		tmp.len = get_len(num);
-		if (new_str(&tmp, tmp.len, TMP_ALLOC))
+		tmp->len = get_len(num);
+		if (new_str(tmp, tmp->len, TMP_ALLOC))
 			return (MEMORY_ERROR);
-		str_fill(&tmp, num);
+		str_fill(tmp, num);
 		(*str)++;
 		xfree(num, ENV_ALLOC);
+		return (1);
 	}
-	else
+	return (0);
+}
+
+static t_err	create_variable_node(t_ctx *ctx, char **str,
+		t_lst ***elm, int *global_len)
+{
+	t_str	tmp;
+
+	tmp.len = 0;
+	if (!check_interrogation(ctx, str, &tmp))
 	{
 		while (is_variable((*str)[tmp.len]))
 			tmp.len++;
@@ -48,7 +56,8 @@ static t_err	create_variable_node(t_ctx *ctx, char **str, t_lst ***elm, int *glo
 	return (NO_ERROR);
 }
 
-static t_err	create_text_node(char **str, t_lst ***elm, int *global_len, const char sep)
+static t_err	create_text_node(char **str, t_lst ***elm,
+		int *global_len, const char sep)
 {
 	t_str	tmp;
 
@@ -67,6 +76,13 @@ static t_err	create_text_node(char **str, t_lst ***elm, int *global_len, const c
 	return (NO_ERROR);
 }
 
+static void	fill(t_str *parse, t_lst *lst)
+{
+	xfree(parse->str, PARS_ALLOC);
+	new_str(parse, parse->len, PARS_ALLOC);
+	str_fill_from_lst(parse, lst);
+	xfree_group(TMP_ALLOC);
+}
 
 t_err	drop_variables(t_ctx *ctx, t_str *parse)
 {
@@ -92,9 +108,6 @@ t_err	drop_variables(t_ctx *ctx, t_str *parse)
 				err = create_text_node(&str, &elm, &(parse->len), '\0');
 		}
 	}
-	xfree(parse->str, PARS_ALLOC);
-	new_str(parse, parse->len, PARS_ALLOC);
-	str_fill_from_lst(parse, lst);
-	xfree_group(TMP_ALLOC);
+	fill(parse, lst);
 	return (err);
 }

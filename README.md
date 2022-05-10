@@ -1,22 +1,19 @@
 - [ ] : ~~Inverted expand path (for tilde prompt)~~
 - [x] : Manage clear_history function location
 - [ ] : $ comportment for special characters
-- [ ] : Expand $?
+- [x] : Expand $?
 - [ ] : Segfault handle
-- [ ] : Manage return values
-- [ ] : Manage error loggin
-- [ ] : Implementation Env -i
-- [ ] : Shell level
-- [ ] : Leaks
+- [x] : Manage return values
+- [x] : Manage error loggin
+- [x] : Implementation Env -i
+- [!] : Shell level
+- [?] : Leaks
 - [ ] : Norminette
 - [ ] : ~~Stat function~~
 - [x] : Test with symbolic link
 - [x] : Get path of symlink
-- [ ] : Message erreur export et unset
-- [ ] : export peut prendre plusieur args
-- [ ] :
-- [ ] :
-- [ ] :
+- [x] : Message erreur export et unset
+- [x] : export peut prendre plusieur args
 
 
 LOG :

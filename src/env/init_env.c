@@ -6,7 +6,7 @@
 /*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 18:06:59 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/06 15:59:27 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/10 16:44:29 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,22 @@ t_err	add_to_env2(t_ctx *ctx, char *key, char *value)
 	return (NO_ERROR);
 }
 
+void	check_pwd(t_ctx *ctx)
+{
+	char	*key;
+	char	*value;
+	char	*tmp;
+
+	if (get_variable(ctx, "PWD", NULL))
+	{
+		tmp = getcwd(NULL, 0);
+		str_dup(&key, "PWD", ENV_ALLOC);
+		str_dup(&value, tmp, ENV_ALLOC);
+		add_to_env2(ctx, key, value);
+		free(tmp);
+	}
+}
+
 void	no_env(t_ctx *ctx)
 {
 	char	*key;
@@ -52,12 +68,7 @@ void	no_env(t_ctx *ctx)
 	t_str	*shlvl;
 	int		n;
 
-	if (get_variable(ctx, "PWD", NULL))
-	{
-		value = getcwd(NULL, 0);
-		str_dup(&key, "PWD", ENV_ALLOC);
-		add_to_env2(ctx, key, value);
-	}
+	check_pwd(ctx);
 	if (get_variable(ctx, "SHLVL", NULL))
 	{
 		str_dup(&key, "SHLVL", ENV_ALLOC);
@@ -75,7 +86,6 @@ void	no_env(t_ctx *ctx)
 		shlvl->len = get_len(value);
 	}
 }
-
 
 t_err	init_env(t_ctx *ctx, char **env)
 {

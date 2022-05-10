@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 02:12:00 by artblin           #+#    #+#             */
-/*   Updated: 2022/04/28 14:19:06 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/10 14:49:47 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,13 @@
 # define BUILT_IN
 
 # include <struct.h>
+# include <memory.h>
+# include <utils.h>
+# include <env.h>
+
+#define ADD				1
+#define CREATE			2
+#define NO_ASSIGNEMENT	3
 
 #define CMD_CD			0
 #define CMD_PWD			1
@@ -39,4 +46,6 @@ t_err	cmd_exit(t_ctx *ctx, t_token *args);
 t_err	cmd_export(t_ctx *ctx, t_token *args);
 t_err	cmd_pwd(t_ctx *ctx, t_token *args);
 t_err	cmd_unset(t_ctx *ctx, t_token *args);
+
+char	*get_key(char **str);
 #endif

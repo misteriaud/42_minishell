@@ -6,15 +6,16 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 12:24:56 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/06 12:06:40 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/10 16:37:04 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-static t_err swap_pwd(t_ctx *ctx)
+static t_err	swap_pwd(t_ctx *ctx)
 {
 	t_str	*pwd;
+	char	*tmp;
 	t_str	*oldpwd;
 
 	if (get_address_variable(ctx, "PWD", &pwd))
@@ -30,12 +31,14 @@ static t_err swap_pwd(t_ctx *ctx)
 	xfree(oldpwd->str, ENV_ALLOC);
 	oldpwd->str = pwd->str;
 	oldpwd->len = pwd->len;
-	pwd->str = getcwd(NULL, 0);
+	tmp = getcwd(NULL, 0);
+	str_dup(&pwd->str, tmp, ENV_ALLOC);
+	free(tmp);
 	pwd->len = get_len(pwd->str);
 	return (NO_ERROR);
 }
 
-static t_err check_and_change_path(t_str *path)
+static t_err	check_and_change_path(t_str *path)
 {
 	if (access(path->str, F_OK)
 		|| chdir(path->str))
@@ -43,12 +46,10 @@ static t_err check_and_change_path(t_str *path)
 	return (NO_ERROR);
 }
 
-
 t_err	cmd_cd(t_ctx *ctx, t_token *args)
 {
 	t_str	*home;
 	t_err	err;
-
 
 	if (!args)
 	{

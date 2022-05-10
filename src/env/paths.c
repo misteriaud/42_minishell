@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:13:26 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/06 09:36:08 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/10 16:40:58 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,7 @@ t_err	get_exec_path(t_ctx *ctx, t_str *exec)
 		if (!access(exec_path.str, X_OK))
 		{
 			xfree(exec->str, PARS_ALLOC);
-			*exec = exec_path;
-			return (NO_ERROR);
+			return (*exec = exec_path, NO_ERROR);
 		}
 		xfree(exec_path.str, PARS_ALLOC);
 		elm = elm->next;
@@ -47,6 +46,7 @@ t_err	refresh_paths(t_ctx *ctx)
 	t_str	paths;
 
 	xfree_group(PATHS_ALLOC);
+	ctx->paths = NULL;
 	if (get_variable(ctx, "PATH", &paths))
 		return (NO_VAR_ERROR);
 	if (split_lst_normal(&ctx->paths, paths.str, ':', PATHS_ALLOC))
@@ -56,7 +56,6 @@ t_err	refresh_paths(t_ctx *ctx)
 
 t_err	get_exec_arg(char ***arg, t_token *parse)
 {
-	// premier arg du main
 	t_token		*elm;
 	int			size;
 	int			x;
