@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 12:25:50 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/05 17:10:13 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/10 14:19:52 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,25 +95,32 @@ t_err	add_to_env(t_ctx *ctx, char *key, int assign, char *value)
 }
 
 
+// bash: export: `3fjkd=sf': not a valid identifier
+
 t_err	cmd_export(t_ctx *ctx, t_token *args)
 {
 	char	*str;
 	char	*key;
 	char	*value;
 	int		assign;
+	t_err	err;
 
-	if (args && args->value.str)
+	err = NO_ERROR;
+	if (!args)
+		return (err);
+	while (args)
 	{
-		str = args->value.str;
-		key = get_key(&str);
-		assign = check_assignement(&str);
-		value = get_value(&str);
-		if (!key)
-			return (VAR_ERROR);
-		if (!(assign == ADD || assign == CREATE))
-			return (ASSIGN_ERROR);
-		add_to_env(ctx, key, assign, value);
-		return (NO_ERROR);
+		if (args->value.str)
+		{
+			str = args->value.str;
+			key = get_key(&str);
+			assign = check_assignement(&str);
+			value = get_value(&str);
+			if (!key || !(assign == ADD || assign == CREATE))
+				err = print_err(VAR_IDENTIFIER_ERROR, args->value.str);
+			add_to_env(ctx, key, assign, value);
+		}
+		args = args->next;
 	}
-	return (ARG_ERROR);
+	return (err);
 }

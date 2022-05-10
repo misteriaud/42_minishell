@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 09:30:27 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/09 12:31:47 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/10 14:14:12 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,12 @@ t_err	print_err(t_err err, char *str)
 		print_custom_err("exit: ");
 		print_custom_err(str);
 		print_custom_err(": numeric argument required\n");
+	}
+	else if (err == VAR_IDENTIFIER_ERROR)
+	{
+		print_custom_err("export: ");
+		print_custom_err(str);
+		print_custom_err(": not a valid identifier\n");
 	}
 	else
 	{
