@@ -6,11 +6,20 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 16:07:05 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/09 11:12:29 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/10 12:30:26 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <process.h>
+
+static void	sigint_handler(int sig)
+{
+	(void)sig;
+	close(0);
+	close(1);
+	close(2);
+	xfree_all();
+}
 
 static inline t_err	get_fd(int *fd, t_token **in)
 {
@@ -35,6 +44,8 @@ static inline void	stream_from_file(int *pfd, t_token *in, const int fd)
 {
 	char	c;
 
+	if (signal(SIGINT, sigint_handler) == SIG_ERR)
+		exit(SIGNAL_ERROR);
 	close(pfd[0]);
 	while (in->type == PATH && read(fd, &c, 1) == 1)
 		write(pfd[1], &c, 1);

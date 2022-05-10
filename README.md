@@ -9,9 +9,9 @@
 - [ ] : Shell level
 - [ ] : Leaks
 - [ ] : Norminette
-- [ ] : Stat function
-- [ ] : Test with symbolic link
-- [ ] : Get path of symlink
+- [ ] : ~~Stat function~~
+- [x] : Test with symbolic link
+- [x] : Get path of symlink
 - [ ] : Message erreur export et unset
 - [ ] : export peut prendre plusieur args
 - [ ] :

@@ -6,11 +6,20 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 16:07:16 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/09 12:27:00 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/10 12:30:38 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <process.h>
+
+static void	sigint_handler(int sig)
+{
+	(void)sig;
+	close(0);
+	close(1);
+	close(2);
+	xfree_all();
+}
 
 static inline t_err	open_file(int *fd, t_token *path)
 {
@@ -33,6 +42,8 @@ static inline void	stream_to_file(int *pfd, const int fd)
 {
 	char	c;
 
+	if (signal(SIGINT, sigint_handler) == SIG_ERR)
+		exit(SIGNAL_ERROR);
 	close(pfd[1]);
 	while (read(pfd[0], &c, 1) == 1)
 	{

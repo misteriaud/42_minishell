@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:09:08 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/09 12:11:12 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/10 12:21:57 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static inline t_err	run_cmd(t_ctx *ctx, t_token *token)
 	return (err);
 }
 
-t_err	execute(t_ctx *ctx, t_token *token)
+t_err	execute(t_ctx *ctx, t_token *token, int *dfd)
 {
 	int			pid;
 	t_err		err;
@@ -75,11 +75,16 @@ t_err	execute(t_ctx *ctx, t_token *token)
 	if (!pid)
 	{
 		err = run_cmd(ctx, token);
+		close(dfd[0]);
+		close(dfd[1]);
+		close(0);
+		close(1);
+		close(2);
 		xfree_all();
 		exit(err);
 	}
 	if (pid && token->out)
-		return (execute(ctx, token->out));
+		return (execute(ctx, token->out, dfd));
 	close(0);
 	close(1);
 	if (!err)
@@ -90,6 +95,7 @@ t_err	execute(t_ctx *ctx, t_token *token)
 static void	sigint_handler(int sig)
 {
 	(void)sig;
+	set_status(CTRL_C_ERROR);
 	write(2, "\n", 1);
 }
 
@@ -109,12 +115,14 @@ t_err	run_process(t_ctx *ctx)
 	if (signal(SIGINT, sigint_handler) == SIG_ERR)
 		return (SIGNAL_ERROR);
 	if (curr->out || !built_in)
-		exit_status = execute(ctx, curr);
+		exit_status = execute(ctx, curr, default_inout);
 	else
 		exit_status = run_cmd(ctx, curr);
 	dup2(default_inout[0], 0);
 	dup2(default_inout[1], 1);
 	close(default_inout[0]);
 	close(default_inout[1]);
+	if (get_status())
+		return (get_status());
 	return (exit_status);
 }
