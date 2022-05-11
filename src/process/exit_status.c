@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 12:06:49 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/10 11:57:34 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/11 09:16:45 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_err	get_exit_status(void)
 	t_err		err;
 
 	wpid = 0;
-	highest_status = 1;
+	status = 0;
 	err = NO_ERROR;
 	wpid = wait(&status);
 	highest_pid = wpid;

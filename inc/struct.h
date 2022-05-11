@@ -6,12 +6,12 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 19:56:33 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/10 17:51:08 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/11 09:50:47 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STRUCT_H
-#define STRUCT_H
+# define STRUCT_H
 
 # include <termios.h>
 
@@ -44,7 +44,6 @@ typedef enum e_err
 	NO_VAR_ERROR = 0x84,
 	NOT_EQUAL_ERROR = 0x85,
 	EMPTY_FILE_ERROR = 0x86,
-	// UNKNOWN_EXEC_ERROR = 0x87,
 	UNKNOWN_EXEC_ERROR = 127,
 	UNKNOWN_PATH_ERROR = 0x88,
 	CTRL_C_ERROR = 130,
@@ -63,7 +62,7 @@ typedef enum e_err
 	DIR_ERROR = 0xC4
 }	t_err;
 
-typedef t_err (t_func)(t_ctx *, t_token *);
+typedef	t_err (t_func)(t_ctx *, t_token *);
 
 enum e_alloc_group
 {
@@ -96,7 +95,6 @@ typedef struct s_env
 	struct s_env	*next;
 }	t_env;
 
-
 //PARSING STRUCT
 typedef enum e_token_type
 {
@@ -106,7 +104,6 @@ typedef enum e_token_type
 	ARG = 16,
 	HEREDOC = 32,
 }	t_token_type;
-
 
 struct s_token
 {
@@ -140,9 +137,5 @@ struct s_ctx
 	t_token			*parse_tree;
 	t_err			old_status;
 };
-
-
-
-
 
 #endif

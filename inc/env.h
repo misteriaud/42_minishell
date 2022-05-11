@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 22:33:16 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/06 12:05:16 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/11 09:35:33 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include <struct.h>
 
-#define ENV_GROUP	0
+# define ENV_GROUP	0
 
 t_err	add_to_env(t_ctx *ctx, char *key, int assign, char *value);
 
@@ -30,7 +30,8 @@ t_err	refresh_paths(t_ctx *ctx);
 // get value of variable
 t_err	get_variable(t_ctx *ctx, const char *key, t_str *value);
 
-t_err	get_address_variable(t_ctx *ctx, const char *key, t_str **address_value);
+t_err	get_address_variable(t_ctx *ctx, const char *key,
+			t_str **address_value);
 
 // test and get execution path
 t_err	get_exec_path(t_ctx *ctx, t_str *exec);

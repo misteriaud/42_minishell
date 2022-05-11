@@ -6,26 +6,17 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:13:26 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/10 17:54:25 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/11 09:23:14 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-t_err	get_exec_path(t_ctx *ctx, t_str *exec)
+t_err	get_cmd_path(t_ctx *ctx, t_str *exec)
 {
 	t_lst	*elm;
 	t_str	exec_path;
 
-	if (is_containing_set(exec->str, "/"))
-	{
-		expand_path(ctx, exec);
-		if (is_dir(exec->str))
-			return (DIR_ERROR);
-		if (!access(exec->str, X_OK))
-			return (NO_ERROR);
-		return (UNKNOWN_EXEC_ERROR);
-	}
 	elm = ctx->paths;
 	while (elm)
 	{
@@ -41,6 +32,20 @@ t_err	get_exec_path(t_ctx *ctx, t_str *exec)
 		elm = elm->next;
 	}
 	return (UNKNOWN_EXEC_ERROR);
+}
+
+t_err	get_exec_path(t_ctx *ctx, t_str *exec)
+{
+	if (is_containing_set(exec->str, "/"))
+	{
+		expand_path(ctx, exec);
+		if (is_dir(exec->str))
+			return (DIR_ERROR);
+		if (!access(exec->str, X_OK))
+			return (NO_ERROR);
+		return (UNKNOWN_EXEC_ERROR);
+	}
+	return (get_cmd_path(ctx, exec));
 }
 
 t_err	refresh_paths(t_ctx *ctx)

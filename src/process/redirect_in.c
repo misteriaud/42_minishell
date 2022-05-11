@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 16:07:05 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/10 17:54:30 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/11 09:16:24 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 static void	sigint_handler(int sig)
 {
 	(void)sig;
-	close(0);
 	close(1);
+	close(0);
 	close(2);
 	xfree_all();
 }
@@ -44,17 +44,20 @@ static inline t_err	get_fd(int *fd, t_token **in)
 
 static inline void	stream_from_file(int *pfd, t_token *in, const int fd)
 {
-	char	c;
+	char				c;
+	const t_token_type	type = in->type;
 
+	close(pfd[0]);
+	dup2(pfd[1], 1);
+	close(pfd[1]);
 	if (signal(SIGINT, sigint_handler) == SIG_ERR)
 		exit(SIGNAL_ERROR);
-	close(pfd[0]);
-	while (in->type == PATH && read(fd, &c, 1) == 1)
-		write(pfd[1], &c, 1);
-	if (in->type == HEREDOC)
-		write(pfd[1], in->value.str, in->value.len);
-	close(pfd[1]);
+	while (type == PATH && read(fd, &c, 1) == 1)
+		write(1, &c, 1);
+	if (type == HEREDOC)
+		write(1, in->value.str, in->value.len);
 	close(fd);
+	close(1);
 	xfree_all();
 	exit(NO_ERROR);
 }

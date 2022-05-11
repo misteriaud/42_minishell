@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 13:46:16 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/10 17:50:35 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/11 09:35:12 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,14 @@ t_err	merge(t_str *merged, t_str *left, t_str *right, const char sep);
 
 t_err	compare(const char *what, const char *with);
 
-t_err	split_arr(char ***array, const char *str, const char del, const int alloc_group);
+t_err	split_arr(char ***array, const char *str,
+			const char del, const int alloc_group);
 
-t_err	split_lst_normal(t_lst **head, const char *str,  const char sep, const int alloc_group);
+t_err	split_lst_normal(t_lst **head, const char *str,
+			const char sep, const int alloc_group);
 
-t_err	split_lst_inverted(t_lst **head, const char *str,  const char sep, const int alloc_group);
-
-
+t_err	split_lst_inverted(t_lst **head, const char *str,
+			const char sep, const int alloc_group);
 
 t_bool	is_set(const char c, const char *set);
 
@@ -63,6 +64,5 @@ void	print_custom_err(const char *str);
 t_err	print_err(t_err err, char *str);
 int		secure_atoi(char *str, int *result);
 t_err	is_dir(const char *path);
-
 
 #endif

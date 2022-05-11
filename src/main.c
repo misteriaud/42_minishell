@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 17:02:17 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/10 17:12:31 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/11 09:32:07 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,30 @@ void	init_minishell(t_ctx *ctx, char **env)
 	ctx->old_status = NO_ERROR;
 }
 
+static void	run_cmd(t_ctx *ctx, char *cmd)
+{
+	if (!cmd)
+		cmd_exit(NULL, NULL);
+	refresh_paths(ctx);
+	if (!get_status())
+		set_status(parse(ctx, cmd));
+	if (get_status() == EMPTY_STR_ERROR)
+	{
+		ctx->old_status = NO_ERROR;
+		set_status(0);
+		free_cmd(cmd);
+		return ;
+	}
+	if (!get_status())
+		set_status(prompt_heredoc(ctx));
+	if (!get_status())
+		set_status(run_process(ctx));
+	ctx->old_status = get_status();
+	set_status(NO_ERROR);
+	add_history(cmd);
+	free_cmd(cmd);
+}
+
 int	main(int ac, char **av, char **env)
 {
 	t_ctx	ctx;
@@ -63,26 +87,7 @@ int	main(int ac, char **av, char **env)
 		cmd = readline(prompt);
 		xfree(prompt, PROMPT_ALLOC);
 		signal(SIGINT, SIG_IGN);
-		if (!cmd)
-			cmd_exit(NULL, NULL);
-		refresh_paths(&ctx);
-		if (!get_status())
-			set_status(parse(&ctx, cmd));
-		if (get_status() == EMPTY_STR_ERROR)
-		{
-			ctx.old_status = NO_ERROR;
-			set_status(0);
-			free_cmd(cmd);
-			continue ;
-		}
-		if (!get_status())
-			set_status(prompt_heredoc(&ctx));
-		if (!get_status())
-			set_status(run_process(&ctx));
-		ctx.old_status = get_status();
-		set_status(NO_ERROR);
-		add_history(cmd);
-		free_cmd(cmd);
+		run_cmd(&ctx, cmd);
 	}
 	xfree_all();
 	return (0);
