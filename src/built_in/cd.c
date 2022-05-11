@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 12:24:56 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/11 11:10:50 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/11 11:55:29 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,5 @@ t_err	cmd_cd(t_ctx *ctx, t_token *args)
 			return (err);
 	}
 	swap_pwd(ctx);
-	close(1);
 	return (NO_ERROR);
 }

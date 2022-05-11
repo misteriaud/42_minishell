@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 12:23:15 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/10 18:15:01 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/11 11:55:32 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,5 @@ t_err	cmd_echo(t_ctx *ctx, t_token *args)
 	}
 	if (state)
 		write(STDOUT_FILENO, "\n", 1);
-	close(1);
 	return (NO_ERROR);
 }

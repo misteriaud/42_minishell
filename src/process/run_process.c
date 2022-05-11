@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:09:08 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/11 11:31:13 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/11 11:56:36 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ static inline t_err	run_cmd(t_ctx *ctx, t_token *token, int *dfd)
 		err = built_func(ctx, token->arg);
 	else if (!err)
 		execve(token->value.str, argv, ctx->exec_env);
+	close(1);
 	while (wait(&status) > 0)
 		;
 	return (err);
