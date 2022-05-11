@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 18:29:44 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/06 19:56:03 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/11 14:43:23 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static inline void	write_doc(char *eof)
 	{
 		line.str = readline("> ");
 		line.len = get_len(line.str);
-		if (!line.str || !compare(line.str, eof))
+		if (!line.str || !compare(line.str, eof) || (!eof && !line.len))
 		{
 			if (line.str)
 				free(line.str);
@@ -44,7 +44,7 @@ static inline void	write_doc(char *eof)
 		write(3, "\n", 1);
 		free(line.str);
 	}
-	close(3);
+	close_fds(11);
 	xfree_all();
 	exit(NO_ERROR);
 }

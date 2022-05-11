@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 19:56:33 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/11 11:58:04 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/11 14:21:42 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,9 @@ typedef enum e_err
 	VAR_ERROR = 0xC0,
 	EXPORT_ERROR = 0xC2,
 	UNSET_ERROR = 0xC3,
-	DIR_ERROR = 0xC4
+	DIR_ERROR = 126,
+	REG_ERROR = 0xc4,
+	PERMISSION_ERROR = 0xc5
 }	t_err;
 
 typedef struct s_built		t_built;

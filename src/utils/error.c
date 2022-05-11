@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 09:30:27 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/10 17:51:00 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/11 14:23:07 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,12 @@ t_err	print_err(t_err err, char *str)
 		print_custom_err("exit: ");
 		print_custom_err(str);
 		print_custom_err(": numeric argument required\n");
+	}
+	else if (err == PERMISSION_ERROR)
+	{
+		print_custom_err(str);
+		print_custom_err(": Permission denied\n");
+		return (127);
 	}
 	return (err);
 }

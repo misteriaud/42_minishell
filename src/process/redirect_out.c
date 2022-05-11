@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 16:07:16 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/11 11:43:34 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/11 13:49:47 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,8 @@ t_err	redirect_out(t_token *path, t_err *err, int *dfd)
 		close(pfd[0]);
 		dup2(pfd[1], 1);
 		close(pfd[1]);
-		close(fd);
+		if (fd > 2)
+			close(fd);
 	}
 	return (*err);
 }

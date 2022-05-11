@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 13:46:16 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/11 09:35:12 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/11 14:40:58 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,5 +64,7 @@ void	print_custom_err(const char *str);
 t_err	print_err(t_err err, char *str);
 int		secure_atoi(char *str, int *result);
 t_err	is_dir(const char *path);
+t_err	is_reg(const char *path);
+void	close_fds(int fds);
 
 #endif

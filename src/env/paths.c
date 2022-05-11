@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:13:26 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/11 09:23:14 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/11 14:17:49 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,11 @@ t_err	get_exec_path(t_ctx *ctx, t_str *exec)
 		expand_path(ctx, exec);
 		if (is_dir(exec->str))
 			return (DIR_ERROR);
-		if (!access(exec->str, X_OK))
-			return (NO_ERROR);
-		return (UNKNOWN_EXEC_ERROR);
+		if (!is_reg(exec->str))
+			return (UNKNOWN_EXEC_ERROR);
+		if (is_reg(exec->str) && access(exec->str, X_OK))
+			return (PERMISSION_ERROR);
+		return (NO_ERROR);
 	}
 	return (get_cmd_path(ctx, exec));
 }

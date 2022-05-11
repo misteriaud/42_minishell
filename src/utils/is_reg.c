@@ -1,35 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   exit.c                                             :+:      :+:    :+:   */
+/*   is_reg.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/03/30 12:27:01 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/11 15:00:44 by mriaud           ###   ########.fr       */
+/*   Created: 2022/05/10 17:24:08 by mriaud            #+#    #+#             */
+/*   Updated: 2022/05/11 14:12:40 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#include <utils.h>
 
-t_err	cmd_exit(t_ctx *ctx, t_token *args)
+t_err	is_reg(const char *path)
 {
-	int	exit_status;
-	int	i;
+	struct stat	path_stat;
 
-	(void)ctx;
-	i = 0;
-	printf("exit\n");
-	if (!args || !args->value.str)
-		exit_status = 0;
-	else if (secure_atoi(args->value.str, &exit_status))
-	{
-		print_err(EXIT_ERROR, args->value.str);
-		exit_status = 2;
-	}
-	xfree_all();
-	while (!close(i))
-		i++;
-	exit(exit_status % 256);
+	stat(path, &path_stat);
+	if (S_ISREG(path_stat.st_mode))
+		return (REG_ERROR);
 	return (NO_ERROR);
 }
