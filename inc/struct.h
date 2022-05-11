@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 19:56:33 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/11 09:50:47 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/11 11:51:24 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,6 @@
 
 # include <termios.h>
 
-typedef struct s_built		t_built;
-typedef struct s_ctx		t_ctx;
-typedef struct s_token		t_token;
-typedef struct termios		t_termios;
 
 typedef enum e_bool
 {
@@ -62,7 +58,11 @@ typedef enum e_err
 	DIR_ERROR = 0xC4
 }	t_err;
 
-typedef	t_err (t_func)(t_ctx *, t_token *);
+typedef struct s_built		t_built;
+typedef struct s_ctx		t_ctx;
+typedef struct s_token		t_token;
+typedef struct termios		t_termios;
+typedef						t_err (t_func)(t_ctx *, t_token *);
 
 enum e_alloc_group
 {
