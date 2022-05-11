@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 16:07:16 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/10 18:04:42 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/11 11:43:34 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static inline t_err	open_file(int *fd, t_token *path)
 	return (NO_ERROR);
 }
 
-static inline void	stream_to_file(int *pfd, const int fd)
+static inline void	stream_to_file(int *pfd, const int fd, int *dfd)
 {
 	char	c;
 
@@ -55,13 +55,17 @@ static inline void	stream_to_file(int *pfd, const int fd)
 			exit(UNKNOWN_PATH_ERROR);
 		}
 	}
+	close(dfd[0]);
+	close(dfd[1]);
 	close(pfd[0]);
 	close(fd);
+	close(0);
+	close(1);
 	xfree_all();
 	exit(NO_ERROR);
 }
 
-t_err	redirect_out(t_token *path, t_err *err)
+t_err	redirect_out(t_token *path, t_err *err, int *dfd)
 {
 	int		pfd[2];
 	int		fd;
@@ -77,12 +81,13 @@ t_err	redirect_out(t_token *path, t_err *err)
 	if (!*err && pid < 0)
 		*err = FORK_ERROR;
 	if (!*err && pid == 0)
-		stream_to_file(pfd, fd);
+		stream_to_file(pfd, fd, dfd);
 	if (!*err)
 	{
 		close(pfd[0]);
 		dup2(pfd[1], 1);
 		close(pfd[1]);
+		close(fd);
 	}
 	return (*err);
 }

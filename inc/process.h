@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 12:10:44 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/10 12:18:07 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/11 11:31:35 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ typedef struct s_wstatus
 	int		status;
 }	t_wstatus;
 
-t_err	redirect_in(t_token *in, t_err *err);
-t_err	redirect_out(t_token *path, t_err *err);
+t_err	redirect_in(t_token *in, t_err *err, int *dfd);
+t_err	redirect_out(t_token *path, t_err *err, int *dfd);
 
 t_err	run_process(t_ctx *ctx);
 t_err	execute(t_ctx *ctx, t_token *token, int *dfd);

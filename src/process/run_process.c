@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:09:08 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/10 18:09:38 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/11 11:31:13 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static inline t_err	split_process(int *pid, t_token *token)
 	return (err);
 }
 
-static inline t_err	run_cmd(t_ctx *ctx, t_token *token)
+static inline t_err	run_cmd(t_ctx *ctx, t_token *token, int *dfd)
 {
 	char	**argv;
 	t_func	*built_func;
@@ -50,9 +50,9 @@ static inline t_err	run_cmd(t_ctx *ctx, t_token *token)
 	if (!err && !built_func)
 		err = print_err(get_exec_path(ctx, &token->value), token->value.str);
 	if (!err && token->in)
-		redirect_in(token->in, &err);
+		redirect_in(token->in, &err, dfd);
 	if (!err && token->redir)
-		redirect_out(token->redir, &err);
+		redirect_out(token->redir, &err, dfd);
 	if (!err && !built_func)
 		err = get_exec_arg(&argv, token);
 	if (!err)
@@ -74,7 +74,7 @@ t_err	execute(t_ctx *ctx, t_token *token, int *dfd)
 	err = split_process(&pid, token);
 	if (!pid)
 	{
-		err = run_cmd(ctx, token);
+		err = run_cmd(ctx, token, dfd);
 		close(dfd[0]);
 		close(dfd[1]);
 		close(0);
@@ -117,7 +117,7 @@ t_err	run_process(t_ctx *ctx)
 	if (curr->out || !built_in)
 		exit_status = execute(ctx, curr, default_inout);
 	else
-		exit_status = run_cmd(ctx, curr);
+		exit_status = run_cmd(ctx, curr, default_inout);
 	dup2(default_inout[0], 0);
 	dup2(default_inout[1], 1);
 	close(default_inout[0]);

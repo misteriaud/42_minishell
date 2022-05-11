@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 16:07:05 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/11 09:16:24 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/11 11:46:33 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ static inline t_err	get_fd(int *fd, t_token **in)
 	return (NO_ERROR);
 }
 
-static inline void	stream_from_file(int *pfd, t_token *in, const int fd)
+static inline void	stream_from_file(int *pfd, t_token *in,
+	const int fd, int *dfd)
 {
 	char				c;
 	const t_token_type	type = in->type;
@@ -57,12 +58,15 @@ static inline void	stream_from_file(int *pfd, t_token *in, const int fd)
 	if (type == HEREDOC)
 		write(1, in->value.str, in->value.len);
 	close(fd);
+	close(dfd[0]);
+	close(dfd[1]);
+	close(0);
 	close(1);
 	xfree_all();
 	exit(NO_ERROR);
 }
 
-t_err	redirect_in(t_token *in, t_err *err)
+t_err	redirect_in(t_token *in, t_err *err, int *dfd)
 {
 	int		pfd[2];
 	int		fd;
@@ -78,12 +82,13 @@ t_err	redirect_in(t_token *in, t_err *err)
 	if (!*err && pid < 0)
 		*err = FORK_ERROR;
 	if (!*err && !pid)
-		stream_from_file(pfd, in, fd);
+		stream_from_file(pfd, in, fd, dfd);
 	if (!*err)
 	{
 		close(pfd[1]);
 		dup2(pfd[0], 0);
 		close(pfd[0]);
+		close(fd);
 	}
 	return (*err);
 }

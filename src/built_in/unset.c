@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 12:26:34 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/10 16:34:58 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/11 11:11:19 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,6 @@ t_err	cmd_unset(t_ctx *ctx, t_token *args)
 			delete(ctx, args);
 		args = args->next;
 	}
+	close(1);
 	return (err);
 }
