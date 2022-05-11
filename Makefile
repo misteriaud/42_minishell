@@ -50,7 +50,7 @@ all:
 						@if ! command -v lolcat &> /dev/null; then \
 							$(MAKE) --no-print-directory $(NAME); \
 						else \
-							$(MAKE) --no-print-directory $(NAME) | ./lolcat -v 1 -h 0; \
+							$(MAKE) --no-print-directory $(NAME) | lolcat; \
 						fi
 
 
