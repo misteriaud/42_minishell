@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 00:35:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/10 11:04:13 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/12 12:31:23 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,31 @@ int	get_cat(char **str)
 		return (EOF);
 	if (**str == ' ')
 		return (WHITESPACE);
-	if (**str == '|')
-		return (PIPE);
 	if (**str == '\'')
 		return (SINGLE);
 	if (**str == '"')
 		return (DOUBLE);
+	if (**str == '(')
+		return (L_PARENT);
+	if (**str == ')')
+		return (R_PARENT);
 	if (**str == '<' || **str == '>')
 	{
 		result = L_CHEVRON;
 		if (**str == '>')
 			result = R_CHEVRON;
+		if (**str == *(*str + 1))
+		{
+			*str += 1;
+			result += (result << 1);
+		}
+		return (result);
+	}
+	if (**str == '&' || **str == '|')
+	{
+		result = GENERAL;
+		if (**str == '|')
+			result = PIPE;
 		if (**str == *(*str + 1))
 		{
 			*str += 1;
@@ -71,7 +85,7 @@ t_lexer_state	get_state(t_lexer_state state, t_char_cat cat)
 		return (END);
 	if (cat == WHITESPACE && state != IN_WORD)
 		return (get_state_when_whitespace(state));
-	if ((state == MAIN && cat < 8) || state & AFTER_TOKEN)
+	if ((state == MAIN && cat < 8) || state & AFTER_TOKEN || cat > 192)
 		return ((t_lexer_state)cat);
 	if (state & (IN_SQ | IN_DQ))
 	{
