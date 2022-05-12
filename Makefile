@@ -77,6 +77,6 @@ leaks:					$(NAME) ignoreleak
 						--show-leak-kinds=all \
 						--track-origins=yes \
 						--track-fds=yes \
-						$(NAME)
+						./$(NAME)
 
 .PHONY:					all clean fclean re leaks
