@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:06:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/12 10:22:19 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/12 12:12:30 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,14 @@ static t_err	feed_token(t_ctx *ctx, t_token *token,
 	return (NO_ERROR);
 }
 
+#include <stdio.h>
 // printf("\'%c\'(prev_state: %d, state:%d) %s(type %d)\n", *str,
 	// state.prev, state.curr, token->value.str, token->type);
 static t_err	generate_token(t_ctx *ctx, t_token *token,
 	t_state state, char *str)
 {
+	printf("\'%c\'(prev_state: %d, state:%d) %s(type %d)\n", *str,
+	state.prev, state.curr, token->value.str, token->type);
 	if (state.curr > 1 && state.curr % 2)
 		return (log_error(LEXING_ERROR, str));
 	if (!*str)

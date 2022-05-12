@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:04:05 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/10 17:02:50 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/12 12:18:55 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ typedef enum e_lexer_state {
 	A_R_CHEV = 64,
 	A_2R_CHEV = 192,
 	AFTER_TOKEN = 256,
+	OPEN_PARENT = 512,
+	CLOSE_PARENT = 1024,
 	ERROR = 255
 }	t_lexer_state;
 
@@ -51,13 +53,17 @@ typedef enum e_char_cat
 	EOF = -1,
 	WHITESPACE = 0,
 	GENERAL = 1,
+	AND = 3,
 	SINGLE = 2,
 	DOUBLE = 4,
 	PIPE = 8,
+	OR = 24,
 	L_CHEVRON = 16,
 	DL_CHEVRON = 48,
 	R_CHEVRON = 64,
-	DR_CHEVRON = 192
+	DR_CHEVRON = 192,
+	L_PARENT = 512,
+	R_PARENT = 1024
 }	t_char_cat;
 
 typedef struct s_state

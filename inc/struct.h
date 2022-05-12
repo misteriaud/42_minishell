@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 19:56:33 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/12 11:31:18 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/12 12:05:38 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,8 +105,9 @@ typedef enum e_token_type
 	ARG = 16,
 	HEREDOC = 32,
 	AND_CMD = 64,
-	// OR_CMD = 128,
-	// EMPTY_CMD = 256
+	OR_CMD = 128,
+	EMPTY_CMD = 256,
+	PARENTESIS = 512
 }	t_token_type;
 
 struct s_token
@@ -119,6 +120,7 @@ struct s_token
 	t_token			*redir;
 	t_token			*next;
 	t_token			*prev;
+	t_token			*child;
 };
 
 struct s_built
