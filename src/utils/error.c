@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/03 09:30:27 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/11 14:23:07 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/12 10:02:10 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ void	print_custom_err(const char *str)
 {
 	if (str && *str)
 		write(2, str, get_len(str));
+	else
+		write(2, "''", 2);
 }
 
 void	print_err_2(t_err err, char *str)

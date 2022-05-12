@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:06:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/10 16:58:36 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/12 10:22:19 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +99,10 @@ t_err	parse(t_ctx *ctx, char *str)
 	t_state	state;
 	t_err	err;
 
-	if (!str || !*str)
+	if (is_empty_str(str))
 		return (EMPTY_STR_ERROR);
-	if (xmalloc(&ctx->parse_tree, sizeof(*ctx->parse_tree), PARS_ALLOC))
+	ctx->parse_tree = NULL;
+	if (!add_token_back(NULL, &ctx->parse_tree))
 		return (MEMORY_ERROR);
 	ctx->parse_tree->type = CMD;
 	state.prev = MAIN;

@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:13:26 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/11 14:17:49 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/12 10:16:35 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ t_err	get_cmd_path(t_ctx *ctx, t_str *exec)
 	t_str	exec_path;
 
 	elm = ctx->paths;
+	if (!exec->len)
+		return (UNKNOWN_EXEC_ERROR);
 	while (elm)
 	{
 		if (new_str(&exec_path, elm->data.len + exec->len + 1, PARS_ALLOC))
