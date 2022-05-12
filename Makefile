@@ -60,14 +60,17 @@ $(OBJDIR) $(DEPDIR):	;
 						@$(MKDIR) $@
 
 clean:					;
-						@$(REMOVE) $(OBJDIR) $(DEPDIR)
+						@$(REMOVE) $(OBJDIR) $(DEPDIR) ignoreleak
 
 fclean:					clean
 						@$(REMOVE) $(NAME)
 
 re:						fclean all
 
-leaks:					$(NAME)
+ignoreleak:
+						@echo -e "{\nleak readline\nMemcheck:Leak\n...\nfun:readline\n}\n{\nleak add_history\nMemcheck:Leak\n...\nfun:add_history\n}" > $@
+
+leaks:					$(NAME) ignoreleak
 						@valgrind \
 						--suppressions=ignoreleak \
 						--leak-check=full \
