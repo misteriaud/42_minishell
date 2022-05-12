@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 17:02:17 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/11 09:32:07 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/12 16:02:27 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <readline/history.h>
 #include <prompt.h>
 #include <status.h>
+#include <wildcard.h>
 
 #define RUNNING 1
 
@@ -76,6 +77,8 @@ int	main(int ac, char **av, char **env)
 	char	*cmd;
 	char	*prompt;
 
+	if (ac == 2)
+		return (expand_wildcard(av[1]), 0);
 	(void)av;
 	if (ac != 1)
 		return (1);

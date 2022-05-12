@@ -2,6 +2,7 @@
 NAME					:= minishell
 
 FILES					:=	main.c \
+							wildcard.c \
 							memory.c bzero.c t_alloc.c t_node.c \
 							lexer.c parser.c parser_utils.c split_cmd.c \
 							prompt_heredoc.c prompt.c \
