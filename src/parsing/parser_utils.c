@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 17:15:44 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/12 11:31:55 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/16 11:45:59 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@ t_token	*add_token_back(t_token *parent, t_token **first)
 
 	prev = NULL;
 	curr = *first;
-	if (xmalloc(&dest, sizeof(*dest), PARS_ALLOC)
-		|| xmalloc(&dest->value.str, 1, PARS_ALLOC))
+	if (xmalloc(&dest, sizeof(*dest), PARS_ALLOC))
 		return (NULL);
 	dest->prev = parent;
 	while (curr)
@@ -40,7 +39,7 @@ t_err	new_branch(t_token **curr_token, t_state state, t_token_type type)
 {
 	while (state.prev && (*curr_token)->type != CMD)
 		*curr_token = (*curr_token)->prev;
-	if (state.prev & (AFTER_TOKEN | A_PIP) && !(*curr_token)->value.len)
+	if (state.prev & (AFTER_TOKEN | A_PIP) && !(*curr_token)->value.str)
 		return (NO_ERROR);
 	if (state.prev == MAIN || state.prev & A_PIP)
 		*curr_token = add_token_back(*curr_token, &(*curr_token)->out);

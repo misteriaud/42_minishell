@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/25 21:06:19 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/12 10:22:19 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/16 14:20:23 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,16 +28,24 @@ static	t_err	log_error(t_err error, char *str)
 	return (error);
 }
 
-static	t_err	ft_state_lane(t_state *state, char **str, int *i)
+static	t_err	ft_state_lane(t_state *state, char **str, int *i, char **str2)
 {
+	char	*end;
+
+	end = *str;
 	while ((state->curr > 0 && state->curr == IN_WORD)
 		|| (state->curr == state->prev && state->curr < 8 && state->curr))
 	{
 		(*i)++;
 		move_forward(state, str);
 	}
+	if (state->prev & (IN_DQ | IN_SQ) && state->curr & (IN_SQ | IN_DQ))
+		move_forward(state, str);
 	if (state->curr == ERROR)
+	{
+		*str2 = end;
 		return (LEXING_ERROR);
+	}
 	return (NO_ERROR);
 }
 
@@ -51,21 +59,19 @@ static t_err	feed_token(t_ctx *ctx, t_token *token,
 	tmp = (t_str){NULL, 0};
 	i = 0;
 	if ((state->curr > 0 && state->curr & IN_WORD)
-		|| (state->curr == state->prev && state->curr < 8 && state->curr))
+		|| (state->curr == state->prev && state->curr < 8 && state->curr)
+		|| (state->prev & (IN_DQ | IN_SQ) && state->curr & (IN_SQ | IN_DQ)))
 	{
 		end = *str;
-		if (ft_state_lane(state, &end, &tmp.len))
-		{
-			*str = end;
+		if (ft_state_lane(state, &end, &tmp.len, str))
 			return (LEXING_ERROR);
-		}
 		if (xmalloc(&tmp.str, tmp.len + 1, PARS_ALLOC))
 			return (MEMORY_ERROR);
 		while (i++ < tmp.len)
 			tmp.str[i - 1] = *((*str)++);
 		*str = end;
 	}
-	if (tmp.len)
+	if (tmp.str)
 		return (concat_token(ctx, token, state, tmp));
 	move_forward(state, str);
 	return (NO_ERROR);
