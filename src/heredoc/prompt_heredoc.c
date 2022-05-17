@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 18:29:44 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/11 14:43:23 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/17 19:02:03 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,40 +49,58 @@ static inline void	write_doc(char *eof)
 	exit(NO_ERROR);
 }
 
-static inline t_err	recieve_doc(t_ctx *ctx, int *pfd, t_str *dest)
+static t_err	get_tmp_path(int *fd, char **path)
 {
-	char	c;
-	int		status;
+	static int	id;
 
+	*path = NULL;
+	*path = str_join("/tmp/minishell", ft_itoa(id), EXEC_ALLOC);
+	if (!path)
+		return (MEMORY_ERROR);
+	*fd = open(*path, O_RDWR | O_CREAT | O_TRUNC, 777);
+	return (NO_ERROR);
+}
+
+static inline t_err	recieve_doc(t_ctx *ctx, int *pfd, t_token *token)
+{
+	char		c;
+	int			status;
+	int			fd;
+	char		*path;
+	t_str		tmp;
+
+	tmp = (t_str){0, 0};
 	close(pfd[1]);
+	if (get_tmp_path(&fd, &path))
+		return (MEMORY_ERROR);
 	while (read(pfd[0], &c, 1) == 1)
 	{
-		if (xrealloc(&(dest->str), ++dest->len + 1, PARS_ALLOC))
+		if (xrealloc(&tmp, ++tmp.len + 1, PARS_ALLOC))
 		{
 			kill(0, SIGUSR1);
 			return (MEMORY_ERROR);
 		}
-		dest->str[dest->len - 1] = c;
+		tmp.str[tmp.len - 1] = c;
 	}
-	if (dest->str && drop_variables(ctx, dest))
+	if (tmp.str && drop_variables(ctx, &tmp))
 		return (MEMORY_ERROR);
+	write(fd, &tmp.str, tmp.len);
 	close(pfd[0]);
 	wait(&status);
+	token->type = PATH;
+	token->value.str = path;
+	token->value.len = get_len(path);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
 	return (NO_ERROR);
 }
 
-static inline t_err	get_doc(t_ctx *ctx, t_str *dest)
+static inline t_err	get_doc(t_ctx *ctx, t_token *token)
 {
 	int		pid;
 	int		pfd[2];
 	t_err	err;
-	char	*eof;
 
-	eof = dest->str;
-	dest->len = 0;
-	dest->str = NULL;
 	err = NO_ERROR;
 	if (pipe(pfd) == -1)
 		return (PIPE_ERROR);
@@ -90,13 +108,13 @@ static inline t_err	get_doc(t_ctx *ctx, t_str *dest)
 	if (pid < 0)
 		err = FORK_ERROR;
 	if (!err && pid)
-		err = recieve_doc(ctx, pfd, dest);
+		err = recieve_doc(ctx, pfd, token);
 	else if (!err && !pid)
 	{
 		close(pfd[0]);
 		dup2(pfd[1], 3);
 		close(pfd[1]);
-		write_doc(eof);
+		write_doc(token->value.str);
 	}
 	return (err);
 }
@@ -115,7 +133,7 @@ t_err	prompt_heredoc(t_ctx *ctx)
 		while (!err && curr_in)
 		{
 			if (curr_in->type == HEREDOC)
-				err = get_doc(ctx, &curr_in->value);
+				err = get_doc(ctx, curr_in);
 			curr_in = curr_in->next;
 		}
 		curr = curr->out;
