@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:09:08 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/17 15:44:37 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/17 16:56:15 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,12 +99,11 @@ t_err	run_process(t_ctx *ctx)
 {
 	t_token	*curr;
 	t_err	exit_status;
-	int		default_inout[3];
+	int		default_inout[2];
 	t_func	*built_in;
 
 	default_inout[0] = dup(0);
 	default_inout[1] = dup(1);
-	default_inout[2] = dup(2);
 	curr = ctx->parse_tree;
 	if (!curr)
 		return (PARSING_ERROR);
@@ -115,13 +114,10 @@ t_err	run_process(t_ctx *ctx)
 		exit_status = execute(ctx, curr);
 	else
 		exit_status = run_cmd(ctx, curr);
-	close_all();
 	dup2(default_inout[0], 0);
 	dup2(default_inout[1], 1);
-	dup2(default_inout[2], 2);
 	close(default_inout[0]);
 	close(default_inout[1]);
-	close(default_inout[2]);
 	if (get_status())
 		return (get_status());
 	return (exit_status);
