@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 17:02:17 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/11 09:32:07 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/17 14:57:58 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	init_minishell(t_ctx *ctx, char **env)
 static void	run_cmd(t_ctx *ctx, char *cmd)
 {
 	if (!cmd)
-		cmd_exit(NULL, NULL);
+		cmd_exit(ctx, NULL);
 	refresh_paths(ctx);
 	if (!get_status())
 		set_status(parse(ctx, cmd));
@@ -77,6 +77,7 @@ int	main(int ac, char **av, char **env)
 	char	*prompt;
 
 	(void)av;
+	rl_outstream = stderr;
 	if (ac != 1)
 		return (1);
 	init_minishell(&ctx, env);
