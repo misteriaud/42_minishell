@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 13:46:16 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/17 15:11:14 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/17 16:46:20 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,6 @@ t_err	is_reg(const char *path);
 void	close_fds(int fds);
 void	close_all(void);
 t_bool	is_empty_str(char *str);
+t_err	writer(int fd, char *str, unsigned int size);
 
 #endif
