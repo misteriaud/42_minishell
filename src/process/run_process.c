@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:09:08 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/11 11:56:36 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/17 16:56:15 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ static inline t_err	split_process(int *pid, t_token *token)
 	return (err);
 }
 
-static inline t_err	run_cmd(t_ctx *ctx, t_token *token, int *dfd)
+static inline t_err	run_cmd(t_ctx *ctx, t_token *token)
 {
 	char	**argv;
 	t_func	*built_func;
@@ -50,9 +50,9 @@ static inline t_err	run_cmd(t_ctx *ctx, t_token *token, int *dfd)
 	if (!err && !built_func)
 		err = print_err(get_exec_path(ctx, &token->value), token->value.str);
 	if (!err && token->in)
-		redirect_in(token->in, &err, dfd);
+		err = redirect_in(token->in);
 	if (!err && token->redir)
-		redirect_out(token->redir, &err, dfd);
+		err = redirect_out(token->redir);
 	if (!err && !built_func)
 		err = get_exec_arg(&argv, token);
 	if (!err)
@@ -61,13 +61,12 @@ static inline t_err	run_cmd(t_ctx *ctx, t_token *token, int *dfd)
 		err = built_func(ctx, token->arg);
 	else if (!err)
 		execve(token->value.str, argv, ctx->exec_env);
-	close(1);
 	while (wait(&status) > 0)
 		;
 	return (err);
 }
 
-t_err	execute(t_ctx *ctx, t_token *token, int *dfd)
+t_err	execute(t_ctx *ctx, t_token *token)
 {
 	int			pid;
 	t_err		err;
@@ -75,17 +74,13 @@ t_err	execute(t_ctx *ctx, t_token *token, int *dfd)
 	err = split_process(&pid, token);
 	if (!pid)
 	{
-		err = run_cmd(ctx, token, dfd);
-		close(dfd[0]);
-		close(dfd[1]);
-		close(0);
-		close(1);
-		close(2);
+		err = run_cmd(ctx, token);
+		close_all();
 		xfree_all();
 		exit(err);
 	}
 	if (pid && token->out)
-		return (execute(ctx, token->out, dfd));
+		return (execute(ctx, token->out));
 	close(0);
 	close(1);
 	if (!err)
@@ -116,9 +111,9 @@ t_err	run_process(t_ctx *ctx)
 	if (signal(SIGINT, sigint_handler) == SIG_ERR)
 		return (SIGNAL_ERROR);
 	if (curr->out || !built_in)
-		exit_status = execute(ctx, curr, default_inout);
+		exit_status = execute(ctx, curr);
 	else
-		exit_status = run_cmd(ctx, curr, default_inout);
+		exit_status = run_cmd(ctx, curr);
 	dup2(default_inout[0], 0);
 	dup2(default_inout[1], 1);
 	close(default_inout[0]);

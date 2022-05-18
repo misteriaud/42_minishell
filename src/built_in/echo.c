@@ -42,7 +42,7 @@ t_err	cmd_echo(t_ctx *ctx, t_token *args)
 
 	(void)ctx;
 	state = 1;
-	
+
 	while ((args && args->value.str && args->value.str[0] == '-'
 			&& args->value.str[1] == 'n'))
 	{
@@ -87,7 +87,7 @@ t_err	cmd_echo(t_ctx *ctx, t_token *args)
 
 	(void)ctx;
 	state = 1;
-	
+
 	while ((args && args->value.str && args->value.str[0] == '-'
 			&& args->value.str[1] == 'n'))
 	{
@@ -116,16 +116,17 @@ t_err	cmd_echo(t_ctx *ctx, t_token *args)
 			write(1, args->value.str, args->value.len);
 			if (args->next)
 			{
-				
+
 				//if (args->next->value.str || args->next->next)
 				//	write(STDOUT_FILENO, " ", 1);
-					
+
 			}
 		}
 		args = args->next;
 	}
 	if (state)
-		write(STDOUT_FILENO, "\n", 1);
+		if (writer(STDOUT_FILENO, "\n", 1))
+			return (1);
 	return (NO_ERROR);
 }*/
 		/*if (!args->value.str)

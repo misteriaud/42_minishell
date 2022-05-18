@@ -6,17 +6,17 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/06 17:07:03 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/09 17:49:03 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/17 14:51:06 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <status.h>
 
+unsigned int	g_status;
+
 static	unsigned int	*status(void)
 {
-	static unsigned int	state = 0;
-
-	return (&state);
+	return (&g_status);
 }
 
 unsigned int	get_status(void)
