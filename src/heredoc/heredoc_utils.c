@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 10:59:08 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/18 11:01:15 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/18 15:01:36 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ t_err	get_tmp_path(int *fd, char **path)
 	static unsigned int	id;
 
 	*path = NULL;
-	*path = str_join("/tmp/minishell", ft_itoa(id), EXEC_ALLOC);
+	*path = str_join("/tmp/.minishell", ft_itoa(id), EXEC_ALLOC);
 	if (!path)
 		return (MEMORY_ERROR);
 	while (is_reg(*path))
