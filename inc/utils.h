@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 13:46:16 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/12 09:31:54 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/17 16:38:16 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,7 @@ t_err	split_lst_inverted(t_lst **head, const char *str,
 t_bool	is_set(const char c, const char *set);
 
 t_bool	is_containing_set(const char *str, const char *set);
+t_bool	is_only_set(const char *str, const char *set);
 
 int		is_num(const char c);
 int		is_lower(const char c);
@@ -59,6 +60,7 @@ int		is_upper(const char c);
 int		is_under(const char c);
 int		is_variable(const char c);
 int		is_var_start(const char c);
+int		is_white(const char c);
 
 void	print_custom_err(const char *str);
 t_err	print_err(t_err err, char *str);

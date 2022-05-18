@@ -6,7 +6,7 @@
 /*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 22:22:54 by artblin           #+#    #+#             */
-/*   Updated: 2022/03/29 22:23:09 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/17 15:18:35 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,21 @@ t_bool	is_containing_set(const char *str, const char *set)
 				return (TRUE);
 			str++;
 		}
+	}
+	return (FALSE);
+}
+
+t_bool	is_only_set(const char *str, const char *set)
+{
+	if (str && set)
+	{
+		while (*str)
+		{
+			if (!is_set(*str, set))
+				return (FALSE);
+			str++;
+		}
+		return (TRUE);
 	}
 	return (FALSE);
 }

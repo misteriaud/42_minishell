@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 16:07:38 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/10 15:18:16 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/17 16:38:01 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,4 +35,10 @@ int	is_under(const char c)
 int	is_variable(const char c)
 {
 	return (is_var_start(c) | is_num(c));
+}
+
+int is_white(const char c)
+{
+	return ((c >= 9 && c <= 13) || (c == 32));
+
 }

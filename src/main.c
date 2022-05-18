@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 17:02:17 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/11 09:32:07 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/17 15:04:03 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ int	main(int ac, char **av, char **env)
 	if (ac != 1)
 		return (1);
 	init_minishell(&ctx, env);
+	rl_outstream = stderr;
 	while (RUNNING)
 	{
 		signal(SIGINT, signal_handler);
