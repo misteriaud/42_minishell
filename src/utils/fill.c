@@ -6,7 +6,7 @@
 /*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 22:18:10 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/17 17:56:28 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/18 15:39:07 by artblin          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,11 @@ t_err	str_fill_from_lst(t_str *out, t_lst *lst)
 	x = 0;
 	while (lst)
 	{
-		/*
-		write(2, "--> ", 4);
-		write(2, lst->data.str, lst->data.len);
-		write(2, "\n", 1);
-		*/
-		while (*(lst->data.str))
-			out->str[x++] = *(lst->data.str)++;
+		if (lst->data.str)
+		{
+			while (*(lst->data.str))
+				out->str[x++] = *(lst->data.str)++;
+		}
 		lst = lst->next;
 	}
 	return (NO_ERROR);
