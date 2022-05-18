@@ -5,7 +5,8 @@ FILES					:=	main.c \
 							memory.c bzero.c t_alloc.c t_node.c \
 							lexer.c parser.c parser_utils.c split_cmd.c \
 							prompt_heredoc.c prompt.c heredoc_utils.c \
-							init_env.c get_variable.c drop_variables.c print_env.c paths.c package_env.c \
+							init_env.c get_variable.c drop_variables.c drop_variables_2.c \
+							print_env.c paths.c package_env.c \
 							run_process.c redirect_in.c redirect_out.c exit_status.c \
 							split_array.c split_lst.c size.c compare.c merge.c error.c secure_atoi.c \
 							is_char.c is_char_2.c is_set.c t_str.c fill.c is_dir.c is_reg.c close_fds.c is_empty_str.c \
