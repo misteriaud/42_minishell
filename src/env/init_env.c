@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 18:06:59 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/10 16:44:29 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/18 16:25:24 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	no_env(t_ctx *ctx)
 	char	*key;
 	char	*value;
 	t_str	*shlvl;
-	int		n;
+	long	n;
 
 	check_pwd(ctx);
 	if (get_variable(ctx, "SHLVL", NULL))
@@ -79,8 +79,11 @@ void	no_env(t_ctx *ctx)
 	{
 		get_address_variable(ctx, "SHLVL", &shlvl);
 		secure_atoi(shlvl->str, &n);
-		n++;
-		value = ft_itoa(n);
+		if (++n > 999)
+			n = 1;
+		if (n < 1)
+			n = 0;
+		value = ft_itoa((int)n);
 		xfree(shlvl->str, ENV_ALLOC);
 		shlvl->str = value;
 		shlvl->len = get_len(value);

@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 12:27:01 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/17 15:11:33 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/18 16:23:26 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 t_err	cmd_exit(t_ctx *ctx, t_token *args)
 {
-	int	exit_status;
+	long	exit_status;
 
 	(void)ctx;
 	printf("exit\n");
@@ -25,7 +25,7 @@ t_err	cmd_exit(t_ctx *ctx, t_token *args)
 		print_err(EXIT_ERROR, args->value.str);
 		exit_status = 2;
 	}
-	if (args && args->next)
+	else if (args && args->next)
 	{
 		print_custom_err("minishell: exit: too many arguments\n");
 		return (1);
