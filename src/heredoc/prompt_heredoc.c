@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 18:29:44 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/17 19:02:03 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/18 11:00:04 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ static void	signal_handler(int signum)
 {
 	if (signum == SIGINT)
 		write(2, "\n", 1);
+	close_all();
 	xfree_all();
 	exit(CTRL_C_ERROR);
 }
@@ -44,21 +45,9 @@ static inline void	write_doc(char *eof)
 		write(3, "\n", 1);
 		free(line.str);
 	}
-	close_fds(11);
+	close_all();
 	xfree_all();
 	exit(NO_ERROR);
-}
-
-static t_err	get_tmp_path(int *fd, char **path)
-{
-	static int	id;
-
-	*path = NULL;
-	*path = str_join("/tmp/minishell", ft_itoa(id), EXEC_ALLOC);
-	if (!path)
-		return (MEMORY_ERROR);
-	*fd = open(*path, O_RDWR | O_CREAT | O_TRUNC, 777);
-	return (NO_ERROR);
 }
 
 static inline t_err	recieve_doc(t_ctx *ctx, int *pfd, t_token *token)
@@ -84,10 +73,10 @@ static inline t_err	recieve_doc(t_ctx *ctx, int *pfd, t_token *token)
 	}
 	if (tmp.str && drop_variables(ctx, &tmp))
 		return (MEMORY_ERROR);
-	write(fd, &tmp.str, tmp.len);
+	write(fd, tmp.str, tmp.len);
 	close(pfd[0]);
+	close(fd);
 	wait(&status);
-	token->type = PATH;
 	token->value.str = path;
 	token->value.len = get_len(path);
 	if (WIFEXITED(status))

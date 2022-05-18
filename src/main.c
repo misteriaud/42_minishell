@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 17:02:17 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/17 14:57:58 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/18 10:59:17 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ static void	run_cmd(t_ctx *ctx, char *cmd)
 	ctx->old_status = get_status();
 	set_status(NO_ERROR);
 	add_history(cmd);
+	unlink_heredoc(ctx->parse_tree);
 	free_cmd(cmd);
 }
 
