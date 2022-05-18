@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 17:15:44 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/16 11:45:59 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/17 21:07:15 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,9 @@ t_err	concat_token(t_ctx *ctx, t_token *token, t_state *state, t_str tmp)
 	t_str	dest;
 
 	dest = (t_str){NULL, 0};
+	if (token->value.str && token->value.str[0] == '$'
+		&& token->value.len == 1 && state->prev & (IN_DQ | IN_SQ))
+		token->value = (t_str){0, 0};
 	if (!(state->prev & IN_SQ) && drop_variables(ctx, &tmp))
 		return (MEMORY_ERROR);
 	if (!token->value.str)

@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 18:25:26 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/11 09:38:47 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/18 11:01:08 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,12 @@
 # include <unistd.h>
 # include <sys/types.h>
 # include <sys/wait.h>
+# include <sys/types.h>
+# include <sys/stat.h>
+# include <fcntl.h>
 
+void	unlink_heredoc(t_token *curr);
+t_err	get_tmp_path(int *fd, char **path);
 t_err	prompt_heredoc(t_ctx *ctx);
 
 #endif

@@ -1,39 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   close_fds.c                                        :+:      :+:    :+:   */
+/*   writer.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/05/11 14:37:59 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/17 15:42:16 by mriaud           ###   ########.fr       */
+/*   Created: 2022/05/17 15:53:54 by mriaud            #+#    #+#             */
+/*   Updated: 2022/05/17 16:51:32 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <utils.h>
 #include <stdio.h>
 
-void	close_fds(int fds)
+t_err	writer(int fd, char *str, unsigned int size)
 {
-	int	i;
-
-	i = 0;
-	while (fds > 0)
+	if (!str)
+		return (NO_ERROR);
+	if (write(fd, str, size) == -1)
 	{
-		if (fds & 1)
-		{
-			close(i);
-		}
-		fds = fds >> 1;
-		i++;
+		perror("minishell: write error: ");
+		return (WRITE_ERROR);
 	}
-}
-
-void	close_all(void)
-{
-	int	i;
-
-	i = 0;
-	while (!close(i))
-		i++;
+	return (NO_ERROR);
 }

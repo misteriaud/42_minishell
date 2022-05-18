@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/27 13:46:16 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/17 16:38:16 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/18 15:44:36 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ int		secure_atoi(char *str, int *result);
 t_err	is_dir(const char *path);
 t_err	is_reg(const char *path);
 void	close_fds(int fds);
+void	close_all(void);
 t_bool	is_empty_str(char *str);
+t_err	writer(int fd, char *str, unsigned int size);
 
 #endif
