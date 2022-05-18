@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/26 16:07:05 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/18 10:44:14 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/18 17:26:13 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,11 @@ static inline t_err	get_fd(int *fd, t_token **in)
 			close(*fd);
 		if (is_dir((*in)->value.str))
 			return (print_err(DIR_ERROR, (*in)->value.str));
+		if (!(*in)->value.str)
+		{
+			print_custom_err("minishell: ambiguous redirect\n");
+			return (1);
+		}
 		*fd = open((*in)->value.str, O_RDONLY);
 		if (*fd == -1)
 			return (print_err(UNKNOWN_PATH_ERROR, (*in)->value.str));
