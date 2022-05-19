@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   t_str.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: artblin <artblin@student.42.fr>            +#+  +:+       +#+        */
+/*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 22:18:54 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/06 14:49:55 by artblin          ###   ########.fr       */
+/*   Updated: 2022/05/19 11:10:22 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ t_err	str_dup(char **new, const char *str, int alloc)
 	x = get_len(str);
 	if (xmalloc(new, sizeof(char) * ++x, alloc))
 		return (MEMORY_ERROR);
+	if (!str)
+		return (NO_ERROR);
 	while (*str)
 		*(*new)++ = *(str)++;
 	*new -= (--x);
