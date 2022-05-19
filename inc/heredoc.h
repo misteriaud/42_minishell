@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 18:25:26 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/18 11:01:08 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/19 15:32:07 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 
 void	unlink_heredoc(t_token *curr);
 t_err	get_tmp_path(int *fd, char **path);
+t_err	readline_to_mem(t_str *line);
 t_err	prompt_heredoc(t_ctx *ctx);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 18:29:44 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/18 15:17:33 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/19 15:58:01 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,20 +25,20 @@ static inline void	write_doc(t_ctx *ctx, char *eof)
 {
 	t_str	line;
 
-	line.str = NULL;
-	line.len = 0;
 	signal(SIGINT, signal_handler);
 	signal(SIGUSR1, signal_handler);
 	while (1)
 	{
-		line.str = readline("> ");
-		line.len = get_len(line.str);
+		if (readline_to_mem(&line))
+		{
+			close_all();
+			xfree_all();
+			exit (MEMORY_ERROR);
+		}
 		if (!line.str || !compare(line.str, eof) || (!eof && !line.len)
 			|| drop_variables(ctx, &line))
 		{
-			if (line.str)
-				free(line.str);
-			else
+			if (!line.str)
 				print_custom_err("here-doc recieve EOF\n");
 			break ;
 		}
@@ -52,10 +52,10 @@ static inline void	write_doc(t_ctx *ctx, char *eof)
 
 static inline t_err	recieve_doc(int *pfd, t_token *token)
 {
-	char		c;
-	int			status;
-	int			fd;
-	char		*path;
+	char	c;
+	int		status;
+	int		fd;
+	char	*path;
 
 	close(pfd[1]);
 	if (get_tmp_path(&fd, &path))

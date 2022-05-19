@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/18 10:59:08 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/18 15:01:36 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/19 15:57:58 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,23 @@ void	unlink_heredoc(t_token *curr)
 		}
 		curr = curr->out;
 	}
+}
+
+t_err	readline_to_mem(t_str *line)
+{
+	char	*str;
+	t_err	err;
+
+	line->str = NULL;
+	line->len = 0;
+	str = NULL;
+	err = NO_ERROR;
+	str = readline("> ");
+	if (!str)
+		return (NO_ERROR);
+	err = new_str(line, get_len(str) + 1, TMP_ALLOC);
+	if (!err)
+		err = str_fill(line, str);
+	free(str);
+	return (err);
 }

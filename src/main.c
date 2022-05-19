@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/29 17:02:17 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/18 15:52:56 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/19 15:04:05 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,11 @@ static void	signal_handler(int signum)
 	rl_on_new_line();
 }
 
-static inline void	free_cmd(char *cmd)
+static inline void	free_cmd(t_ctx *ctx, char *cmd)
 {
 	free(cmd);
+	unlink_heredoc(ctx->parse_tree);
+	ctx->parse_tree = NULL;
 	xfree_group(PARS_ALLOC);
 	xfree_group(EXEC_ALLOC);
 	xfree_group(TMP_ALLOC);
@@ -44,6 +46,7 @@ void	init_minishell(t_ctx *ctx, char **env)
 	signal(SIGUSR1, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
 	ctx->old_status = NO_ERROR;
+	ctx->parse_tree = NULL;
 }
 
 static void	run_cmd(t_ctx *ctx, char *cmd)
@@ -57,7 +60,7 @@ static void	run_cmd(t_ctx *ctx, char *cmd)
 	{
 		ctx->old_status = NO_ERROR;
 		set_status(0);
-		free_cmd(cmd);
+		free_cmd(ctx, cmd);
 		return ;
 	}
 	if (!get_status())
@@ -67,8 +70,7 @@ static void	run_cmd(t_ctx *ctx, char *cmd)
 	ctx->old_status = get_status();
 	set_status(NO_ERROR);
 	add_history(cmd);
-	unlink_heredoc(ctx->parse_tree);
-	free_cmd(cmd);
+	free_cmd(ctx, cmd);
 }
 
 int	main(int ac, char **av, char **env)
@@ -78,7 +80,6 @@ int	main(int ac, char **av, char **env)
 	char	*prompt;
 
 	(void)av;
-	rl_outstream = stderr;
 	if (ac != 1)
 		return (1);
 	init_minishell(&ctx, env);
