@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/10 16:58:07 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/10 17:01:34 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/19 16:26:55 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ t_err	split_cmd(t_token *curr)
 {
 	while (curr)
 	{
-		if (is_containing_set(curr->value.str, " ") && split_cmd2(curr))
+		if (!is_only_set(curr->value.str, " ")
+			&& is_containing_set(curr->value.str, " ") && split_cmd2(curr))
 			return (MEMORY_ERROR);
 		curr = curr->out;
 	}
