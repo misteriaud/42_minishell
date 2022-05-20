@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:09:08 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/20 14:18:20 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/20 14:38:03 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,11 +117,5 @@ t_err	run_process(t_ctx *ctx)
 		exit_status = run_cmd(ctx, curr);
 		close_all(3);
 	}
-	dup2(default_inout[0], 0);
-	dup2(default_inout[1], 1);
-	close(default_inout[0]);
-	close(default_inout[1]);
-	if (get_status())
-		return (get_status());
-	return (exit_status);
+	return (reinit_fds(default_inout, exit_status));
 }

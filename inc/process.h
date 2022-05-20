@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/09 12:10:44 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/17 15:23:31 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/20 14:37:42 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ t_err	redirect_out(t_token *path);
 
 t_err	run_process(t_ctx *ctx);
 t_err	execute(t_ctx *ctx, t_token *token);
+t_err	reinit_fds(int *default_inout, t_err exit_status);
 
 t_err	get_exit_status(void);
 
