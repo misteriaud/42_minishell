@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/11 14:37:59 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/17 15:42:16 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/20 14:16:44 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,8 @@ void	close_fds(int fds)
 	}
 }
 
-void	close_all(void)
+void	close_all(int i)
 {
-	int	i;
-
-	i = 0;
 	while (!close(i))
 		i++;
 }

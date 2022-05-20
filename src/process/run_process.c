@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/28 14:09:08 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/19 16:15:41 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/20 14:18:20 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ t_err	execute(t_ctx *ctx, t_token *token)
 	if (!pid)
 	{
 		err = run_cmd(ctx, token);
-		close_all();
+		close_all(0);
 		xfree_all();
 		exit(err);
 	}
@@ -113,7 +113,10 @@ t_err	run_process(t_ctx *ctx)
 	if (curr->out || !built_in)
 		exit_status = execute(ctx, curr);
 	else
+	{
 		exit_status = run_cmd(ctx, curr);
+		close_all(3);
+	}
 	dup2(default_inout[0], 0);
 	dup2(default_inout[1], 1);
 	close(default_inout[0]);

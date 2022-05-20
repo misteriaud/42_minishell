@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 18:29:44 by mriaud            #+#    #+#             */
-/*   Updated: 2022/05/19 15:58:01 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/20 14:17:24 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	signal_handler(int signum)
 {
 	if (signum == SIGINT)
 		write(2, "\n", 1);
-	close_all();
+	close_all(0);
 	xfree_all();
 	exit(CTRL_C_ERROR);
 }
@@ -31,7 +31,7 @@ static inline void	write_doc(t_ctx *ctx, char *eof)
 	{
 		if (readline_to_mem(&line))
 		{
-			close_all();
+			close_all(0);
 			xfree_all();
 			exit (MEMORY_ERROR);
 		}
@@ -45,7 +45,7 @@ static inline void	write_doc(t_ctx *ctx, char *eof)
 		write(3, line.str, line.len);
 		write(3, "\n", 1);
 	}
-	close_all();
+	close_all(0);
 	xfree_all();
 	exit(NO_ERROR);
 }

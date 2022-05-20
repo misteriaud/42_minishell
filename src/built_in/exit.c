@@ -6,7 +6,7 @@
 /*   By: mriaud <mriaud@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 12:27:01 by artblin           #+#    #+#             */
-/*   Updated: 2022/05/18 16:23:26 by mriaud           ###   ########.fr       */
+/*   Updated: 2022/05/20 14:17:05 by mriaud           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ t_err	cmd_exit(t_ctx *ctx, t_token *args)
 		return (1);
 	}
 	xfree_all();
-	close_all();
+	close_all(0);
 	exit(exit_status % 256);
 	return (NO_ERROR);
 }
