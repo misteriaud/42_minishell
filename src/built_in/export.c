@@ -109,7 +109,7 @@ t_err	cmd_export(t_ctx *ctx, t_token *args)
 			assign = check_assignement(&str);
 			value = get_value(&str);
 			if (!key || !(assign == ADD || assign == CREATE))
-				err = print_err(EXPORT_ERROR, args->value.str);
+				return (err = print_err(EXPORT_ERROR, args->value.str), !!err);
 			add_to_env(ctx, key, assign, value);
 		}
 		args = args->next;
